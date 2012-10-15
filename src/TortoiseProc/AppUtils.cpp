@@ -2506,118 +2506,120 @@ static void PushCallback(CProgressDlg *dlg, void *caller, int result)
 bool CAppUtils::Push(CString selectLocalBranch, bool autoClose)
 {
 	CPushDlg dlg;
-	dlg.m_BranchSourceName = selectLocalBranch;
-	CString error;
-	DWORD exitcode = 0xFFFFFFFF;
-	CTGitPathList list;
-	list.AddPath(CTGitPath(g_Git.m_CurrentDir));
-	if (CHooks::Instance().PrePush(list,exitcode, error))
+	while (true)
 	{
-		if (exitcode)
+		dlg.m_BranchSourceName = selectLocalBranch;
+		CString error;
+		DWORD exitcode = 0xFFFFFFFF;
+		CTGitPathList list;
+		list.AddPath(CTGitPath(g_Git.m_CurrentDir));
+		if (CHooks::Instance().PrePush(list,exitcode, error))
 		{
-			CString temp;
-			temp.Format(IDS_ERR_HOOKFAILED, (LPCTSTR)error);
-			//ReportError(temp);
-			CMessageBox::Show(NULL,temp,_T("TortoiseGit"),MB_OK|MB_ICONERROR);
-			return false;
-		}
-	}
-
-	if(dlg.DoModal()==IDOK)
-	{
-		CString arg;
-
-		if(dlg.m_bPack)
-			arg += _T("--thin ");
-		if(dlg.m_bTags && !dlg.m_bPushAllBranches)
-			arg += _T("--tags ");
-		if(dlg.m_bForce)
-			arg += _T("--force ");
-		if (dlg.m_bSetUpstream)
-			arg += _T("--set-upstream ");
-		if (dlg.m_RecurseSubmodules == 1)
-			arg += _T("--recurse-submodules=check ");
-		if (dlg.m_RecurseSubmodules == 2)
-			arg += _T("--recurse-submodules=on-demand ");
-
-		int ver = CAppUtils::GetMsysgitVersion();
-
-		if(ver >= 0x01070203) //above 1.7.0.2
-			arg += _T("--progress ");
-
-		CProgressDlg progress;
-		progress.m_bAutoCloseOnSuccess=autoClose;
-
-		STRING_VECTOR remotesList;
-		if (dlg.m_bPushAllRemotes)
-			g_Git.GetRemoteList(remotesList);
-		else
-			remotesList.push_back(dlg.m_URL);
-
-		for (unsigned int i = 0; i < remotesList.size(); ++i)
-		{
-			if (dlg.m_bAutoLoad)
-				CAppUtils::LaunchPAgent(NULL, &remotesList[i]);
-
-			CString cmd;
-			if (dlg.m_bPushAllBranches)
+			if (exitcode)
 			{
-				cmd.Format(_T("git.exe push --all %s \"%s\""),
-						arg,
-						remotesList[i]);
+				CString temp;
+				temp.Format(IDS_ERR_HOOKFAILED, (LPCTSTR)error);
+				//ReportError(temp);
+				CMessageBox::Show(NULL,temp,_T("TortoiseGit"),MB_OK|MB_ICONERROR);
+				return false;
+			}
+		}
 
-				if (dlg.m_bTags)
+		if(dlg.DoModal()==IDOK)
+		{
+			CString arg;
+
+			if(dlg.m_bPack)
+				arg += _T("--thin ");
+			if(dlg.m_bTags && !dlg.m_bPushAllBranches)
+				arg += _T("--tags ");
+			if(dlg.m_bForce)
+				arg += _T("--force ");
+			if (dlg.m_bSetUpstream)
+				arg += _T("--set-upstream ");
+			if (dlg.m_RecurseSubmodules == 1)
+				arg += _T("--recurse-submodules=check ");
+			if (dlg.m_RecurseSubmodules == 2)
+				arg += _T("--recurse-submodules=on-demand ");
+
+			int ver = CAppUtils::GetMsysgitVersion();
+
+			if(ver >= 0x01070203) //above 1.7.0.2
+				arg += _T("--progress ");
+
+			CProgressDlg progress;
+			progress.m_bAutoCloseOnSuccess=autoClose;
+
+			STRING_VECTOR remotesList;
+			if (dlg.m_bPushAllRemotes)
+				g_Git.GetRemoteList(remotesList);
+			else
+				remotesList.push_back(dlg.m_URL);
+
+			for (unsigned int i = 0; i < remotesList.size(); ++i)
+			{
+				if (dlg.m_bAutoLoad)
+					CAppUtils::LaunchPAgent(NULL, &remotesList[i]);
+
+				CString cmd;
+				if (dlg.m_bPushAllBranches)
 				{
-					progress.m_GitCmdList.push_back(cmd);
-					cmd.Format(_T("git.exe push --tags %s \"%s\""), arg, remotesList[i]);
+					cmd.Format(_T("git.exe push --all %s \"%s\""),
+							arg,
+							remotesList[i]);
+
+					if (dlg.m_bTags)
+					{
+						progress.m_GitCmdList.push_back(cmd);
+						cmd.Format(_T("git.exe push --tags %s \"%s\""), arg, remotesList[i]);
+					}
 				}
+				else
+				{
+					cmd.Format(_T("git.exe push %s \"%s\" %s"),
+							arg,
+							remotesList[i],
+							dlg.m_BranchSourceName);
+					if (!dlg.m_BranchRemoteName.IsEmpty())
+					{
+						cmd += _T(":") + dlg.m_BranchRemoteName;
+					}
+				}
+				progress.m_GitCmdList.push_back(cmd);
+			}
+
+			progress.m_PostCmdList.Add(CString(MAKEINTRESOURCE(IDS_PROC_REQUESTPULL)));
+			progress.m_PostCmdList.Add(CString(MAKEINTRESOURCE(IDS_MENUPUSH)));
+			bool rejected = false;
+			progress.m_caller = &rejected;
+			progress.m_PostCmdCallback = PushCallback;
+			INT_PTR ret = progress.DoModal();
+
+			if(!progress.m_GitStatus)
+			{
+				if (CHooks::Instance().PostPush(list,exitcode, error))
+				{
+					if (exitcode)
+					{
+						CString temp;
+						temp.Format(IDS_ERR_HOOKFAILED, (LPCTSTR)error);
+						//ReportError(temp);
+						CMessageBox::Show(NULL,temp,_T("TortoiseGit"),MB_OK|MB_ICONERROR);
+						return false;
+					}
+				}
+				if(ret == IDC_PROGRESS_BUTTON1)
+				{
+					RequestPull(dlg.m_BranchRemoteName);
+				}
+				else if(ret == IDC_PROGRESS_BUTTON1 + 1)
+				{
+					continue;
+				}
+				return TRUE;
 			}
 			else
 			{
-				cmd.Format(_T("git.exe push %s \"%s\" %s"),
-						arg,
-						remotesList[i],
-						dlg.m_BranchSourceName);
-				if (!dlg.m_BranchRemoteName.IsEmpty())
-				{
-					cmd += _T(":") + dlg.m_BranchRemoteName;
-				}
-			}
-			progress.m_GitCmdList.push_back(cmd);
-		}
-
-		progress.m_PostCmdList.Add(CString(MAKEINTRESOURCE(IDS_PROC_REQUESTPULL)));
-		progress.m_PostCmdList.Add(CString(MAKEINTRESOURCE(IDS_MENUPUSH)));
-		bool rejected = false;
-		progress.m_caller = &rejected;
-		progress.m_PostCmdCallback = PushCallback;
-		INT_PTR ret = progress.DoModal();
-
-		if(!progress.m_GitStatus)
-		{
-			if (CHooks::Instance().PostPush(list,exitcode, error))
-			{
-				if (exitcode)
-				{
-					CString temp;
-					temp.Format(IDS_ERR_HOOKFAILED, (LPCTSTR)error);
-					//ReportError(temp);
-					CMessageBox::Show(NULL,temp,_T("TortoiseGit"),MB_OK|MB_ICONERROR);
-					return false;
-				}
-			}
-			if(ret == IDC_PROGRESS_BUTTON1)
-			{
-				RequestPull(dlg.m_BranchRemoteName);
-			}
-			else if(ret == IDC_PROGRESS_BUTTON1 + 1)
-			{
-				Push();
-			}
-			return TRUE;
-		}
-		else
-		{
 			if (rejected)
 			{
 				// failed, pull first
@@ -2627,17 +2629,18 @@ bool CAppUtils::Push(CString selectLocalBranch, bool autoClose)
 				}
 				else if (ret == IDC_PROGRESS_BUTTON1 + 1)
 				{
-					Push();
+					continue;
 				}
 			}
 			else
 			{
 				if (ret == IDC_PROGRESS_BUTTON1)
 				{
-					Push();
+					continue;
 				}
 			}
 		}
+		break;
 	}
 	return FALSE;
 }

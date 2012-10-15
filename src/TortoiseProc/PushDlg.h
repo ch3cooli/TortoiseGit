@@ -49,8 +49,12 @@ protected:
 public:
 	CString			m_URL;
 	CString			m_BranchSourceName;
+	CString			m_BranchSourceName2;
 	CString			m_BranchRemoteName;
+	CString			m_sRemoteName;
+	CString			m_sRemoteURL;
 
+	BOOL			m_bURLOrRemote;
 	BOOL			m_bTags;
 	BOOL			m_bForce;
 	BOOL			m_bPack;

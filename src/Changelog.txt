@@ -5,6 +5,7 @@ Released: Unreleased
  * Revision Graph: Can generate output graph file through command line
  * Fixed issue #1858: Switch-and-merge as a single command
  * Support Gravatar
+ * Fixed issue #1460: Feature request: "Retry" button on failed push dialog
 
 == Bug Fixes ==
  * Fixed issue #1859: Log too long when using Switch to New Branch option in Create Branch dialog

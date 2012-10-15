@@ -38,6 +38,7 @@ IMPLEMENT_DYNAMIC(CPushDlg, CHorizontalResizableStandAloneDialog)
 
 CPushDlg::CPushDlg(CWnd* pParent /*=NULL*/)
 	: CHorizontalResizableStandAloneDialog(CPushDlg::IDD, pParent)
+	, m_bURLOrRemote(FALSE)
 	, m_bPushAllBranches(FALSE)
 	, m_bForce(FALSE)
 	, m_bPack(FALSE)
@@ -197,6 +198,31 @@ BOOL CPushDlg::OnInitDialog()
 	this->UpdateData(false);
 
 	OnBnClickedPushall();
+	((CButton *)GetDlgItem(IDC_RD_REMOTE))->SetCheck(m_bURLOrRemote ? FALSE : TRUE);
+	((CButton *)GetDlgItem(IDC_RD_URL))->SetCheck(m_bURLOrRemote ? TRUE : FALSE);
+	OnBnClickedRd();
+
+	if (!m_BranchSourceName2.IsEmpty())
+		m_BranchSource.SetWindowTextW(m_BranchSourceName2);
+	if (!m_BranchRemoteName.IsEmpty())
+		m_BranchRemote.SetWindowTextW(m_BranchRemoteName);
+
+	if (!m_sRemoteURL.IsEmpty())
+		m_RemoteURL.SetWindowText(m_sRemoteURL);
+	if (!m_sRemoteName.IsEmpty())
+	{
+		for (int i = 0; i < m_Remote.GetCount(); i++)
+		{
+			CString str;
+			m_Remote.GetLBText(i, str);
+			if (str == m_sRemoteName)
+			{
+				m_Remote.SetCurSel(i);
+				break;
+			}
+		}
+	}
+
 	return TRUE;
 }
 
@@ -355,6 +381,7 @@ void CPushDlg::OnBnClickedRd()
 {
 	if( GetCheckedRadioButton(IDC_RD_REMOTE,IDC_RD_URL) == IDC_RD_REMOTE)
 	{
+		m_bURLOrRemote = FALSE;
 		m_Remote.EnableWindow(TRUE);
 		GetDlgItem(IDC_REMOTE_MANAGE)->EnableWindow(TRUE);
 		m_RemoteURL.EnableWindow(FALSE);
@@ -366,6 +393,7 @@ void CPushDlg::OnBnClickedRd()
 			m_RemoteURL.SetCurSel(0);
 		else
 			m_RemoteURL.SetWindowText(clippath);
+		m_bURLOrRemote = TRUE;
 		m_Remote.EnableWindow(FALSE);
 		GetDlgItem(IDC_REMOTE_MANAGE)->EnableWindow(FALSE);
 		m_RemoteURL.EnableWindow(TRUE);
@@ -386,6 +414,7 @@ void CPushDlg::OnBnClickedOk()
 	if( GetCheckedRadioButton(IDC_RD_REMOTE,IDC_RD_URL) == IDC_RD_REMOTE)
 	{
 		m_URL=m_Remote.GetString();
+		m_sRemoteName = m_Remote.GetString();
 		if (m_URL.IsEmpty())
 		{
 			CMessageBox::Show(NULL, IDS_PROC_GITCONFIG_REMOTEEMPTY, IDS_APPNAME, MB_OK);
@@ -396,12 +425,14 @@ void CPushDlg::OnBnClickedOk()
 	if( GetCheckedRadioButton(IDC_RD_REMOTE,IDC_RD_URL) == IDC_RD_URL)
 	{
 		m_URL=m_RemoteURL.GetString();
+		m_sRemoteURL = m_RemoteURL.GetString();
 	}
 
 	if (!m_bPushAllBranches)
 	{
 		this->m_BranchRemoteName=m_BranchRemote.GetString().Trim();
 		this->m_BranchSourceName=m_BranchSource.GetString().Trim();
+		this->m_BranchSourceName2=m_BranchSource.GetString().Trim();
 
 		if (m_BranchSourceName.IsEmpty() && m_BranchRemoteName.IsEmpty())
 		{
