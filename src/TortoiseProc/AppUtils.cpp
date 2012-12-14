@@ -2620,6 +2620,17 @@ static void MergeCallback(CProgressDlg *dlg, void *caller, int result)
 		{
 			// there are conflict files
 			dlg->m_PostCmdList.Add(CString(MAKEINTRESOURCE(IDS_PROGRS_CMD_RESOLVE)));
+
+			CTGitPath gitPath = g_Git.m_CurrentDir;
+			if (gitPath.HasSubmodules())
+			{
+				if (CMessageBox::Show(NULL, CString(MAKEINTRESOURCE(IDS_MERGE_CONFLICT_SUBMODULE_NOT_UPDATED)), _T("TortoiseGit"), 2, IDI_QUESTION, CString(MAKEINTRESOURCE(IDS_MSGBOX_YES)), CString(MAKEINTRESOURCE(IDS_MSGBOX_NO))) == 1)
+				{
+					CString sCmd;
+					sCmd.Format(_T("/command:subupdate /bkpath:\"%s\""), g_Git.m_CurrentDir);
+					CAppUtils::RunTortoiseProc(sCmd);
+				}
+			}
 		}
 	}
 }
