@@ -58,6 +58,7 @@ public:
 	CStringArray			m_PostFailCmdList;
 	PostCmdCallback			m_PostCmdCallback;
 	std::vector<CString>	m_GitCmdList;
+	std::vector<CString>	m_GitDirList;
 	CString					m_PreText;		// optional text to show in log window before running command
 	bool					m_bShowCommand;	// whether to display the command in the log window (default true)
 	CString					m_LogFile;
@@ -123,7 +124,7 @@ public:
 	static void	ParserCmdOutput(CRichEditCtrl &log,CProgressCtrl &progressctrl,HWND m_hWnd,CComPtr<ITaskbarList3> m_pTaskbarList,
 									CStringA &oneline, char ch,CWnd *CurrentWork=NULL);
 
-	static UINT	RunCmdList(CWnd *pWnd, std::vector<CString> &cmdlist, bool bShowCommand, CString *pfilename, bool *bAbort, CGitByteArray *pdata = nullptr, CGit *git = &g_Git);
+	static UINT	RunCmdList(CWnd *pWnd, std::vector<CString> &cmdlist, STRING_VECTOR &dirlist, bool bShowCommand, CString *pfilename, bool *bAbort, CGitByteArray *pdata, CGit *git = &g_Git);
 
 	static void KillProcessTree(DWORD dwProcessId, unsigned int depth = 0);
 
