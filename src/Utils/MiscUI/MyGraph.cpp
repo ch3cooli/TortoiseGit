@@ -172,7 +172,7 @@ int MyGraphSeries::GetAverageDataValue() const
 		nTotal += static_cast<int> (m_dwaValues.GetAt(nGroup));
 	}
 
-	return nTotal / m_dwaValues.GetSize();
+	return nTotal / (int)m_dwaValues.GetSize();
 }
 
 // Returns the number of data points that are not zero.
@@ -1205,8 +1205,8 @@ void MyGraph::DrawSeriesBar(CDC& dc) const
 		int nMaxDataValue = max(GetMaxDataValue(), 1);
 		double barTop = m_ptOrigin.y - (double)m_nYAxisHeight *
 			(GetAverageDataValue() / (double)nMaxDataValue);
-		dc.MoveTo(m_ptOrigin.x, barTop);
-		VERIFY(dc.LineTo(m_ptOrigin.x + (m_nXAxisWidth - m_rcLegend.Width() - (GAP_PIXELS * 2)), barTop));
+		dc.MoveTo(m_ptOrigin.x, (int)barTop);
+		VERIFY(dc.LineTo(m_ptOrigin.x + (m_nXAxisWidth - m_rcLegend.Width() - (GAP_PIXELS * 2)), (int)barTop));
 	}
 }
 
@@ -1308,8 +1308,8 @@ void MyGraph::DrawSeriesLine(CDC& dc) const
 	int nMaxDataValue = max(GetMaxDataValue(), 1);
 	double barTop = m_ptOrigin.y - (double)m_nYAxisHeight *
 		(GetAverageDataValue() / (double)nMaxDataValue);
-	dc.MoveTo(m_ptOrigin.x, barTop);
-	VERIFY(dc.LineTo(m_ptOrigin.x + (m_nXAxisWidth - m_rcLegend.Width() - (GAP_PIXELS * 2)), barTop));
+	dc.MoveTo(m_ptOrigin.x, (int)barTop);
+	VERIFY(dc.LineTo(m_ptOrigin.x + (m_nXAxisWidth - m_rcLegend.Width() - (GAP_PIXELS * 2)), (int)barTop));
 }
 
 //
