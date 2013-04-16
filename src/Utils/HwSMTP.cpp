@@ -840,8 +840,8 @@ BOOL CHwSMTP::SendEmail (
 	m_SendSock.Close();
 	if ( !m_SendSock.Create () )
 	{
-		//int nResult = GetLastError();
 		m_csLastError.Format ( _T("Create socket failed!") );
+		TRACE(_T("%d\n"), GetLastError());
 		return FALSE;
 	}
 
@@ -1053,7 +1053,7 @@ BOOL CHwSMTP::SendBuffer(char *buff,int size)
 	return TRUE;
 }
 // 利用socket发送数据，数据长度不能超过10M
-BOOL CHwSMTP::Send(const CString &str )
+BOOL CHwSMTP::Send(LPCTSTR str )
 {
 	CMultiByteString cbsData ( str );
 
@@ -1109,13 +1109,13 @@ BOOL CHwSMTP::SendEmail()
 		return FALSE;
 	}
 	// 结束邮件正文
-	if ( !Send ( CString(_T(".\r\n") ) ) ) return FALSE;
+	if (!Send(_T(".\r\n"))) return FALSE;
 	if ( !GetResponse ( _T("250") ) )
 		return FALSE;
 
 	// 退出发送
 	if ( HANDLE_IS_VALID(m_SendSock.m_hSocket) )
-		Send ( CString(_T("QUIT\r\n")) );
+		Send(_T("QUIT\r\n"));
 	m_bConnected = FALSE;
 
 	return bRet;
@@ -1137,7 +1137,7 @@ static CStringA EncodeBase64(const char * source, int len)
 BOOL CHwSMTP::auth()
 {
 	int nResponseCode = 0;
-	if ( !Send ( CString(_T("auth login\r\n")) ) ) return FALSE;
+	if ( !Send(_T("auth login\r\n"))) return FALSE;
 	if ( !GetResponse ( _T("334"), &nResponseCode ) ) return FALSE;
 	if ( nResponseCode != 334 )	// 不需要验证用户名和密码
 		return TRUE;
@@ -1197,8 +1197,8 @@ BOOL CHwSMTP::SendHead()
 		if ( !GetResponse ( _T("250") ) ) return FALSE;
 	}
 
-	if ( !Send ( CString(_T("DATA\r\n") ) ) ) return FALSE;
-	if ( !GetResponse ( CString(_T("354") )) ) return FALSE;
+	if (!Send(_T("DATA\r\n"))) return FALSE;
+	if (!GetResponse(_T("354"))) return FALSE;
 
 	return TRUE;
 }
@@ -1328,7 +1328,6 @@ BOOL CHwSMTP::SendOnAttach(LPCTSTR lpszFileName)
 	if ( !pBuf )
 	{
 		::AfxThrowMemoryException ();
-		return FALSE;
 	}
 
 	if(!Send ( csAttach ))
@@ -1368,7 +1367,6 @@ BOOL CHwSMTP::SendOnAttach(LPCTSTR lpszFileName)
 	delete[] pBuf;
 
 	return TRUE;
-	//return Send ( csAttach );
 }
 
 CString CHwSMTP::GetLastErrorText()
@@ -1522,8 +1520,6 @@ CString GetCompatibleString ( LPVOID lpszOrg, BOOL bOrgIsUnicode, int nOrgLength
 		THROW_LAST ();
 	}
 	END_CATCH_ALL
-
-	return _T("");
 }
 
 CString FormatDateTime (COleDateTime &DateTime, LPCTSTR /*pFormat*/)
@@ -1566,7 +1562,6 @@ CString FormatString ( LPCTSTR lpszStr, ... )
 		if ( !buf )
 		{
 			::AfxThrowMemoryException ();
-			return _T("");
 		}
 		memset ( buf, 0, nBufCount*sizeof(TCHAR) );
 
