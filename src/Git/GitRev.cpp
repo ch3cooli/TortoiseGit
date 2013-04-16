@@ -180,7 +180,7 @@ int GitRev::SafeGetSimpleList(CGit *git)
 
 		try
 		{
-			if(git_get_commit_from_hash(&commit, this->m_CommitHash.m_hash))
+			if([&]{ return git_get_commit_from_hash(&commit, this->m_CommitHash.m_hash); }())
 				return -1;
 		}
 		catch (char *)
@@ -263,7 +263,7 @@ int GitRev::SafeFetchFullInfo(CGit *git)
 
 		try
 		{
-			if (git_get_commit_from_hash(&commit, this->m_CommitHash.m_hash))
+			if ([&]{ return git_get_commit_from_hash(&commit, this->m_CommitHash.m_hash); }())
 				return -1;
 		}
 		catch (char *)
