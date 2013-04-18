@@ -88,6 +88,7 @@ public:
 		eCmd_SaveAs,
 		eCmd_CopyPath,
 		eCmd_CopyHash,
+		eCmd_Properties,
 	};
 
 	enum eCol
@@ -150,6 +151,7 @@ private:
 	void					FileSaveAs(const CString path);
 	void					OpenFile(const CString path, eOpenType mode);
 	bool					RevertItemToVersion(const CString &path);
+	void					ShowProperties(TShadowFilesTreeList &selectedLeafs);
 
 	afx_msg void			OnBnClickedButtonRevision();
 

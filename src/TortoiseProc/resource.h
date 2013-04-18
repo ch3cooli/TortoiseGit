@@ -156,6 +156,7 @@
 #define IDI_JUMPDOWN                    344
 #define IDD_LOGORDERING                 345
 #define IDI_GITCREDENTIAL               346
+#define IDI_PROPERTIES2                 347
 #define IDS_CHSTAT_FILECOL              1000
 #define IDS_CHSTAT_WCCOL                1001
 #define IDS_CHSTAT_REPOCOL              1002
@@ -898,6 +899,7 @@
 #define IDC_PROXYLABEL4                 1412
 #define IDS_DO_SAME_FOR_REST            1412
 #define IDC_PROXYLABEL5                 1413
+#define IDS_PROPERTIES                  1413
 #define IDC_PROXYLABEL6                 1414
 #define IDS_SETTINGS_LOCAL              1415
 #define IDS_SETTINGS_GLOBAL             1416
@@ -1720,7 +1722,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        347
+#define _APS_NEXT_RESOURCE_VALUE        348
 #define _APS_NEXT_COMMAND_VALUE         32860
 #define _APS_NEXT_CONTROL_VALUE         1754
 #define _APS_NEXT_SYMED_VALUE           201

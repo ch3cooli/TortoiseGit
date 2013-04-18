@@ -35,6 +35,7 @@
 #include "PathUtils.h"
 #include "StringUtils.h"
 #include "GitDiff.h"
+#include "MessageBox.h"
 
 void SetSortArrowA(CListCtrl * control, int nColumn, bool bAscending)
 {
@@ -602,6 +603,7 @@ void CRepositoryBrowser::ShowContextMenu(CPoint point, TShadowFilesTreeList &sel
 		popupMenu.AppendMenuIcon(eCmd_CopyPath, IDS_STATUSLIST_CONTEXT_COPY, IDI_COPYCLIP);
 		popupMenu.AppendMenuIcon(eCmd_CopyHash, IDS_COPY_COMMIT_HASH, IDI_COPYCLIP);
 	}
+	popupMenu.AppendMenuIcon(eCmd_Properties, IDS_PROPERTIES, IDI_PROPERTIES2);
 
 	eCmd cmd = (eCmd)popupMenu.TrackPopupMenuEx(TPM_LEFTALIGN|TPM_RETURNCMD, point.x, point.y, this, 0);
 	switch(cmd)
@@ -670,6 +672,11 @@ void CRepositoryBrowser::ShowContextMenu(CPoint point, TShadowFilesTreeList &sel
 	case eCmd_CopyHash:
 		{
 			CopyHashToClipboard(selectedLeafs);
+		}
+		break;
+	case eCmd_Properties:
+		{
+			ShowProperties(selectedLeafs);
 		}
 		break;
 	}
@@ -1047,4 +1054,75 @@ void CRepositoryBrowser::CopyHashToClipboard(TShadowFilesTreeList &selectedLeafs
 		}
 		CStringUtils::WriteAsciiStringToClipboard(sClipdata, GetSafeHwnd());
 	}
+}
+
+void CRepositoryBrowser::ShowProperties(TShadowFilesTreeList &selectedLeafs)
+{
+	CStringA gitdir = CUnicodeUtils::GetMulti(g_Git.m_CurrentDir, CP_UTF8);
+	git_repository *repository = NULL;
+	int ret = 0;
+	CString str;
+	do
+	{
+		ret = git_repository_open(&repository, gitdir.GetBuffer());
+		gitdir.ReleaseBuffer();
+		if (ret)
+		{
+			MessageBox(CGit::GetLibGit2LastErr(_T("Could not open repository.")), _T("TortoiseGit"), MB_ICONERROR);
+			break;
+		}
+
+		for (int i = 0; i < selectedLeafs.size(); ++i)
+		{
+			if (!selectedLeafs[i]->m_bFolder)
+			{
+				git_oid oid;
+				git_oid_fromraw(&oid, selectedLeafs[i]->m_hash.m_hash);
+				git_blob *blob;
+				ret = git_blob_lookup(&blob, repository, &oid);
+				if (ret)
+				{
+					MessageBox(CGit::GetLibGit2LastErr(_T("Could not open blob.")), _T("TortoiseGit"), MB_ICONERROR);
+					continue;
+				}
+
+				int isBinary = git_blob_is_binary(blob);
+				int crlf = 0, lf = 0;
+				if (!isBinary && selectedLeafs[i]->m_iSize > 0)
+				{
+					const char *raw = (const char *)git_blob_rawcontent(blob);
+					if (selectedLeafs[i]->m_iSize == 1)
+						lf = raw[0] == '\n' ? 1 : 0;
+					for (int j = 1; j < selectedLeafs[i]->m_iSize; ++j)
+					{
+						if (raw[j] == '\n' && raw[j - 1] == '\r')
+							++crlf;
+						else if (raw[j] == '\n')
+							++lf;
+					}
+				}
+				git_blob_free(blob);
+				str.Append(selectedLeafs[i]->GetFullName());
+				str.Append(_T("\t"));
+				str.Append(selectedLeafs[i]->m_hash);
+				str.Append(_T("\t"));
+				str.Append(isBinary ? _T("Binary") : _T("Text"));
+				str.Append(_T("\t"));
+				str.AppendFormat(_T("CRLF x %d, LF x %d"), crlf, lf);
+				str.Append(_T("\r\n"));
+			}
+			else
+			{
+				str.Append(selectedLeafs[i]->GetFullName());
+				str.Append(_T("\t"));
+				str.Append(selectedLeafs[i]->m_hash);
+				str.Append(_T("\t"));
+				str.Append(_T("Tree"));
+				str.Append(_T("\r\n"));
+			}
+		}
+	} while (0);
+	git_repository_free(repository);
+
+	CMessageBox::Show(this->GetSafeHwnd(), str, _T("TortoiseGit"), MB_OK);
 }
