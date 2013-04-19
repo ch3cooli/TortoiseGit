@@ -898,6 +898,7 @@
 #define IDC_PROXYLABEL4                 1412
 #define IDS_DO_SAME_FOR_REST            1412
 #define IDC_PROXYLABEL5                 1413
+#define IDS_ARCHIVE_FILETYPES           1413
 #define IDC_PROXYLABEL6                 1414
 #define IDS_SETTINGS_LOCAL              1415
 #define IDS_SETTINGS_GLOBAL             1416

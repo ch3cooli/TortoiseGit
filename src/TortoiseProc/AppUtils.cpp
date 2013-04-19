@@ -1089,7 +1089,7 @@ bool CAppUtils::Export(CString *BashHash)
 	if (dlg.DoModal() == IDOK)
 	{
 		CString cmd;
-		cmd.Format(_T("git.exe archive --output=\"%s\" --format=zip --verbose %s"),
+		cmd.Format(_T("git.exe archive --output=\"%s\" --verbose %s"),
 					dlg.m_strExportDirectory, g_Git.FixBranchName(dlg.m_VersionName));
 
 		CProgressDlg pro;

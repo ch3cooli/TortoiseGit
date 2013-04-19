@@ -9195,6 +9195,10 @@ msgstr ""
 msgid "Your version is: %d.%d.%d.%d"
 msgstr ""
 
+#. Resource IDs: (1410)
+msgid "Zip archive (*.zip)|*.zip|Tar archive (*.tar)|*.tar|GZipped Tar archive (*.tar.gz)|*.tar.gz|GZipped Tar archive (*.tgz)|*.tgz||"
+msgstr ""
+
 #. Resource IDs: (1074)
 msgid "Zip File"
 msgstr ""
