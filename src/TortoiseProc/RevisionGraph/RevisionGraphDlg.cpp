@@ -27,12 +27,7 @@
 #include "TempFile.h"
 #include "UnicodeUtils.h"
 #include "TGitPath.h"
-//#include "SVNInfo.h"
-//#include "SVNDiff.h"
 #include "RevGraphFilterDlg.h"
-//#include "RepositoryInfo.h"
-//#include "RevisionInRange.h"
-//#include "RemovePathsBySubString.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

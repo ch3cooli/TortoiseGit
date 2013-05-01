@@ -32,8 +32,6 @@
 #include "BrowseFolder.h"
 #include "GitProgressDlg.h"
 #include "ChangedDlg.h"
-//#include "RevisionGraph/StandardLayout.h"
-//#include "RevisionGraph/UpsideDownLayout.h"
 #include "SysInfo.h"
 #include "FormatMessageWrapper.h"
 

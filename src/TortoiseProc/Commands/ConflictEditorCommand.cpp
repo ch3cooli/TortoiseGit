@@ -1,5 +1,6 @@
 // TortoiseGit - a Windows shell extension for easy version control
 
+// Copyright (C) 2009-2013 - TortoiseGit
 // Copyright (C) 2008-2009 - TortoiseSVN
 
 // This program is free software; you can redistribute it and/or
@@ -21,12 +22,9 @@
 #include "ConflictEditorCommand.h"
 #include "GitStatus.h"
 #include "GitDiff.h"
-//#include "SVNInfo.h"
 #include "UnicodeUtils.h"
 #include "PathUtils.h"
 #include "AppUtils.h"
-//#include "EditPropConflictDlg.h"
-//#include "TreeConflictEditorDlg.h"
 
 bool ConflictEditorCommand::Execute()
 {

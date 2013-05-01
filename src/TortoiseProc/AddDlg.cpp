@@ -22,7 +22,6 @@
 #include "messagebox.h"
 #include "DirFileEnum.h"
 #include "AddDlg.h"
-//#include "SVNConfig.h"
 #include "registry.h"
 #include "AppUtils.h"
 

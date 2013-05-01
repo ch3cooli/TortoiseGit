@@ -26,16 +26,6 @@
 #include "TempFile.h"
 #include "UnicodeUtils.h"
 #include "TGitPath.h"
-//#include "SVNInfo.h"
-//#include ".\revisiongraphwnd.h"
-//#include "CachedLogInfo.h"
-//#include "RevisionGraph/IRevisionGraphLayout.h"
-//#include "RevisionGraph/FullGraphBuilder.h"
-//#include "RevisionGraph/FullGraphFinalizer.h"
-//#include "RevisionGraph/VisibleGraphBuilder.h"
-//#include "RevisionGraph/StandardLayout.h"
-//#include "RevisionGraph/ShowWC.h"
-//#include "RevisionGraph/ShowWCModification.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

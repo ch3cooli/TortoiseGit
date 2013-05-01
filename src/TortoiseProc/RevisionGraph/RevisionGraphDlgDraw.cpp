@@ -26,12 +26,7 @@
 #include "TempFile.h"
 #include "UnicodeUtils.h"
 #include "TGitPath.h"
-//#include "SVNInfo.h"
-//#include "SVNDiff.h"
 #include "RevisionGraphWnd.h"
-//#include "IRevisionGraphLayout.h"
-//#include "UpsideDownLayout.h"
-//#include "ShowTreeStripes.h"
 #include "registry.h"
 #include "UnicodeUtils.h"
 

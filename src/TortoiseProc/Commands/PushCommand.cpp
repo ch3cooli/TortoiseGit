@@ -20,7 +20,6 @@
 #include "stdafx.h"
 #include "PushCommand.h"
 
-//#include "SVNProgressDlg.h"
 #include "StringUtils.h"
 #include "Hooks.h"
 #include "MessageBox.h"

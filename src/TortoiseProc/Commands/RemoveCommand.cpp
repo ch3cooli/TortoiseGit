@@ -21,7 +21,6 @@
 #include "RemoveCommand.h"
 
 #include "MessageBox.h"
-//#include "ProgressDlg.h"
 #include "Git.h"
 #include "InputLogDlg.h"
 #include "ShellUpdater.h"

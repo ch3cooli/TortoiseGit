@@ -18,14 +18,12 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 #pragma once
-//#include "RevisionGraph/RevisionGraphState.h"
 #pragma warning(push)
 #pragma warning(disable: 4481) // nonstandard extension used: override specifier 'override'
 #include "Future.h"
 #pragma warning(pop)
 #include "ProgressDlg.h"
 #include "Colors.h"
-//#include "SVNDiff.h"
 #include "AppUtils.h"
 #include "SVG.h"
 #include "LogDlgHelper.h"
