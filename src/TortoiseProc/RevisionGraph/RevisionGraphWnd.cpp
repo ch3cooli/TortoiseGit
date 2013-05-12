@@ -1318,24 +1318,8 @@ void CRevisionGraphWnd::DoCheckForModification()
 
 void CRevisionGraphWnd::DoMergeTo()
 {
-#if 0
-	CString URL = GetSelectedURL();
-	CString path = m_sPath;
-	CBrowseFolder folderBrowser;
-	folderBrowser.SetInfo(CString(MAKEINTRESOURCE(IDS_LOG_MERGETO)));
-	if (folderBrowser.Show(GetSafeHwnd(), path, path) == CBrowseFolder::OK)
-	{
-		CSVNProgressDlg dlg;
-		dlg.SetCommand(CSVNProgressDlg::SVNProgress_Merge);
-		dlg.SetPathList(CTGitPathList(CTGitPath(path)));
-		dlg.SetUrl(URL);
-		dlg.SetSecondUrl(URL);
-		SVNRevRangeArray revarray;
-		revarray.AddRevRange (m_SelectedEntry1->GetRevision()-1, svn_revnum_t(m_SelectedEntry1->GetRevision()));
-		dlg.SetRevisionRanges(revarray);
-		dlg.DoModal();
-	}
-#endif
+	CString rev = GetFriendRefName(m_SelectedEntry1);
+	CAppUtils::Merge(&rev);
 }
 
 void CRevisionGraphWnd::DoUpdate()
@@ -1515,6 +1499,9 @@ void CRevisionGraphWnd::OnContextMenu(CWnd* /*pWnd*/, CPoint point)
 	case ID_SHOWLOG:
 		DoShowLog();
 		break;
+	case ID_MERGETO:
+		DoMergeTo();
+		break;
 	case ID_SWITCH:
 	{
 		MENUITEMINFO mii;
@@ -1560,9 +1547,6 @@ void CRevisionGraphWnd::OnContextMenu(CWnd* /*pWnd*/, CPoint point)
 		break;
 	case ID_CFM:
 		DoCheckForModification();
-		break;
-	case ID_MERGETO:
-		DoMergeTo();
 		break;
 	case ID_UPDATE:
 		DoUpdate();
