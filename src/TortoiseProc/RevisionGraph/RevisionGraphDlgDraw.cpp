@@ -110,31 +110,6 @@ void CRevisionGraphWnd::OnPaint()
 
 }
 
-void CRevisionGraphWnd::ClearVisibleGlyphs (const CRect& /*rect*/)
-{
-#if 0
-	float glyphSize = GLYPH_SIZE * m_fZoomFactor;
-
-	CSyncPointer<CRevisionGraphState::TVisibleGlyphs>
-		visibleGlyphs (m_state.GetVisibleGlyphs());
-
-	for (size_t i = visibleGlyphs->size(), count = i; i > 0; --i)
-	{
-		const PointF& leftTop = (*visibleGlyphs)[i-1].leftTop;
-		CRect glyphRect ( static_cast<int>(leftTop.X)
-						, static_cast<int>(leftTop.Y)
-						, static_cast<int>(leftTop.X + glyphSize)
-						, static_cast<int>(leftTop.Y + glyphSize));
-
-		if (CRect().IntersectRect (glyphRect, rect))
-		{
-			(*visibleGlyphs)[i-1] = (*visibleGlyphs)[--count];
-			visibleGlyphs->pop_back();
-		}
-	}
-#endif
-}
-
 void CRevisionGraphWnd::CutawayPoints (const RectF& rect, float cutLen, TCutRectangle& result)
 {
 	result[0] = PointF (rect.X, rect.Y + cutLen);
@@ -1227,11 +1202,6 @@ void CRevisionGraphWnd::DrawGraph(GraphicsDevice& graphics, const CRect& rect, i
 		graphics.pDC->FillSolidRect(rect, GetSysColor(COLOR_WINDOW));
 		graphics.pDC->SetBkMode(TRANSPARENT);
 	}
-
-	// preparation & sync
-
-	//CSyncPointer<CAllRevisionGraphOptions> options (m_state.GetOptions());
-	ClearVisibleGlyphs (rect);
 
 	// transform visible
 

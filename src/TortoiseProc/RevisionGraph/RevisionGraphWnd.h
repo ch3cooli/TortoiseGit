@@ -194,8 +194,6 @@ public:
 	void			DoZoom (float nZoomFactor, bool updateScrollbars = true);
 	bool			CancelMouseZoom();
 
-	void			SetDlgTitle (bool offline);
-
 	void			BuildPreview();
 
 protected:
@@ -338,18 +336,10 @@ private:
 	void			AppendMenu (CMenu& popup, UINT title, UINT command, UINT flags = MF_ENABLED);
 	void			AppendMenu (CMenu &popup, CString title, UINT command, CString *extra = NULL, CMenu *submenu = NULL);
 	void			AddGitOps (CMenu& popup);
-	void			AddGraphOps (CMenu& popup, const CVisibleGraphNode * node);
-	CString			GetSelectedURL() const;
-	CString			GetWCURL() const;
 	void			DoShowLog();
-	void			DoCheckForModification();
 	void			DoMergeTo();
-	void			DoUpdate();
 	void			DoSwitch(CString rev);
-	void			DoSwitchToHead();
 	void			DoBrowseRepo();
-	void			ResetNodeFlags (DWORD flags);
-	void			ToggleNodeFlag (const CVisibleGraphNode *node, DWORD flag);
 	void			DoCopyRefs();
 
 	void			SetScrollbar (int bar, int newPos, int clientMax, int graphMax);
@@ -362,12 +352,7 @@ private:
 
 	CPoint			GetLogCoordinates (CPoint point) const;
 	ogdf::node		GetHitNode (CPoint point, CSize border = CSize (0, 0)) const;
-	DWORD			GetHoverGlyphs (CPoint point) const;
 	PointF			cutPoint(ogdf::node v,double lw,PointF ps, PointF pt);
-
-//	const CRevisionGraphState::SVisibleGlyph* GetHitGlyph (CPoint point) const;
-
-	void			ClearVisibleGlyphs (const CRect& rect);
 
 	typedef PointF TCutRectangle[8];
 	void			CutawayPoints (const RectF& rect, float cutLen, TCutRectangle& result);

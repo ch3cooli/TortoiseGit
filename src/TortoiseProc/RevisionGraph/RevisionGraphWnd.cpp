@@ -145,32 +145,6 @@ CRevisionGraphWnd::CRevisionGraphWnd()
 	m_ArrowCos = cos(pi/8);
 	m_ArrowSin = sin(pi/8);
 	this->m_ArrowSize = 8;
-#if 0
-	ogdf::node one = this->m_Graph.newNode();
-	ogdf::node two = this->m_Graph.newNode();
-	ogdf::node three = this->m_Graph.newNode();
-	ogdf::node four = this->m_Graph.newNode();
-
-
-	m_GraphAttr.width(one)=100;
-	m_GraphAttr.height(one)=200;
-	m_GraphAttr.width(two)=100;
-	m_GraphAttr.height(two)=100;
-	m_GraphAttr.width(three)=100;
-	m_GraphAttr.height(three)=20;
-	m_GraphAttr.width(four)=100;
-	m_GraphAttr.height(four)=20;
-
-	m_GraphAttr.labelNode(one)="One";
-	m_GraphAttr.labelNode(two)="Two";
-	m_GraphAttr.labelNode(three)="three";
-
-	this->m_Graph.newEdge(one, two);
-	this->m_Graph.newEdge(one, three);
-	this->m_Graph.newEdge(two, four);
-	this->m_Graph.newEdge(three, four);
-
-#endif
 	FastHierarchyLayout *pOHL = ::new FastHierarchyLayout;
 	//It will auto delte when m_SugiyamLayout destory
 
@@ -178,61 +152,6 @@ CRevisionGraphWnd::CRevisionGraphWnd()
 	pOHL->nodeDistance(25.0);
 
 	m_SugiyamLayout.setLayout(pOHL);
-
-#if 0
-	//this->m_OHL.layerDistance(30.0);
-	//this->m_OHL.nodeDistance(25.0);
-	//this->m_OHL.weightBalancing(0.8);
-	m_SugiyamLayout.setLayout(&m_OHL);
-	m_SugiyamLayout.call(m_GraphAttr);
-#endif
-#if 0
-	PlanarizationLayout pl;
-
-	FastPlanarSubgraph *ps = ::new FastPlanarSubgraph;
-	ps->runs(100);
-	VariableEmbeddingInserter *ves = ::new VariableEmbeddingInserter;
-	ves->removeReinsert(EdgeInsertionModule::rrAll);
-	pl.setSubgraph(ps);
-	pl.setInserter(ves);
-
-	EmbedderMinDepthMaxFaceLayers *emb = ::new EmbedderMinDepthMaxFaceLayers;
-	pl.setEmbedder(emb);
-
-	OrthoLayout *ol =::new OrthoLayout;
-	ol->separation(20.0);
-	ol->cOverhang(0.4);
-	ol->setOptions(2+4);
-	ol->preferedDir(OrthoDir::odEast);
-	pl.setPlanarLayouter(ol);
-
-	pl.call(m_GraphAttr);
-
-	node v;
-	forall_nodes(v,m_Graph) {
-
-		TRACE(_T("node  x %f y %f %f %f\n"),/* m_GraphAttr.idNode(v), */
-			m_GraphAttr.x(v),
-			m_GraphAttr.y(v),
-			m_GraphAttr.width(v),
-			m_GraphAttr.height(v)
-		);
-	}
-
-	edge e;
-	forall_edges(e, m_Graph)
-	{
-		// get connection and point position
-		const DPolyline &dpl = this->m_GraphAttr.bends(e);
-
-		ListConstIterator<DPoint> it;
-		for(it = dpl.begin(); it.valid(); ++it)
-		{
-			TRACE(_T("edge %f %f\n"), (*it).m_x, (*it).m_y);
-		}
-	}
-	m_GraphAttr.writeGML("test.gml");
-#endif
 }
 
 CRevisionGraphWnd::~CRevisionGraphWnd()
@@ -334,18 +253,6 @@ CPoint CRevisionGraphWnd::GetLogCoordinates (CPoint point) const
 
 node CRevisionGraphWnd::GetHitNode (CPoint point, CSize /*border*/) const
 {
-#if 0
-	// any nodes at all?
-
-	CSyncPointer<const ILayoutNodeList> nodeList (m_state.GetNodes());
-	if (!nodeList)
-		return index_t(NO_INDEX);
-
-	// search the nodes for one at that grid position
-
-	return nodeList->GetAt (GetLogCoordinates (point), border);
-#endif
-
 	node v;
 	forall_nodes(v,m_Graph)
 	{
@@ -358,102 +265,6 @@ node CRevisionGraphWnd::GetHitNode (CPoint point, CSize /*border*/) const
 	}
 	return NULL;
 }
-
-DWORD CRevisionGraphWnd::GetHoverGlyphs (CPoint /*point*/) const
-{
-	// if there is no layout, there will be no nodes,
-	// hence, no glyphs
-	DWORD result = 0;
-#if 0
-	CSyncPointer<const ILayoutNodeList> nodeList (m_state.GetNodes());
-	if (!nodeList)
-		return 0;
-
-	// get node at point or node that is close enough
-	// so that point may hit a glyph area
-
-	index_t nodeIndex = GetHitNode(point);
-	if (nodeIndex == NO_INDEX)
-		nodeIndex = GetHitNode(point, CSize (GLYPH_SIZE, GLYPH_SIZE / 2));
-
-	if (nodeIndex >= nodeList->GetCount())
-		return 0;
-
-	ILayoutNodeList::SNode node = nodeList->GetNode (nodeIndex);
-	const CVisibleGraphNode* base = node.node;
-
-	// what glyphs should be shown depending on position of point
-	// relative to the node rect?
-
-	CPoint logCoordinates = GetLogCoordinates (point);
-	CRect r = node.rect;
-	CPoint center = r.CenterPoint();
-
-	CRect rightGlyphArea ( r.right - GLYPH_SIZE, center.y - GLYPH_SIZE / 2
-						 , r.right + GLYPH_SIZE, center.y + GLYPH_SIZE / 2);
-	CRect topGlyphArea ( center.x - GLYPH_SIZE, r.top - GLYPH_SIZE / 2
-					   , center.x + GLYPH_SIZE, r.top + GLYPH_SIZE / 2);
-	CRect bottomGlyphArea ( center.x - GLYPH_SIZE, r.bottom - GLYPH_SIZE / 2
-						  , center.x + GLYPH_SIZE, r.bottom + GLYPH_SIZE / 2);
-
-	bool upsideDown
-		= m_state.GetOptions()->GetOption<CUpsideDownLayout>()->IsActive();
-
-	if (upsideDown)
-	{
-		std::swap (topGlyphArea.top, bottomGlyphArea.top);
-		std::swap (topGlyphArea.bottom, bottomGlyphArea.bottom);
-	}
-
-
-	if (rightGlyphArea.PtInRect (logCoordinates))
-		result = base->GetFirstCopyTarget() != NULL
-			   ? CGraphNodeStates::COLLAPSED_RIGHT | CGraphNodeStates::SPLIT_RIGHT
-			   : 0;
-
-	if (topGlyphArea.PtInRect (logCoordinates))
-		result = base->GetSource() != NULL
-			   ? CGraphNodeStates::COLLAPSED_ABOVE | CGraphNodeStates::SPLIT_ABOVE
-			   : 0;
-
-	if (bottomGlyphArea.PtInRect (logCoordinates))
-		result = base->GetNext() != NULL
-			   ? CGraphNodeStates::COLLAPSED_BELOW | CGraphNodeStates::SPLIT_BELOW
-			   : 0;
-
-	// if some nodes have already been split, don't allow collapsing etc.
-
-	CSyncPointer<const CGraphNodeStates> nodeStates (m_state.GetNodeStates());
-	if (result & nodeStates->GetFlags (base))
-		result = 0;
-#endif
-	return result;
-}
-#if 0
-const CRevisionGraphState::SVisibleGlyph* CRevisionGraphWnd::GetHitGlyph (CPoint point) const
-{
-	float glyphSize = GLYPH_SIZE * m_fZoomFactor;
-
-	CSyncPointer<const CRevisionGraphState::TVisibleGlyphs>
-		visibleGlyphs (m_state.GetVisibleGlyphs());
-
-	for (size_t i = 0, count = visibleGlyphs->size(); i < count; ++i)
-	{
-		const CRevisionGraphState::SVisibleGlyph* entry = &(*visibleGlyphs)[i];
-
-		float xRel = point.x - entry->leftTop.X;
-		float yRel = point.y - entry->leftTop.Y;
-
-		if (   (xRel >= 0) && (xRel < glyphSize)
-			&& (yRel >= 0) && (yRel < glyphSize))
-		{
-			return entry;
-		}
-	}
-
-	return NULL;
-}
-#endif
 void CRevisionGraphWnd::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 {
 	SCROLLINFO sinfo = {0};
@@ -561,11 +372,8 @@ void CRevisionGraphWnd::OnSize(UINT nType, int cx, int cy)
 
 void CRevisionGraphWnd::OnLButtonDown(UINT nFlags, CPoint point)
 {
-
 	if (IsUpdateJobRunning())
 		return __super::OnLButtonDown(nFlags, point);
-
-//	CSyncPointer<const ILayoutNodeList> nodeList (m_state.GetNodes());
 
 	SetFocus();
 	bool bHit = false;
@@ -573,16 +381,6 @@ void CRevisionGraphWnd::OnLButtonDown(UINT nFlags, CPoint point)
 	bool bOverview = m_bShowOverview && m_OverviewRect.PtInRect(point);
 	if (! bOverview)
 	{
-#if 0
-		const CRevisionGraphState::SVisibleGlyph* hitGlyph
-			= GetHitGlyph (point);
-
-		if (hitGlyph != NULL)
-		{
-			ToggleNodeFlag (hitGlyph->node, hitGlyph->state);
-			return __super::OnLButtonDown(nFlags, point);
-		}
-#endif
 		node nodeIndex = GetHitNode (point);
 		if (nodeIndex != NULL)
 		{
@@ -1190,103 +988,6 @@ void CRevisionGraphWnd::AppendMenu(CMenu &popup, CString title, UINT command, CS
 	title.ReleaseBuffer();
 }
 
-void CRevisionGraphWnd::AddGraphOps (CMenu& /*popup*/, const CVisibleGraphNode * /*node*/)
-{
-#if 0
-	CSyncPointer<CGraphNodeStates> nodeStates (m_state.GetNodeStates());
-
-	if (node == NULL)
-	{
-		DWORD state = nodeStates->GetCombinedFlags();
-		if (state != 0)
-		{
-			if (state & CGraphNodeStates::COLLAPSED_ALL)
-				AppendMenu (popup, IDS_REVGRAPH_POPUP_EXPAND_ALL, ID_EXPAND_ALL);
-
-			if (state & CGraphNodeStates::SPLIT_ALL)
-				AppendMenu (popup, IDS_REVGRAPH_POPUP_JOIN_ALL, ID_JOIN_ALL);
-		}
-	}
-	else
-	{
-		DWORD state = nodeStates->GetFlags (node);
-
-		if (node->GetSource() || (state & CGraphNodeStates::COLLAPSED_ABOVE))
-			AppendMenu ( popup
-					   ,   (state & CGraphNodeStates::COLLAPSED_ABOVE)
-						 ? IDS_REVGRAPH_POPUP_EXPAND_ABOVE
-						 : IDS_REVGRAPH_POPUP_COLLAPSE_ABOVE
-					   , ID_GRAPH_EXPANDCOLLAPSE_ABOVE);
-
-		if (node->GetFirstCopyTarget() || (state & CGraphNodeStates::COLLAPSED_RIGHT))
-			AppendMenu ( popup
-					   ,   (state & CGraphNodeStates::COLLAPSED_RIGHT)
-						 ? IDS_REVGRAPH_POPUP_EXPAND_RIGHT
-						 : IDS_REVGRAPH_POPUP_COLLAPSE_RIGHT
-					   , ID_GRAPH_EXPANDCOLLAPSE_RIGHT);
-
-		if (node->GetNext() || (state & CGraphNodeStates::COLLAPSED_BELOW))
-			AppendMenu ( popup
-					   ,   (state & CGraphNodeStates::COLLAPSED_BELOW)
-						 ? IDS_REVGRAPH_POPUP_EXPAND_BELOW
-						 : IDS_REVGRAPH_POPUP_COLLAPSE_BELOW
-					   , ID_GRAPH_EXPANDCOLLAPSE_BELOW);
-
-		if (node->GetSource() || (state & CGraphNodeStates::SPLIT_ABOVE))
-			AppendMenu ( popup
-					   ,   (state & CGraphNodeStates::SPLIT_ABOVE)
-						 ? IDS_REVGRAPH_POPUP_JOIN_ABOVE
-						 : IDS_REVGRAPH_POPUP_SPLIT_ABOVE
-					   , ID_GRAPH_SPLITJOIN_ABOVE);
-
-		if (node->GetFirstCopyTarget() || (state & CGraphNodeStates::SPLIT_RIGHT))
-			AppendMenu ( popup
-					   ,   (state & CGraphNodeStates::SPLIT_RIGHT)
-						 ? IDS_REVGRAPH_POPUP_JOIN_RIGHT
-						 : IDS_REVGRAPH_POPUP_SPLIT_RIGHT
-					   , ID_GRAPH_SPLITJOIN_RIGHT);
-
-		if (node->GetNext() || (state & CGraphNodeStates::SPLIT_BELOW))
-			AppendMenu ( popup
-					   ,   (state & CGraphNodeStates::SPLIT_BELOW)
-						 ? IDS_REVGRAPH_POPUP_JOIN_BELOW
-						 : IDS_REVGRAPH_POPUP_SPLIT_BELOW
-					   , ID_GRAPH_SPLITJOIN_BELOW);
-	}
-#endif
-}
-
-CString CRevisionGraphWnd::GetSelectedURL() const
-{
-#if 0
-	if (m_SelectedEntry1 == NULL)
-		return CString();
-
-	CString URL = m_state.GetRepositoryRoot()
-				+ CUnicodeUtils::GetUnicode (m_SelectedEntry1->GetPath().GetPath().c_str());
-	URL = CUnicodeUtils::GetUnicode(CPathUtils::PathEscape(CUnicodeUtils::GetUTF8(URL)));
-
-	return URL;
-#endif
-	return CString();
-}
-
-CString CRevisionGraphWnd::GetWCURL() const
-{
-#if 0
-	CTGitPath path (m_sPath);
-	if (path.IsUrl())
-		return CString();
-
-	SVNInfo info;
-	const SVNInfoData * status
-		= info.GetFirstFileInfo (path, SVNRev(), SVNRev());
-
-	return status == NULL ? CString() : status->url;
-#endif
-	return CString();
-}
-
 void CRevisionGraphWnd::DoShowLog()
 {
 
@@ -1309,54 +1010,15 @@ void CRevisionGraphWnd::DoShowLog()
 
 }
 
-void CRevisionGraphWnd::DoCheckForModification()
-{
-	CChangedDlg dlg;
-	dlg.m_pathList = CTGitPathList (CTGitPath (m_sPath));
-	dlg.DoModal();
-}
-
 void CRevisionGraphWnd::DoMergeTo()
 {
 	CString rev = GetFriendRefName(m_SelectedEntry1);
 	CAppUtils::Merge(&rev);
 }
 
-void CRevisionGraphWnd::DoUpdate()
-{
-#if 0
-	CSVNProgressDlg progDlg;
-	progDlg.SetCommand (CSVNProgressDlg::SVNProgress_Update);
-	progDlg.SetOptions (0); // don't ignore externals
-	progDlg.SetPathList (CTGitPathList (CTGitPath (m_sPath)));
-	progDlg.SetRevision (m_SelectedEntry1->GetRevision());
-	progDlg.SetDepth();
-	progDlg.DoModal();
-
-	if (m_state.GetFetchedWCState())
-		m_parent->UpdateFullHistory();
-#endif
-}
-
 void CRevisionGraphWnd::DoSwitch(CString rev)
 {
 	CAppUtils::PerformSwitch(rev);
-}
-
-void CRevisionGraphWnd::DoSwitchToHead()
-{
-#if 0
-	CSVNProgressDlg progDlg;
-	progDlg.SetCommand (CSVNProgressDlg::SVNProgress_Switch);
-	progDlg.SetPathList (CTGitPathList (CTGitPath (m_sPath)));
-	progDlg.SetUrl (GetSelectedURL());
-	progDlg.SetRevision (SVNRev::REV_HEAD);
-	progDlg.SetPegRevision (m_SelectedEntry1->GetRevision());
-	progDlg.DoModal();
-
-	if (m_state.GetFetchedWCState())
-		m_parent->UpdateFullHistory();
-#endif
 }
 
 void CRevisionGraphWnd::DoBrowseRepo()
@@ -1370,26 +1032,6 @@ void CRevisionGraphWnd::DoBrowseRepo()
 		GetFriendRefName(m_SelectedEntry1));
 
 	CAppUtils::RunTortoiseGitProc(sCmd);
-}
-
-void CRevisionGraphWnd::ResetNodeFlags (DWORD /*flags*/)
-{
-//	m_state.GetNodeStates()->ResetFlags (flags);
-//	m_parent->StartWorkerThread();
-}
-
-void CRevisionGraphWnd::ToggleNodeFlag (const CVisibleGraphNode * /*node*/, DWORD /*flag*/)
-{
-#if 0
-	CSyncPointer<CGraphNodeStates> nodeStates (m_state.GetNodeStates());
-
-	if (nodeStates->GetFlags (node) & flag)
-		nodeStates->ResetFlags (node, flag);
-	else
-		nodeStates->SetFlags (node, flag);
-
-	m_parent->StartWorkerThread();
-#endif
 }
 
 void CRevisionGraphWnd::DoCopyRefs()
@@ -1471,7 +1113,6 @@ void CRevisionGraphWnd::OnContextMenu(CWnd* /*pWnd*/, CPoint point)
 		AppendMenu (popup, IDS_REVGRAPH_POPUP_UNIDIFFREVS, ID_UNIDIFFREVS);
 	}
 
-//	AddGraphOps (popup, clickedentry);
 
 	// if the context menu is invoked through the keyboard, we have to use
 	// a calculated position on where to anchor the menu on
@@ -1527,60 +1168,7 @@ void CRevisionGraphWnd::OnContextMenu(CWnd* /*pWnd*/, CPoint point)
 		if (m_SelectedEntry1 != NULL)
 			CompareRevs(true);
 		break;
-
-
-#if 0
-	case ID_COMPAREREVS:
-		if (m_SelectedEntry1 != NULL)
-			CompareRevs(false);
-		break;
-	case ID_UNIDIFFREVS:
-		if (m_SelectedEntry1 != NULL)
-			UnifiedDiffRevs(false);
-		break;
-	case ID_UNIDIFFHEADS:
-		if (m_SelectedEntry1 != NULL)
-			UnifiedDiffRevs(true);
-		break;
-	case ID_SHOWLOG:
-		DoShowLog();
-		break;
-	case ID_CFM:
-		DoCheckForModification();
-		break;
-	case ID_UPDATE:
-		DoUpdate();
-		break;
-	case ID_SWITCHTOHEAD:
-		DoSwitchToHead();
-		break;
-	case ID_EXPAND_ALL:
-		ResetNodeFlags (CGraphNodeStates::COLLAPSED_ALL);
-		break;
-	case ID_JOIN_ALL:
-		ResetNodeFlags (CGraphNodeStates::SPLIT_ALL);
-		break;
-	case ID_GRAPH_EXPANDCOLLAPSE_ABOVE:
-		ToggleNodeFlag (clickedentry, CGraphNodeStates::COLLAPSED_ABOVE);
-		break;
-	case ID_GRAPH_EXPANDCOLLAPSE_RIGHT:
-		ToggleNodeFlag (clickedentry, CGraphNodeStates::COLLAPSED_RIGHT);
-		break;
-	case ID_GRAPH_EXPANDCOLLAPSE_BELOW:
-		ToggleNodeFlag (clickedentry, CGraphNodeStates::COLLAPSED_BELOW);
-		break;
-	case ID_GRAPH_SPLITJOIN_ABOVE:
-		ToggleNodeFlag (clickedentry, CGraphNodeStates::SPLIT_ABOVE);
-		break;
-	case ID_GRAPH_SPLITJOIN_RIGHT:
-		ToggleNodeFlag (clickedentry, CGraphNodeStates::SPLIT_RIGHT);
-		break;
-	case ID_GRAPH_SPLITJOIN_BELOW:
-		ToggleNodeFlag (clickedentry, CGraphNodeStates::SPLIT_BELOW);
-		break;
-#endif
 	}
-
 }
 
 void CRevisionGraphWnd::OnMouseMove(UINT nFlags, CPoint point)
@@ -1612,33 +1200,6 @@ void CRevisionGraphWnd::OnMouseMove(UINT nFlags, CPoint point)
 			CPoint clientPoint = point;
 			GetCursorPos (&clientPoint);
 			ScreenToClient (&clientPoint);
-
-#if 0
-			const CRevisionGraphState::SVisibleGlyph* hitGlyph
-				= GetHitGlyph (clientPoint);
-			const CFullGraphNode* glyphNode
-				= hitGlyph ? hitGlyph->node->GetBase() : NULL;
-
-			const CFullGraphNode* hoverNode = NULL;
-			if (m_hoverIndex != NO_INDEX)
-			{
-				CSyncPointer<const ILayoutNodeList> nodeList (m_state.GetNodes());
-				if (m_hoverIndex < nodeList->GetCount())
-					hoverNode = nodeList->GetNode (m_hoverIndex).node->GetBase();
-			}
-
-			//bool onHoverNodeGlyph = (hoverNode != NULL) && (glyphNode == hoverNode);
-			if (   !m_hoverIndex
-				&& (   (m_hoverIndex != GetHitNode (clientPoint))))
-			{
-				m_showHoverGlyphs = false;
-
-				KillTimer (GLYPH_HOVER_EVENT);
-				SetTimer (GLYPH_HOVER_EVENT, GLYPH_HOVER_DELAY, NULL);
-
-				Invalidate(FALSE);
-			}
-#endif
 			return __super::OnMouseMove(nFlags, point);
 		}
 	}
@@ -1734,18 +1295,3 @@ LRESULT CRevisionGraphWnd::OnWorkerThreadDone(WPARAM, LPARAM)
 	return 0;
 }
 
-void CRevisionGraphWnd::SetDlgTitle (bool /*offline*/)
-{
-#if 0
-	if (m_sTitle.IsEmpty())
-		GetParent()->GetWindowText(m_sTitle);
-
-	CString newTitle;
-	if (offline)
-		newTitle.Format (IDS_REVGRAPH_DLGTITLEOFFLINE, (LPCTSTR)m_sTitle);
-	else
-		newTitle = m_sTitle;
-
-	CAppUtils::SetWindowTitle(GetParent()->GetSafeHwnd(), m_sPath, newTitle);
-#endif
-}

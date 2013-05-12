@@ -517,25 +517,9 @@ void CRevisionGraphDlg::OnViewUnifieddiffofheadrevisions()
 
 void CRevisionGraphDlg::UpdateFullHistory()
 {
-	m_Graph.SetDlgTitle (false);
 	m_bFetchLogs = true;
 	Invalidate();
 	StartWorkerThread();
-
-#if 0
-	m_Graph.SetDlgTitle (false);
-
-	SVN svn;
-	LogCache::CRepositoryInfo& cachedProperties
-		= svn.GetLogCachePool()->GetRepositoryInfo();
-	CString root = m_Graph.m_state.GetRepositoryRoot();
-	CString uuid = m_Graph.m_state.GetRepositoryUUID();
-
-	cachedProperties.ResetHeadRevision (uuid, root);
-
-	m_bFetchLogs = true;
-	StartWorkerThread();
-#endif
 }
 
 void CRevisionGraphDlg::SetOption (UINT /*controlID*/)
