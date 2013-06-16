@@ -186,6 +186,9 @@ public: // methods
 	virtual void	UseLeftFile() {return UseViewFile(m_pwndLeft); }
 	virtual void	UseRightBlock() {return UseViewBlock(m_pwndRight); }
 	virtual void	UseRightFile() {return UseViewFile(m_pwndRight); }
+	
+	virtual void	UseBothInlineRightFirst() { return UseBothInline(m_pwndLeft, m_pwndRight); }
+	virtual void	UseBothInlineLeftFirst() { return UseBothInline(m_pwndRight, m_pwndLeft); }
 
 	// ViewData methods
 	void			InsertViewData(int index, const CString& sLine, DiffStates state, int linenumber, EOL ending, HIDESTATE hide, int movedline);
@@ -425,6 +428,7 @@ protected:  // methods
 	virtual void	UseViewBlock(CBaseView * /*pwndView*/) {}
 	void			UseViewBlock(CBaseView * pwndView, int nFirstViewLine, int nLastViewLine);
 	virtual void	UseViewFile(CBaseView * /*pwndView*/) {}
+	virtual void	UseBothInline(CBaseView * /*pwndFirst*/, CBaseView * /*pwndLast*/) {}
 
 	virtual void	AddContextItems(CIconMenu& popup, DiffStates state);
 	void			AddCutCopyAndPaste(CIconMenu& popup);
@@ -604,6 +608,8 @@ protected:  // variables
 		POPUPCOMMAND_USEYOURFILE,
 		POPUPCOMMAND_USETHEIRBLOCK,
 		POPUPCOMMAND_USETHEIRFILE,
+		POPUPCOMMAND_USEYOURANDTHEIRINLINE,
+		POPUPCOMMAND_USETHEIRANDYOURINLINE,
 		// others
 		POPUPCOMMAND_TABTOSPACES,
 		POPUPCOMMAND_SPACESTOTABS,

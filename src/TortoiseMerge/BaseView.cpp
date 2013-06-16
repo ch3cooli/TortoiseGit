@@ -2338,6 +2338,12 @@ void CBaseView::OnContextMenu(CPoint point, DiffStates state)
 	case POPUPCOMMAND_USETHEIRFILE:
 		m_pwndBottom->UseLeftFile();
 		break;
+	case POPUPCOMMAND_USEYOURANDTHEIRINLINE:
+		m_pwndBottom->UseBothInlineRightFirst();
+		break;
+	case POPUPCOMMAND_USETHEIRANDYOURINLINE:
+		m_pwndBottom->UseBothInlineLeftFirst();
+		break;
 	// copy, cut and paste commands
 	case ID_EDIT_COPY:
 		OnEditCopy();
@@ -4328,8 +4334,8 @@ bool CBaseView::GetInlineDiffPositions(int nViewLine, std::vector<inlineDiffPos>
 	if (sDiffLine.IsEmpty())
 		return false;
 
-	CString sLineExp = ExpandChars(sLine);
-	CString sDiffLineExp = ExpandChars(sDiffLine);
+	CString sLineExp = sLine;
+	CString sDiffLineExp = sDiffLine;
 	svn_diff_t * diff = NULL;
 	m_svnlinediff.Diff(&diff, sLineExp, sLineExp.GetLength(), sDiffLineExp, sDiffLineExp.GetLength(), m_bInlineWordDiff);
 	if (!diff || !SVNLineDiff::ShowInlineDiff(diff))

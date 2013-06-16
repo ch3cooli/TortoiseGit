@@ -197,3 +197,14 @@ void CBottomView::UseViewFile(CBaseView * pwndView)
 
 	return UseBlock(pwndView, nFirstViewLine, nLastViewLine);
 }
+
+void CBottomView::UseBothInline(CBaseView * pwndFirst, CBaseView * pwndLast)
+{
+	if (!IsViewGood(pwndFirst) || !IsViewGood(pwndLast))
+		return;
+	int nX;
+	if (pwndLast->GetNextInlineDiff(nX))
+	{
+
+	}
+}

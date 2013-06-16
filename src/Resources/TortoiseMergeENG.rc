@@ -812,6 +812,8 @@ STRINGTABLE
 BEGIN
     IDS_VIEWCONTEXTMENU_EOL "End of Line Style"
     IDS_VIEWCONTEXTMENU_ENCODING "File Encoding"
+    IDS_VIEWCONTEXTMENU_USEYOURANDTHEIRINLINE "Use inline blocks from 'mine' before 'theirs'"
+    IDS_VIEWCONTEXTMENU_USETHEIRANDYOURINLINE "Use inline blocks from 't&heirs' before 'mine'"
 END
 
 STRINGTABLE

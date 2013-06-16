@@ -40,4 +40,5 @@ public:
 	void	UseBothBlocks(CBaseView * pwndFirst, CBaseView * pwndLast);
 	void	UseViewBlock(CBaseView * pwndView);
 	void	UseViewFile(CBaseView * pwndView);
+	void	UseBothInline(CBaseView * pwndFirst, CBaseView * pwndLast);
 };
