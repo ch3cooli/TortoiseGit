@@ -25,6 +25,119 @@
 #include "CreateProcessHelper.h"
 #include "SysInfo.h"
 
+/** Begin code from Scintilla LexOthers.cxx with modifications **/
+
+#define DIFF_BUFFER_START_SIZE 600
+// Note that CheckPatchLineHasBinary analyzes only the first DIFF_BUFFER_START_SIZE
+// characters of each line to classify the line.
+
+static inline bool AtEOL(const char *styler, unsigned int i, int &sol) {
+	if (styler[i] == '\n') {
+		sol = i;
+		return true;
+	}
+
+	if ((styler[i] == '\r') && (styler[i + 1] != '\n')) {
+		sol = i + 1;
+		return true;
+	}
+
+	return false;
+}
+
+static bool CheckPatchLineHasBinary(char *lineBuffer) {
+	int lineType = SCE_DIFF_DEFAULT;
+	// It is needed to remember the current state to recognize starting
+	// comment lines before the first "diff " or "--- ". If a real
+	// difference starts then each line starting with ' ' is a whitespace
+	// otherwise it is considered a comment (Only in..., Binary file...)
+	if (0 == strncmp(lineBuffer, "diff ", 5)) {
+		lineType = SCE_DIFF_COMMAND;
+	} else if (0 == strncmp(lineBuffer, "Index: ", 7)) {  // For subversion's diff
+		lineType = SCE_DIFF_COMMAND;
+	} else if (0 == strncmp(lineBuffer, "---", 3) && lineBuffer[3] != '-') {
+		// In a context diff, --- appears in both the header and the position markers
+		if (lineBuffer[3] == ' ' && atoi(lineBuffer + 4) && !strchr(lineBuffer, '/'))
+			lineType = SCE_DIFF_POSITION;
+		else if (lineBuffer[3] == '\r' || lineBuffer[3] == '\n')
+			lineType = SCE_DIFF_POSITION;
+		else
+			lineType = SCE_DIFF_HEADER;
+	} else if (0 == strncmp(lineBuffer, "+++ ", 4)) {
+		// I don't know of any diff where "+++ " is a position marker, but for
+		// consistency, do the same as with "--- " and "*** ".
+		if (atoi(lineBuffer+4) && !strchr(lineBuffer, '/'))
+			lineType = SCE_DIFF_POSITION;
+		else
+			lineType = SCE_DIFF_HEADER;
+	} else if (0 == strncmp(lineBuffer, "====", 4)) {  // For p4's diff
+		lineType = SCE_DIFF_HEADER;
+	} else if (0 == strncmp(lineBuffer, "***", 3)) {
+		// In a context diff, *** appears in both the header and the position markers.
+		// Also ******** is a chunk header, but here it's treated as part of the
+		// position marker since there is no separate style for a chunk header.
+		if (lineBuffer[3] == ' ' && atoi(lineBuffer+4) && !strchr(lineBuffer, '/'))
+			lineType = SCE_DIFF_POSITION;
+		else if (lineBuffer[3] == '*')
+			lineType = SCE_DIFF_POSITION;
+		else
+			lineType = SCE_DIFF_HEADER;
+	} else if (0 == strncmp(lineBuffer, "? ", 2)) {    // For difflib
+		lineType = SCE_DIFF_HEADER;
+	} else if (lineBuffer[0] == '@') {
+		lineType = SCE_DIFF_POSITION;
+	} else if (lineBuffer[0] >= '0' && lineBuffer[0] <= '9') {
+		lineType = SCE_DIFF_POSITION;
+	} else if (lineBuffer[0] == '-' || lineBuffer[0] == '<') {
+		lineType = SCE_DIFF_DELETED;
+	} else if (lineBuffer[0] == '+' || lineBuffer[0] == '>') {
+		lineType = SCE_DIFF_ADDED;
+	} else if (lineBuffer[0] == '!') {
+		lineType = SCE_DIFF_CHANGED;
+	} else if (lineBuffer[0] != ' ') {
+		lineType = SCE_DIFF_COMMENT;
+		// SVN style
+		if (strstr(lineBuffer, "Cannot display: file marked as a binary type") == lineBuffer)
+			return true;
+		// Git style
+		if (strstr(lineBuffer, "Binary files ") == lineBuffer && strstr(lineBuffer + 13, "differ") == lineBuffer + 13)
+			return true;
+	} else {
+		lineType = SCE_DIFF_DEFAULT;
+	}
+	return false;
+}
+
+static bool CheckPatchHasBinary(unsigned int startPos, int length, const char *styler, int &lastSOLPos) {
+	bool found = false;
+	char lineBuffer[DIFF_BUFFER_START_SIZE] = "";
+	unsigned int linePos = 0;
+	for (unsigned int i = startPos; i < startPos + length; i++) {
+		if (AtEOL(styler, i, lastSOLPos)) {
+			if (linePos < DIFF_BUFFER_START_SIZE) {
+				lineBuffer[linePos] = 0;
+			}
+			if (CheckPatchLineHasBinary(lineBuffer))
+				found = true;
+			linePos = 0;
+		} else if (linePos < DIFF_BUFFER_START_SIZE - 1) {
+			lineBuffer[linePos++] = styler[i];
+		} else if (linePos == DIFF_BUFFER_START_SIZE - 1) {
+			lineBuffer[linePos++] = 0;
+		}
+	}
+	if (linePos > 0) {	// Last line does not have ending characters
+		if (linePos < DIFF_BUFFER_START_SIZE) {
+			lineBuffer[linePos] = 0;
+		}
+		if (CheckPatchLineHasBinary(lineBuffer))
+			found = true;
+	}
+	return found;
+}
+
+/** End code from Scintilla LexOthers.cxx **/
+
 const UINT TaskBarButtonCreated = RegisterWindowMessage(L"TaskbarButtonCreated");
 
 CMainWindow::CMainWindow(HINSTANCE hInst, const WNDCLASSEX* wcx /* = NULL*/)
@@ -609,16 +722,29 @@ bool CMainWindow::LoadFile(HANDLE hFile)
 	InitEditor();
 	char data[4096];
 	DWORD dwRead = 0;
+	DWORD dwRemain = 0;
+	int sol = 0;
+	bool hasBinary = false;
 
 	BOOL bRet = ReadFile(hFile, data, sizeof(data), &dwRead, NULL);
+	dwRemain = 0;
 	bool bUTF8 = IsUTF8(data, dwRead);
 	while ((dwRead > 0) && (bRet))
 	{
 		SendEditor(SCI_ADDTEXT, dwRead,
-			reinterpret_cast<LPARAM>(static_cast<char *>(data)));
-		bRet = ReadFile(hFile, data, sizeof(data), &dwRead, NULL);
+			reinterpret_cast<LPARAM>(static_cast<char *>(data + dwRemain)));
+		sol = 0;
+		if (hasBinary)
+			sol = sizeof(data);
+		else if (CheckPatchHasBinary(dwRemain, sizeof(data) - dwRemain, data, sol))
+			hasBinary = true;
+		dwRemain = sizeof(data) - sol;
+		memcpy(data, data + sol, dwRemain);
+		bRet = ReadFile(hFile, data + dwRemain, sizeof(data) - dwRemain, &dwRead, NULL);
 	}
 	SetupWindow(bUTF8);
+	if (hasBinary)
+		MessageBox(m_hwnd, _T("Binary file detected in this diff/patch"), _T("TortoiseGitUDiff"), MB_OK | MB_ICONINFORMATION);
 	return true;
 }
 
@@ -632,17 +758,30 @@ bool CMainWindow::LoadFile(LPCTSTR filename)
 
 	//SetTitle();
 	char data[4096];
+	size_t dwRemain = 0;
+	int sol = 0;
+	bool hasBinary = false;
 	size_t lenFile = fread(data, 1, sizeof(data), fp);
+	dwRemain = 0;
 	bool bUTF8 = IsUTF8(data, lenFile);
 	while (lenFile > 0)
 	{
 		SendEditor(SCI_ADDTEXT, lenFile,
-			reinterpret_cast<LPARAM>(static_cast<char *>(data)));
-		lenFile = fread(data, 1, sizeof(data), fp);
+			reinterpret_cast<LPARAM>(static_cast<char *>(data + dwRemain)));
+		sol = 0;
+		if (hasBinary)
+			sol = sizeof(data);
+		else if (CheckPatchHasBinary(dwRemain, sizeof(data) - dwRemain, data, sol))
+			hasBinary = true;
+		dwRemain = sizeof(data) - sol;
+		memcpy(data, data + sol, dwRemain);
+		lenFile = fread(data + dwRemain, 1, sizeof(data) - dwRemain, fp);
 	}
 	fclose(fp);
 	SetupWindow(bUTF8);
 	m_filename = filename;
+	if (hasBinary)
+		MessageBox(m_hwnd, _T("Binary file detected in this diff/patch"), _T("TortoiseGitUDiff"), MB_OK | MB_ICONINFORMATION);
 	return true;
 }
 
