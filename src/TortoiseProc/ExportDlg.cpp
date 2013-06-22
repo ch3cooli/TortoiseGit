@@ -1,7 +1,7 @@
 // TortoiseGit - a Windows shell extension for easy version control
 
 // Copyright (C) 2003-2008 - TortoiseSVN
-// Copyright (C) 2008-2012 - TortoiseGit
+// Copyright (C) 2008-2013 - TortoiseGit
 
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -33,6 +33,7 @@ CExportDlg::CExportDlg(CWnd* pParent /*=NULL*/)
 	, CChooseVersion(this)
 	, m_Revision(_T("HEAD"))
 	, m_strFile(_T(""))
+	, m_bUseCommitTime(FALSE)
 {
 }
 
@@ -44,6 +45,7 @@ void CExportDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CHorizontalResizableStandAloneDialog::DoDataExchange(pDX);
 	DDX_Text(pDX, IDC_EXPORTFILE, m_strFile);
+	DDX_Check(pDX, IDC_CHECK_USECOMMITTIME, m_bUseCommitTime);
 	CHOOSE_VERSION_DDX;
 }
 
@@ -66,11 +68,13 @@ BOOL CExportDlg::OnInitDialog()
 	AddAnchor(IDC_EXPORTFILE_LABEL, TOP_LEFT);
 	AddAnchor(IDC_EXPORTFILE_BROWSE, TOP_RIGHT);
 	AddAnchor(IDC_EXPORTFILE, TOP_LEFT, TOP_RIGHT);
+	AddAnchor(IDC_CHECK_USECOMMITTIME, TOP_LEFT);
 
 	AddAnchor(IDOK, BOTTOM_RIGHT);
 	AddAnchor(IDCANCEL, BOTTOM_RIGHT);
 	AddAnchor(IDHELP, BOTTOM_RIGHT);
 
+	AdjustControlSize(IDC_CHECK_USECOMMITTIME);
 	AdjustControlSize(IDC_RADIO_HEAD);
 	AdjustControlSize(IDC_RADIO_BRANCH);
 	AdjustControlSize(IDC_RADIO_TAGS);

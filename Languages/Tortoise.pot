@@ -9002,6 +9002,10 @@ msgstr ""
 msgid "Use both text blocks (this one last)"
 msgstr ""
 
+#. Resource IDs: (1756)
+msgid "Use commit time as archive modification time"
+msgstr ""
+
 #. Resource IDs: (156)
 msgid "Use left block"
 msgstr ""

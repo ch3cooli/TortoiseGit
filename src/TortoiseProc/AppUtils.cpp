@@ -1093,7 +1093,38 @@ bool CAppUtils::Export(CString *BashHash)
 
 		CProgressDlg pro;
 		pro.m_GitCmd=cmd;
-		return (pro.DoModal() == IDOK);
+		INT_PTR ret = pro.DoModal();
+		if (ret == IDOK && pro.m_GitStatus == 0 && dlg.m_bUseCommitTime)
+		{
+			GitRev rev;
+			if (!rev.GetCommit(dlg.m_Revision))
+			{
+				struct tm ltm;
+				time_t ltt = mktime(rev.GetCommitterDate().GetGmtTm(&ltm));
+				SYSTEMTIME st;
+				CTime(ltt).GetAsSystemTime(st);
+				FILETIME ft;
+				SystemTimeToFileTime(&st, &ft);
+				HANDLE file = CreateFile(dlg.m_strFile, GENERIC_READ | GENERIC_WRITE, 0, nullptr, OPEN_EXISTING, 0, nullptr);
+				if (file == INVALID_HANDLE_VALUE)
+				{
+					CMessageBox::Show(NULL, _T("Failed to open ") + dlg.m_strFile, _T("TortoiseGit"), MB_OK | MB_ICONERROR);
+					return false;
+				}
+				if (!SetFileTime(file, nullptr, nullptr, &ft))
+				{
+					CMessageBox::Show(NULL, _T("Failed to set time ") + dlg.m_strFile, _T("TortoiseGit"), MB_OK | MB_ICONERROR);
+					return false;
+				}
+				CloseHandle(file);
+			}
+			else
+			{
+				CMessageBox::Show(NULL, _T("Failed to get commit ") + dlg.m_Revision, _T("TortoiseGit"), MB_OK | MB_ICONERROR);
+				return false;
+			}
+			return true;
+		}
 	}
 	return false;
 }

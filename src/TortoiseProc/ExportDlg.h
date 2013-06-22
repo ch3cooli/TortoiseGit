@@ -64,5 +64,6 @@ public:
 	CString			m_Revision;
 	CButton			m_butBrowse;
 	CString			m_strFile;
+	BOOL			m_bUseCommitTime;
 	afx_msg void OnDestroy();
 };
