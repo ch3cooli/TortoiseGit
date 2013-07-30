@@ -1010,6 +1010,8 @@ void CBrowseRefsDlg::ShowContextMenu(CPoint point, HTREEITEM hTreePos, VectorPSh
 			CString temp;
 			temp.LoadString(IDS_MENUBRANCH);
 			popupMenu.AppendMenuIcon(eCmd_CreateBranch, temp, IDI_COPY);
+			temp = _T("Remove Branch Config");
+			popupMenu.AppendMenuIcon(eCmd_RemoveBranchConfig, temp, IDI_DELETE);
 		}
 		if(pTree->IsFrom(L"refs/tags"))
 		{
@@ -1175,6 +1177,8 @@ void CBrowseRefsDlg::ShowContextMenu(CPoint point, HTREEITEM hTreePos, VectorPSh
 				Refresh();
 			}
 		}
+		break;
+	case eCmd_RemoveBranchConfig:
 		break;
 	}
 }
