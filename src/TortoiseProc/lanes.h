@@ -8,7 +8,7 @@
 #ifndef LANES_H
 #define LANES_H
 
-#include "githash.h"
+#include "GitHash.h"
 
 #define QVector std::vector
 

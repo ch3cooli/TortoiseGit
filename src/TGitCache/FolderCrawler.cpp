@@ -22,7 +22,7 @@
 #include "FolderCrawler.h"
 #include "GitStatusCache.h"
 #include "registry.h"
-#include "TGitCache.h"
+#include "TGITCache.h"
 #include <ShlObj.h>
 #include "SysInfo.h"
 

@@ -24,7 +24,7 @@
 #include "ACEdit.h"
 #include "RegHistory.h"
 #include "TGitPath.h"
-#include "patch.h"
+#include "Patch.h"
 #include "registry.h"
 #include "PatchListCtrl.h"
 

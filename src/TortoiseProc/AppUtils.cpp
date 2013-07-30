@@ -50,7 +50,7 @@
 #include "..\Settings\Settings.h"
 #include "InputDlg.h"
 #include "SVNDCommitDlg.h"
-#include "requestpulldlg.h"
+#include "RequestPullDlg.h"
 #include "PullFetchDlg.h"
 #include "FileDiffDlg.h"
 #include "RebaseDlg.h"

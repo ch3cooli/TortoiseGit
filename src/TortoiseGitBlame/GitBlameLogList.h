@@ -19,7 +19,7 @@
 //
 
 #pragma once
-#include "GitLoglistBase.h"
+#include "GitLogListBase.h"
 class CGitBlameLogList : public CGitLogListBase
 {
 	DECLARE_DYNAMIC(CGitBlameLogList)

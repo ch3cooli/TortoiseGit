@@ -21,7 +21,7 @@
 #include <afxcmn.h>
 #include "HorizontalResizableStandAloneDialog.h"
 #include "HistoryCombo.h"
-#include "ToolTip.h"
+#include "Tooltip.h"
 // CSubmoduleAddDlg dialog
 
 class CSubmoduleAddDlg : public CHorizontalResizableStandAloneDialog

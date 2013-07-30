@@ -25,7 +25,7 @@
 #include "GitSwitchDlg.h"
 #include "AppUtils.h"
 
-#include "Messagebox.h"
+#include "MessageBox.h"
 
 // CGitSwitchDlg dialog
 

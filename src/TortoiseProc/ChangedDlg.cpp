@@ -21,7 +21,7 @@
 #include "TortoiseProc.h"
 #include "ChangedDlg.h"
 #include "MessageBox.h"
-#include "cursor.h"
+#include "Cursor.h"
 #include "AppUtils.h"
 #include "PathUtils.h"
 #include "ChangedDlg.h"

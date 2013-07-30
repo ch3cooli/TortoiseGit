@@ -25,7 +25,7 @@
 #include "GitLogList.h"
 #include "GitRev.h"
 #include "IconMenu.h"
-#include "cursor.h"
+#include "Cursor.h"
 #include "GitProgressDlg.h"
 #include "ProgressDlg.h"
 #include "SysProgressDlg.h"

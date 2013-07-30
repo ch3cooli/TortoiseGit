@@ -19,7 +19,7 @@
 //
 #include "stdafx.h"
 //#include "resource.h"			//if you defined some IDS_MSGBOX_xxxx this include is needed!
-#include "messagebox.h"
+#include "MessageBox.h"
 #include "ClipboardHelper.h"
 #include "SmartHandle.h"
 

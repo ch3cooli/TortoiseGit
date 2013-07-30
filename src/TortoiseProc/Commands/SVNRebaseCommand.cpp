@@ -25,7 +25,7 @@
 #include "RenameDlg.h"
 #include "Git.h"
 #include "ShellUpdater.h"
-#include "rebasedlg.h"
+#include "RebaseDlg.h"
 #include "SysProgressDlg.h"
 #include "AppUtils.h"
 

@@ -19,7 +19,7 @@
 //
 #pragma once
 #include <afxcmn.h>
-#include "acedit.h"
+#include "ACEdit.h"
 
 /**
  * \ingroup TortoiseProc

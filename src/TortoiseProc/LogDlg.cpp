@@ -19,7 +19,7 @@
 
 #include "stdafx.h"
 #include "TortoiseProc.h"
-#include "cursor.h"
+#include "Cursor.h"
 #include "StatGraphDlg.h"
 #include "LogDlg.h"
 #include "MessageBox.h"

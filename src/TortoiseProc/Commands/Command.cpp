@@ -59,7 +59,7 @@
 #include "HelpCommand.h"
 #include "StashCommand.h"
 #include "SubmoduleCommand.h"
-#include "ReflogCommand.h"
+#include "RefLogCommand.h"
 #include "SendMailCommand.h"
 #include "CatCommand.h"
 #include "RefBrowseCommand.h"
@@ -74,7 +74,7 @@
 #include "SVNIgnoreCommand.h"
 #include "BisectCommand.h"
 #include "RepositoryBrowserCommand.h"
-#include "RevisiongraphCommand.h"
+#include "RevisionGraphCommand.h"
 #include "ShowCompareCommand.h"
 #include "DaemonCommand.h"
 

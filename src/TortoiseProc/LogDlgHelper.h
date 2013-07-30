@@ -25,7 +25,7 @@
 #include "lanes.h"
 #include <set>
 #include "GitHash.h"
-#include "GitLogCache.h"
+#include "gitlogcache.h"
 class CLogDlg;
 
 /**

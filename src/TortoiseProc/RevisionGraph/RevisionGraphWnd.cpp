@@ -19,7 +19,7 @@
 //
 #include "stdafx.h"
 #include "TortoiseProc.h"
-#include "Revisiongraphwnd.h"
+#include "RevisionGraphWnd.h"
 #include "MessageBox.h"
 #include "Git.h"
 #include "AppUtils.h"

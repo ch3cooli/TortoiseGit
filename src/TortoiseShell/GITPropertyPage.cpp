@@ -20,7 +20,7 @@
 #include "stdafx.h"
 
 #include "ShellExt.h"
-#include "gitpropertypage.h"
+#include "GITPropertyPage.h"
 #include "UnicodeUtils.h"
 #include "PathUtils.h"
 #include "UnicodeUtils.h"

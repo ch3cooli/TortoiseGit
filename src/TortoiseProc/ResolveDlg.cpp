@@ -19,7 +19,7 @@
 //
 #include "stdafx.h"
 #include "TortoiseProc.h"
-#include "messagebox.h"
+#include "MessageBox.h"
 #include "ResolveDlg.h"
 #include "AppUtils.h"
 

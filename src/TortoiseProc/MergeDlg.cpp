@@ -27,7 +27,7 @@
 #include "MergeDlg.h"
 #include "AppUtils.h"
 #include "HistoryDlg.h"
-#include "Messagebox.h"
+#include "MessageBox.h"
 // CMergeDlg dialog
 
 IMPLEMENT_DYNAMIC(CMergeDlg, CResizableStandAloneDialog)

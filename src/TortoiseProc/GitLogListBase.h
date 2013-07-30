@@ -33,7 +33,7 @@
 #include "GitRev.h"
 #include "Tooltip.h"
 #include "lanes.h"
-#include "GitLogCache.h"
+#include "gitlogcache.h"
 #include <regex>
 #include "GitStatusListCtrl.h"
 #include "FindDlg.h"
