@@ -20,8 +20,8 @@
 #pragma once
 
 #include "HistoryCombo.h"
-#include "afxcmn.h"
-#include "afxwin.h"
+#include <afxcmn.h>
+#include <afxwin.h>
 #include "StandAloneDlg.h"
 #include "LoglistCommonResource.h"
 #include "registry.h"

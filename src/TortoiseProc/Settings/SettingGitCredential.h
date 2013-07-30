@@ -17,7 +17,7 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 #pragma once
-#include "afxwin.h"
+#include <afxwin.h>
 #include "SettingsPropPage.h"
 #include "Tooltip.h"
 #include "registry.h"

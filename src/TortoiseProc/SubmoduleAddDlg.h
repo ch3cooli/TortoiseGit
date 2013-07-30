@@ -18,7 +18,7 @@
 //
 
 #pragma once
-#include "afxcmn.h"
+#include <afxcmn.h>
 #include "HorizontalResizableStandAloneDialog.h"
 #include "HistoryCombo.h"
 #include "ToolTip.h"

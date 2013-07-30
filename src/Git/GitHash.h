@@ -18,6 +18,9 @@
 //
 
 #pragma once
+#if defined(_MFC_VER)
+#include <afx.h>
+#endif
 #define GIT_HASH_SIZE 20
 
 class CGitHash

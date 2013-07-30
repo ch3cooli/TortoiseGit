@@ -21,7 +21,7 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "UserPassword.h"
-#include "afxdialogex.h"
+#include <afxdialogex.h>
 
 // CUserPassword dialog
 

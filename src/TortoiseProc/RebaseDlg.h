@@ -18,8 +18,8 @@
 //
 
 #pragma once
-#include "afxcmn.h"
-#include "afxwin.h"
+#include <afxcmn.h>
+#include <afxwin.h>
 #include "StandAloneDlg.h"
 #include "GitStatusListCtrl.h"
 #include "SciEdit.h"

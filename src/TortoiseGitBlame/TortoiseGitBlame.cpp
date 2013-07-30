@@ -21,7 +21,7 @@
 //
 
 #include "stdafx.h"
-#include "afxwinappex.h"
+#include <afxwinappex.h>
 #include "TortoiseGitBlame.h"
 #include "MainFrm.h"
 #include "../version.h"
