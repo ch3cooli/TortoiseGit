@@ -193,6 +193,7 @@ typedef enum
 }CONFIG_TYPE;
 
 GITDLL_API int get_set_config(const char *key, char *value, CONFIG_TYPE type);
+GITDLL_API int remove_config_section(const char *name);
 
 const char *get_windows_home_directory(void);
 

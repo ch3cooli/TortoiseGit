@@ -1836,6 +1836,18 @@ BEGIN
     LTEXT           "In order to abort a merge progess a reset (to HEAD) is needed.",IDC_STATIC_REMINDER,7,7,285,10
 END
 
+IDD_REMOVEBRANCHCONFIG DIALOGEX 0, 0, 225, 102
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
+CAPTION "Remove Branch Config - TortoiseGit"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "&Branches:",IDC_STATIC,7,7,43,13
+    CONTROL         "",IDC_LIST_TAGS,"SysListView32",LVS_REPORT | LVS_SHOWSELALWAYS | LVS_ALIGNLEFT | LVS_NOCOLUMNHEADER | WS_BORDER | WS_TABSTOP,57,7,161,67
+    CONTROL         "Select/deselect &all",IDC_SELECTALL,"Button",BS_AUTO3STATE | WS_TABSTOP,7,86,78,10
+    DEFPUSHBUTTON   "&Remove",IDOK,91,82,59,14,WS_DISABLED
+    PUSHBUTTON      "Close",IDCANCEL,159,82,59,14
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -2675,6 +2687,14 @@ BEGIN
         RIGHTMARGIN, 292
         TOPMARGIN, 7
         BOTTOMMARGIN, 104
+    END
+
+    IDD_REMOVEBRANCHCONFIG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 218
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 95
     END
 END
 #endif    // APSTUDIO_INVOKED

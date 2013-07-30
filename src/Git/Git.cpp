@@ -642,6 +642,43 @@ int CGit::UnsetConfigValue(CString key, CONFIG_TYPE type, int encoding)
 	return 0;
 }
 
+int CGit::RemoveConfigSection(CString key)
+{
+	if (m_IsUseGitDLL)
+	{
+		CAutoLocker lock(g_Git.m_critGitDllSec);
+
+		try
+		{
+			CheckAndInitDll();
+		}
+		catch(...)
+		{
+		}
+		CStringA keya = CUnicodeUtils::GetUTF8(key);
+		try
+		{
+			return remove_config_section(keya.GetBuffer());
+		}
+		catch (const char *msg)
+		{
+			::MessageBox(NULL, _T("Could not remove config section.\nlibgit reports:\n") + CString(msg), _T("TortoiseGit"), MB_OK | MB_ICONERROR);
+			return -1;
+		}
+	}
+	else
+	{
+		CString cmd;
+		cmd.Format(_T("git.exe config --remove-section %s"), key);
+		CString out;
+		if (Run(cmd, &out, NULL, CP_UTF8))
+		{
+			return -1;
+		}
+	}
+	return 0;
+}
+
 CString CGit::GetCurrentBranch(void)
 {
 	CString output;

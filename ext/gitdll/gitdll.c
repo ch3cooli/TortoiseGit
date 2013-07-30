@@ -1099,6 +1099,11 @@ int get_set_config(const char *key, char *value, CONFIG_TYPE type)
 	return git_config_set_multivar_in_file(config_exclusive_filename, key, value, NULL, 0);
 }
 
+int remove_config_section(const char *name)
+{
+	return git_config_rename_section(name, NULL);
+}
+
 struct mailmap_info {
 	char *name;
 	char *email;

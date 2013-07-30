@@ -35,6 +35,7 @@
 #include "UnicodeUtils.h"
 #include "InputDlg.h"
 #include "SysProgressDlg.h"
+#include "RemoveBranchConfigDlg.h"
 
 static int SplitRemoteBranchName(CString ref, CString &remote, CString &branch)
 {
@@ -1179,6 +1180,8 @@ void CBrowseRefsDlg::ShowContextMenu(CPoint point, HTREEITEM hTreePos, VectorPSh
 		}
 		break;
 	case eCmd_RemoveBranchConfig:
+		CRemoveBranchConfigDlg dlg;
+		dlg.DoModal();
 		break;
 	}
 }

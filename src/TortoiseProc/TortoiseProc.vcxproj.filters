@@ -659,6 +659,9 @@
     <ClCompile Include="MergeAbortDlg.cpp">
       <Filter>Commands\merge</Filter>
     </ClCompile>
+    <ClCompile Include="RemoveBranchConfigDlg.cpp">
+      <Filter>Utility Dialogs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AddRemoteDlg.h">
@@ -1146,6 +1149,9 @@
     </ClInclude>
     <ClInclude Include="MergeAbortDlg.h">
       <Filter>Commands\merge</Filter>
+    </ClInclude>
+    <ClInclude Include="RemoveBranchConfigDlg.h">
+      <Filter>Utility Dialogs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
