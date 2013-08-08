@@ -1450,61 +1450,6 @@ void CLogDlg::OnOK()
 #endif
 }
 
-void CLogDlg::DoDiffFromLog(INT_PTR selIndex, GitRev* rev1, GitRev* rev2, bool /*blame*/, bool /*unified*/)
-{
-	DialogEnableWindow(IDOK, FALSE);
-//	SetPromptApp(&theApp);
-	theApp.DoWaitCursor(1);
-
-	CString temppath;
-	GetTempPath(temppath);
-
-	CString file1;
-	file1.Format(_T("%s%s_%s%s"),
-				temppath,
-				(*m_currentChangedArray)[selIndex].GetBaseFilename(),
-				rev1->m_CommitHash.ToString().Left(g_Git.GetShortHASHLength()),
-				(*m_currentChangedArray)[selIndex].GetFileExtension());
-
-	CString file2;
-	file2.Format(_T("%s\\%s_%s%s"),
-				temppath,
-				(*m_currentChangedArray)[selIndex].GetBaseFilename(),
-				rev2->m_CommitHash.ToString().Left(g_Git.GetShortHASHLength()),
-				(*m_currentChangedArray)[selIndex].GetFileExtension());
-
-	CString cmd;
-	CTGitPath &path = (CTGitPath &)(*m_currentChangedArray)[selIndex];
-
-	if (g_Git.GetOneFile(rev1->m_CommitHash.ToString(), path, file1))
-	{
-		CString out;
-		out.Format(IDS_STATUSLIST_CHECKOUTFILEFAILED, path.GetGitPathString(), rev1->m_CommitHash.ToString(), file1);
-		CMessageBox::Show(nullptr, g_Git.GetGitLastErr(out, CGit::GIT_CMD_GETONEFILE), _T("TortoiseGit"), MB_OK);
-		theApp.DoWaitCursor(-1);
-		EnableOKButton();
-		return;
-	}
-	if (g_Git.GetOneFile(rev2->m_CommitHash.ToString(), path, file2))
-	{
-		CString out;
-		out.Format(IDS_STATUSLIST_CHECKOUTFILEFAILED, path.GetGitPathString(), rev2->m_CommitHash.ToString(), file2);
-		CMessageBox::Show(nullptr, g_Git.GetGitLastErr(out, CGit::GIT_CMD_GETONEFILE), _T("TortoiseGit"), MB_OK);
-		theApp.DoWaitCursor(-1);
-		EnableOKButton();
-		return;
-	}
-
-	CAppUtils::DiffFlags flags;
-	CAppUtils::StartExtDiff(file1,file2,_T("A"),_T("B"),
-													g_Git.CombinePath(path), g_Git.CombinePath(path),
-													rev1->m_CommitHash.ToString(), rev2->m_CommitHash.ToString(),
-													flags);
-
-	theApp.DoWaitCursor(-1);
-	EnableOKButton();
-}
-
 BOOL CLogDlg::PreTranslateMessage(MSG* pMsg)
 {
 	// Skip Ctrl-C when copying text out of the log message or search filter
