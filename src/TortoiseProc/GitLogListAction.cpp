@@ -283,24 +283,11 @@ void CGitLogList::ContextMenuAction(int cmd,int FirstSelect, int LastSelect, CMe
 					}
 					CGitDiff::DiffCommit(m_Path, CTGitPath(path1), r1, r2);
 				}
-
-				//user clicked on the menu item "compare with working copy"
-				//if (PromptShown())
-				//{
-				//	GitDiff diff(this, m_hWnd, true);
-				//	diff.SetAlternativeTool(!!(GetAsyncKeyState(VK_SHIFT) & 0x8000));
-				//	diff.SetHEADPeg(m_LogRevision);
-				//	diff.ShowCompare(m_path, GitRev::REV_WC, m_path, revSelected);
-				//}
-				//else
-				//	CAppUtils::StartShowCompare(m_hWnd, m_path, GitRev::REV_WC, m_path, revSelected, GitRev(), m_LogRevision, !!(GetAsyncKeyState(VK_SHIFT) & 0x8000));
 			}
 			break;
 
 		case ID_COMPAREWITHPREVIOUS:
 			{
-				CFileDiffDlg dlg;
-
 				if (pSelLogEntry->m_ParentHash.empty())
 				{
 					try
@@ -314,7 +301,6 @@ void CGitLogList::ContextMenuAction(int cmd,int FirstSelect, int LastSelect, CMe
 				}
 
 				if (!pSelLogEntry->m_ParentHash.empty())
-				//if(m_logEntries.m_HashMap[pSelLogEntry->m_ParentHash[0]]>=0)
 				{
 					cmd>>=16;
 					cmd&=0xFFFF;
@@ -350,15 +336,6 @@ void CGitLogList::ContextMenuAction(int cmd,int FirstSelect, int LastSelect, CMe
 				{
 					CMessageBox::Show(NULL, IDS_PROC_NOPREVIOUSVERSION, IDS_APPNAME, MB_OK);
 				}
-				//if (PromptShown())
-				//{
-				//	GitDiff diff(this, m_hWnd, true);
-				//	diff.SetAlternativeTool(!!(GetAsyncKeyState(VK_SHIFT) & 0x8000));
-				//	diff.SetHEADPeg(m_LogRevision);
-				//	diff.ShowCompare(CTGitPath(pathURL), revPrevious, CTGitPath(pathURL), revSelected);
-				//}
-				//else
-				//	CAppUtils::StartShowCompare(m_hWnd, CTGitPath(pathURL), revPrevious, CTGitPath(pathURL), revSelected, GitRev(), m_LogRevision, !!(GetAsyncKeyState(VK_SHIFT) & 0x8000));
 			}
 			break;
 		case ID_LOG_VIEWRANGE:
