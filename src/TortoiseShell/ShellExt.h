@@ -112,6 +112,7 @@ protected:
 
 	GitFolderStatus		m_CachedStatus;		// status cache
 	CRemoteCacheLink	m_remoteCacheLink;
+	bool				m_bRemoteCacheLinkOK;
 
 	FN_GetBufferedPaintBits pfnGetBufferedPaintBits;
 	FN_BeginBufferedPaint pfnBeginBufferedPaint;

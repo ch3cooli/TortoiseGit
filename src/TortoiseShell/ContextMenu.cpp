@@ -58,6 +58,7 @@ STDMETHODIMP CShellExt::Initialize_Wrap(LPCITEMIDLIST pIDFolder,
 {
 	CTraceToOutputDebugString::Instance()(__FUNCTION__ ": Shell :: Initialize\n");
 	PreserveChdir preserveChdir;
+	m_bRemoteCacheLinkOK = true;
 	files_.clear();
 	folder_.clear();
 	uuidSource.clear();
@@ -155,6 +156,8 @@ STDMETHODIMP CShellExt::Initialize_Wrap(LPCITEMIDLIST pIDFolder,
 												itemStates |= ITEMIS_FOLDERINGIT;
 										}
 									}
+									else
+										m_bRemoteCacheLinkOK = false;
 								}
 								else
 								{
@@ -284,6 +287,8 @@ STDMETHODIMP CShellExt::Initialize_Wrap(LPCITEMIDLIST pIDFolder,
 											if (status == git_wc_status_conflicted)//if ((stat.status->entry)&&(stat.status->entry->conflict_wrk))
 												itemStates |= ITEMIS_CONFLICTED;
 										}
+										else
+											m_bRemoteCacheLinkOK = false;
 									}
 									else
 									{
@@ -433,6 +438,8 @@ STDMETHODIMP CShellExt::Initialize_Wrap(LPCITEMIDLIST pIDFolder,
 							SecureZeroMemory(&itemStatus, sizeof(itemStatus));
 							if (m_remoteCacheLink.GetStatusFromRemoteCache(tpath, &itemStatus, true))
 								status = GitStatus::GetMoreImportant(itemStatus.m_status.text_status, itemStatus.m_status.prop_status);
+							else
+								m_bRemoteCacheLinkOK = false;
 						}
 					}
 					else
@@ -1244,6 +1251,11 @@ void CShellExt::TweakMenu(HMENU hMenu)
 	MenuInfo.cbSize  = sizeof(MenuInfo);
 	MenuInfo.fMask   = MIM_STYLE | MIM_APPLYTOSUBMENUS;
 	MenuInfo.dwStyle = MNS_CHECKORBMP;
+	if (!m_bRemoteCacheLinkOK)
+	{
+		MenuInfo.fMask |= MIM_BACKGROUND;
+		MenuInfo.hbrBack = (HBRUSH)::GetStockObject(LTGRAY_BRUSH);
+	}
 	SetMenuInfo(hMenu, &MenuInfo);
 }
 
