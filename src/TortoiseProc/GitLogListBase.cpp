@@ -800,7 +800,8 @@ void CGitLogListBase::paintGraphLane(HDC hdc, int laneHeight,int type, int x1, i
 		//Gdiplus::Pen mypen(Gdiplus::Color(0,0,0),2);
 
 		//graphics.DrawRectangle(&mypen,x1-(x2-x1)/2,top+h, x2-x1,laneHeight);
-		graphics.DrawArc(&mypen,x1-(x2-x1)/2-1,top+h-1, x2-x1,laneHeight,270,90);
+		//graphics.DrawArc(&mypen,x1-(x2-x1)/2-1,top+h-1, x2-x1,laneHeight,270,90);
+		graphics.DrawLine(&mypen, x1 - (x2 - x1) / 2 - 1, top + h - 1, (x1 + x2) / 2, top + laneHeight);
 		//graphics.DrawLine(&mypen,x1-1,h+top,P_270);
 
 		break;
@@ -818,7 +819,8 @@ void CGitLogListBase::paintGraphLane(HDC hdc, int laneHeight,int type, int x1, i
 		//Gdiplus::Pen mypen(Gdiplus::Color(0,0,0),2);
 
 		//graphics.DrawRectangle(&mypen,x1-(x2-x1)/2,top+h, x2-x1,laneHeight);
-		graphics.DrawArc(&mypen,x1+(x2-x1)/2,top+h-1, x2-x1,laneHeight,180,90);
+		//graphics.DrawArc(&mypen,x1+(x2-x1)/2,top+h-1, x2-x1,laneHeight,180,90);
+		graphics.DrawLine(&mypen, x1 + (x2 - x1) / 2, top + h - 1, x2, top + laneHeight);
 		//graphics.DrawLine(&mypen,x1-1,h+top,P_270);
 
 
@@ -835,7 +837,8 @@ void CGitLogListBase::paintGraphLane(HDC hdc, int laneHeight,int type, int x1, i
 
 		Gdiplus::Pen mypen(&gradient, m_LineWidth);
 
-		graphics.DrawArc(&mypen,x1-(x2-x1)/2-1,top-h-1, x2-x1,laneHeight,0,90);
+		graphics.DrawLine(&mypen, (x1 + x2) / 2, top, x1 - (x2 - x1) / 2, top + laneHeight / 2);
+		//graphics.DrawArc(&mypen,x1-(x2-x1)/2-1,top-h-1, x2-x1,laneHeight,0,90);
 
 #if 0
 		QConicalGradient gradient(CENTER_DR);
