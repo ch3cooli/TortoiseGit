@@ -1,6 +1,7 @@
 // TortoiseGit - a Windows shell extension for easy version control
 
 // Copyright (C) 2011-2013 Sven Strickroth, <email@cs-ware.de>
+// Copyright (C) 2013 - TortoiseGit
 
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -29,6 +30,7 @@ CStashSaveDlg::CStashSaveDlg(CWnd* pParent /*=NULL*/)
 	: CHorizontalResizableStandAloneDialog(CStashSaveDlg::IDD, pParent)
 	, m_bIncludeUntracked(FALSE)
 	, m_bAll(FALSE)
+	, m_bForce(FALSE)
 {
 }
 
@@ -42,6 +44,7 @@ void CStashSaveDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_STASHMESSAGE, m_sMessage);
 	DDX_Check(pDX, IDC_CHECK_UNTRACKED, m_bIncludeUntracked);
 	DDX_Check(pDX, IDC_CHECK_ALL, m_bAll);
+	DDX_Check(pDX, IDC_CHECK_FORCE, m_bForce);
 }
 
 BEGIN_MESSAGE_MAP(CStashSaveDlg, CHorizontalResizableStandAloneDialog)
@@ -65,6 +68,7 @@ BOOL CStashSaveDlg::OnInitDialog()
 
 	AdjustControlSize(IDC_CHECK_UNTRACKED);
 	AdjustControlSize(IDC_CHECK_ALL);
+	AdjustControlSize(IDC_CHECK_FORCE);
 
 	CString sWindowTitle;
 	GetWindowText(sWindowTitle);
@@ -77,6 +81,8 @@ BOOL CStashSaveDlg::OnInitDialog()
 		GetDlgItem(IDC_CHECK_UNTRACKED)->EnableWindow(FALSE);
 		GetDlgItem(IDC_CHECK_ALL)->EnableWindow(FALSE);
 	}
+	if (CAppUtils::GetMsysgitVersion() < 0x01080400)
+		GetDlgItem(IDC_CHECK_FORCE)->EnableWindow(FALSE);
 
 	return TRUE;
 }

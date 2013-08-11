@@ -1,6 +1,7 @@
 // TortoiseGit - a Windows shell extension for easy version control
 
 // Copyright (C) 2011 Sven Strickroth, <email@cs-ware.de>
+// Copyright (C) 2013 - TortoiseGit
 //
 // Based on PushDlg.cpp
 // Copyright (C) 2003-2008 - TortoiseGit
@@ -50,4 +51,5 @@ public:
 	CString	m_sMessage;
 	BOOL	m_bIncludeUntracked;
 	BOOL	m_bAll;
+	BOOL	m_bForce;
 };

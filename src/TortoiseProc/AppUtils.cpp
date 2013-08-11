@@ -89,6 +89,9 @@ bool CAppUtils::StashSave()
 				cmd += _T(" --all");
 		}
 
+		if (dlg.m_bForce)
+			cmd += _T(" --force");
+
 		if (!dlg.m_sMessage.IsEmpty())
 		{
 			CString message = dlg.m_sMessage;
