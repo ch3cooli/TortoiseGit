@@ -56,7 +56,7 @@ void CSubmoduleUpdateDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Check(pDX, IDC_SHOWWHOLEPROJECT, m_bWholeProject);
 	DDX_Check(pDX, IDC_CHECK_SUBMODULE_INIT, m_bInit);
 	DDX_Check(pDX, IDC_CHECK_SUBMODULE_RECURSIVE, m_bRecursive);
-	DDX_Check(pDX, IDC_FORCE, m_bForce);
+	DDX_Check(pDX, IDC_CHECK_FORCE, m_bForce);
 	DDX_Check(pDX, IDC_CHECK_SUBMODULE_NOFETCH, m_bNoFetch);
 	DDX_Check(pDX, IDC_CHECK_SUBMODULE_MERGE, m_bMerge);
 	DDX_Check(pDX, IDC_CHECK_SUBMODULE_REBASE, m_bRebase);

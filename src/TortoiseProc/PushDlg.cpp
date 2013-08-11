@@ -66,7 +66,7 @@ void CPushDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_URL, this->m_RemoteURL);
 	DDX_Control(pDX, IDC_BUTTON_BROWSE_SOURCE_BRANCH, m_BrowseLocalRef);
 	DDX_Control(pDX, IDC_COMBOBOX_RECURSE_SUBMODULES, m_RecurseSubmodulesCombo);
-	DDX_Check(pDX,IDC_FORCE,this->m_bForce);
+	DDX_Check(pDX,IDC_CHECK_FORCE,this->m_bForce);
 	DDX_Check(pDX, IDC_FORCE_WITH_LEASE, m_bForceWithLease);
 	DDX_Check(pDX,IDC_PUSHALL,this->m_bPushAllBranches);
 	DDX_Check(pDX,IDC_PACK,this->m_bPack);
@@ -87,7 +87,7 @@ BEGIN_MESSAGE_MAP(CPushDlg, CHorizontalResizableStandAloneDialog)
 	ON_BN_CLICKED(IDC_BUTTON_BROWSE_SOURCE_BRANCH, &CPushDlg::OnBnClickedButtonBrowseSourceBranch)
 	ON_BN_CLICKED(IDC_BUTTON_BROWSE_DEST_BRANCH, &CPushDlg::OnBnClickedButtonBrowseDestBranch)
 	ON_BN_CLICKED(IDC_PUSHALL, &CPushDlg::OnBnClickedPushall)
-	ON_BN_CLICKED(IDC_FORCE, &CPushDlg::OnBnClickedForce)
+	ON_BN_CLICKED(IDC_CHECK_FORCE, &CPushDlg::OnBnClickedForce)
 	ON_BN_CLICKED(IDC_FORCE_WITH_LEASE, &CPushDlg::OnBnClickedForceWithLease)
 	ON_BN_CLICKED(IDC_PROC_PUSH_SET_UPSTREAM, &CPushDlg::OnBnClickedProcPushSetUpstream)
 	ON_BN_CLICKED(IDC_PROC_PUSH_SET_PUSHREMOTE, &CPushDlg::OnBnClickedProcPushSetPushremote)
@@ -121,7 +121,7 @@ BOOL CPushDlg::OnInitDialog()
 
 	AddAnchor(IDC_OPTION_GROUP, TOP_LEFT,TOP_RIGHT);
 
-	AddAnchor(IDC_FORCE, TOP_LEFT);
+	AddAnchor(IDC_CHECK_FORCE, TOP_LEFT);
 	AddAnchor(IDC_FORCE_WITH_LEASE, TOP_LEFT);
 	AddAnchor(IDC_PACK, TOP_LEFT);
 	AddAnchor(IDC_TAGS, TOP_LEFT);
@@ -140,7 +140,7 @@ BOOL CPushDlg::OnInitDialog()
 	AdjustControlSize(IDC_RD_REMOTE);
 	AdjustControlSize(IDC_RD_URL);
 	AdjustControlSize(IDC_PUSHALL);
-	AdjustControlSize(IDC_FORCE);
+	AdjustControlSize(IDC_CHECK_FORCE);
 	AdjustControlSize(IDC_FORCE_WITH_LEASE);
 	AdjustControlSize(IDC_PACK);
 	AdjustControlSize(IDC_TAGS);
@@ -190,7 +190,7 @@ BOOL CPushDlg::OnInitDialog()
 	m_tooltips.Create(this);
 	m_tooltips.AddTool(IDC_PROC_PUSH_SET_PUSHBRANCH, IDS_PUSHDLG_PUSHBRANCH_TT);
 	m_tooltips.AddTool(IDC_PROC_PUSH_SET_PUSHREMOTE, IDS_PUSHDLG_PUSHREMOTE_TT);
-	m_tooltips.AddTool(IDC_FORCE, IDS_FORCE_TT);
+	m_tooltips.AddTool(IDC_CHECK_FORCE, IDS_FORCE_TT);
 	m_tooltips.AddTool(IDC_FORCE_WITH_LEASE, IDS_FORCE_WITH_LEASE_TT);
 
 	m_regRecurseSubmodules = CRegDWORD(
@@ -592,7 +592,7 @@ void CPushDlg::OnBnClickedForce()
 void CPushDlg::OnBnClickedForceWithLease()
 {
 	UpdateData();
-	GetDlgItem(IDC_FORCE)->EnableWindow(m_bForceWithLease ? FALSE : TRUE);
+	GetDlgItem(IDC_CHECK_FORCE)->EnableWindow(m_bForceWithLease ? FALSE : TRUE);
 }
 
 void CPushDlg::OnBnClickedProcPushSetUpstream()
