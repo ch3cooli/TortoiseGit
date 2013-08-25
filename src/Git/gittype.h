@@ -31,8 +31,9 @@ enum
 class CGitByteArray:public std::vector<BYTE>
 {
 public:
-	CGitByteArray(){ m_critSec.Init(); }
+	CGitByteArray() : m_pending(0) { m_critSec.Init(); }
 	CComCriticalSection			m_critSec;
+	int							m_pending;
 
 	int find(BYTE data,int start=0)
 	{

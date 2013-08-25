@@ -193,7 +193,10 @@ UINT CProgressDlg::RunCmdList(CWnd *pWnd,std::vector<CString> &cmdlist,bool bSho
 	EnsurePostMessage(pWnd, MSG_PROGRESSDLG_UPDATE_UI, MSG_PROGRESSDLG_START, 0);
 
 	if(pdata)
+	{
 		pdata->clear();
+		pdata->m_pending = 0;
+	}
 
 	for (int i = 0; i < cmdlist.size(); ++i)
 	{
@@ -236,9 +239,18 @@ UINT CProgressDlg::RunCmdList(CWnd *pWnd,std::vector<CString> &cmdlist,bool bSho
 					pdata->push_back('\r');
 				pdata->push_back( byte);
 				lastByte = byte;
+				bool post = false;
+				if (byte == '\r' || byte == '\n')
+				{
+					if (pdata->m_pending < 100)
+					{
+						pdata->m_pending++;
+						post = true;
+					}
+				}
 				pdata->m_critSec.Unlock();
 
-				if(byte == '\r' || byte == '\n')
+				if (post)
 					pWnd->PostMessage(MSG_PROGRESSDLG_UPDATE_UI,MSG_PROGRESSDLG_RUN,0);
 			}
 			else
@@ -330,6 +342,7 @@ LRESULT CProgressDlg::OnProgressUpdateUI(WPARAM wParam,LPARAM lParam)
 		m_BufStart=0;
 		m_Databuf.m_critSec.Lock();
 		this->m_Databuf.clear();
+		m_Databuf.m_pending = 0;
 		m_Databuf.m_critSec.Unlock();
 
 		m_bDone = true;
@@ -433,8 +446,9 @@ LRESULT CProgressDlg::OnProgressUpdateUI(WPARAM wParam,LPARAM lParam)
 				m_Databuf.erase(m_Databuf.begin(), m_Databuf.begin()+m_BufStart);
 				m_BufStart =0;
 			}
+			if (m_Databuf.m_pending > 0)
+				m_Databuf.m_pending--;
 			m_Databuf.m_critSec.Unlock();
-
 		}
 		else
 			ParserCmdOutput((char)lParam);

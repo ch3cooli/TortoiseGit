@@ -1198,6 +1198,7 @@ LRESULT CSyncDlg::OnProgressUpdateUI(WPARAM wParam,LPARAM lParam)
 		m_BufStart = 0;
 		m_Databuf.m_critSec.Lock();
 		m_Databuf.clear();
+		m_Databuf.m_pending = 0;
 		m_Databuf.m_critSec.Unlock();
 
 		m_bDone = true;
@@ -1256,6 +1257,8 @@ LRESULT CSyncDlg::OnProgressUpdateUI(WPARAM wParam,LPARAM lParam)
 			m_Databuf.erase(m_Databuf.begin(), m_Databuf.begin() + m_BufStart);
 			m_BufStart = 0;
 		}
+		if (m_Databuf.m_pending > 0)
+			m_Databuf.m_pending--;
 		m_Databuf.m_critSec.Unlock();
 	}
 
