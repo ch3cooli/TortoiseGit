@@ -572,23 +572,6 @@ CString CLogDlg::GetTagInfo(GitRev* pLogEntry)
 	return output;
 }
 
-bool LookLikeGitHash(const CString& msg, int &pos)
-{
-	int c = 0;
-	for (; pos < msg.GetLength(); ++pos)
-	{
-		if (msg[pos] >= '0' && msg[pos] <= '9' || msg[pos] >= 'a' && msg[pos] <= 'f')
-		{
-			c++;
-		}
-		else
-		{
-			return c >= g_Git.GetShortHASHLength() && c <= GIT_HASH_SIZE * 2;
-		}
-	}
-	return c >= g_Git.GetShortHASHLength() && c <= GIT_HASH_SIZE * 2;
-}
-
 std::vector<CHARRANGE> FindGitHashPositions(const CString& msg, int offset)
 {
 	std::vector<CHARRANGE> result;
@@ -617,7 +600,7 @@ std::vector<CHARRANGE> FindGitHashPositions(const CString& msg, int offset)
 				}
 			}
 
-			if (LookLikeGitHash(msg, offset))
+			if (CGitHash::IsShortSHA1(msg, offset, g_Git.GetShortHASHLength()))
 			{
 				TCHAR d = offset < msg.GetLength() ? msg[offset] : '\0';
 				if (!((d >= 'A' && d <= 'Z') || (d >= 'g' && d <= 'z')))
@@ -1265,7 +1248,7 @@ void CLogDlg::OnEnLinkMsgview(NMHDR *pNMHDR, LRESULT *pResult)
 		msg.Replace(_T("\r\n"), _T("\n"));
 		url = msg.Mid(pEnLink->chrg.cpMin, pEnLink->chrg.cpMax-pEnLink->chrg.cpMin);
 		int pos = 0;
-		if (LookLikeGitHash(url, pos))
+		if (CGitHash::IsShortSHA1(url, pos, g_Git.GetShortHASHLength()))
 		{
 			bool found = false;
 			for (int i = 0; i < m_LogList.m_arShownList.GetCount(); ++i)

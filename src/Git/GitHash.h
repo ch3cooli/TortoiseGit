@@ -176,5 +176,22 @@ public:
 		}
 		return true;
 	}
+
+	static bool IsShortSHA1(const CString& msg, int &pos, int minLength)
+	{
+		int c = 0;
+		for (; pos < msg.GetLength(); ++pos)
+		{
+			if (msg[pos] >= '0' && msg[pos] <= '9' || msg[pos] >= 'a' && msg[pos] <= 'f')
+			{
+				c++;
+			}
+			else
+			{
+				return c >= minLength && c <= GIT_HASH_SIZE * 2;
+			}
+		}
+		return c >= minLength && c <= GIT_HASH_SIZE * 2;
+	}
 };
 
