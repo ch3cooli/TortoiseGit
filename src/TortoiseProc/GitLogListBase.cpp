@@ -2603,6 +2603,7 @@ UINT CGitLogListBase::LogThread()
 	bool bRegex = false;
 	if (m_bFilterWithRegex)
 		bRegex = ValidateRegexp(m_sFilterText, pat, false);
+	std::vector<int> filters = OrderFilter();
 
 	TRACE(_T("\n===Begin===\n"));
 	//Update work copy item;
@@ -2718,7 +2719,7 @@ UINT CGitLogListBase::LogThread()
 
 			if(!m_sFilterText.IsEmpty())
 			{
-				if(!IsMatchFilter(bRegex,pRev,pat))
+				if(!IsMatchFilter(bRegex, pRev, pat, filters))
 					continue;
 			}
 			this->m_critSec.Lock();
@@ -2866,7 +2867,48 @@ bool CGitLogListBase::ValidateRegexp(LPCTSTR regexp_str, std::tr1::wregex& pat, 
 	catch (std::exception) {}
 	return false;
 }
-BOOL CGitLogListBase::IsMatchFilter(bool bRegex, GitRev *pRev, std::tr1::wregex &pat)
+
+std::vector<int> CGitLogListBase::OrderFilter()
+{
+	std::vector<int> ft;
+	ft.push_back(LOGFILTER_BUGID);
+	ft.push_back(LOGFILTER_SUBJECT);
+	ft.push_back(LOGFILTER_MESSAGES);
+	ft.push_back(LOGFILTER_AUTHORS);
+	ft.push_back(LOGFILTER_EMAILS);
+	ft.push_back(LOGFILTER_REVS);
+	ft.push_back(LOGFILTER_REFNAME);
+	ft.push_back(LOGFILTER_PATHS);
+
+	CString find = m_sFilterText;
+	if (find.IsEmpty())
+		return ft;
+	find.MakeLower();
+	auto prioritize = [&] (int x)
+	{
+		for (int i = 0; i < ft.size(); ++i)
+		{
+			if (ft[i] == x)
+			{
+				for (int j = i; j > 0; --j)
+					ft[j] = ft[j - 1];
+				break;
+			}
+		}
+		ft[0] = x;
+	};
+
+	int pos = 0;
+	if (CGitHash::IsValidSHA1(find) || CGitHash::IsShortSHA1(find, pos, g_Git.GetShortHASHLength()))
+		prioritize(LOGFILTER_REVS);
+	else if (find.Find('@') > 0)
+		prioritize(LOGFILTER_EMAILS);
+	else if (_ttoi(find) > 0)
+		prioritize(LOGFILTER_BUGID);
+	return ft;
+}
+
+BOOL CGitLogListBase::IsMatchFilter(bool bRegex, GitRev *pRev, std::tr1::wregex &pat, std::vector<int> &filters)
 {
 
 	std::tr1::regex_constants::match_flag_type flags = std::tr1::regex_constants::match_any;
@@ -2874,115 +2916,123 @@ BOOL CGitLogListBase::IsMatchFilter(bool bRegex, GitRev *pRev, std::tr1::wregex 
 
 	if ((bRegex)&&(m_bFilterWithRegex))
 	{
-		if (m_SelectedFilters & LOGFILTER_BUGID)
+		for (int &filter : filters)
 		{
-			if(this->m_bShowBugtraqColumn)
+			switch (m_SelectedFilters & filter)
 			{
-				CString sBugIds = m_ProjectProperties.FindBugID(pRev->GetSubject() + _T("\r\n\r\n") + pRev->GetBody());
-
-				ATLTRACE(_T("bugID = \"%s\"\n"), sBugIds);
-				if (std::regex_search(std::wstring(sBugIds), pat, flags))
+			case LOGFILTER_BUGID:
+				if (this->m_bShowBugtraqColumn)
 				{
-					return TRUE;
-				}
-			}
-		}
+					CString sBugIds = m_ProjectProperties.FindBugID(pRev->GetSubject() + _T("\r\n\r\n") + pRev->GetBody());
 
-		if ((m_SelectedFilters & LOGFILTER_SUBJECT) || (m_SelectedFilters & LOGFILTER_MESSAGES))
-		{
-			ATLTRACE(_T("messge = \"%s\"\n"), pRev->GetSubject());
-			if (std::regex_search(std::wstring((LPCTSTR)pRev->GetSubject()), pat, flags))
-			{
-				return TRUE;
-			}
-		}
-
-		if (m_SelectedFilters & LOGFILTER_MESSAGES)
-		{
-			ATLTRACE(_T("messge = \"%s\"\n"),pRev->GetBody());
-			if (std::regex_search(std::wstring((LPCTSTR)pRev->GetBody()), pat, flags))
-			{
-					return TRUE;
-			}
-		}
-
-		if (m_SelectedFilters & LOGFILTER_AUTHORS)
-		{
-			if (std::regex_search(std::wstring(pRev->GetAuthorName()), pat, flags))
-			{
-				return TRUE;
-			}
-
-			if (std::regex_search(std::wstring(pRev->GetCommitterName()), pat, flags))
-			{
-				return TRUE;
-			}
-		}
-
-		if (m_SelectedFilters & LOGFILTER_EMAILS)
-		{
-			if (std::regex_search(std::wstring(pRev->GetAuthorEmail()), pat, flags))
-			{
-				return TRUE;
-			}
-
-			if (std::regex_search(std::wstring(pRev->GetCommitterEmail()), pat, flags))
-			{
-				return TRUE;
-			}
-		}
-
-		if (m_SelectedFilters & LOGFILTER_REVS)
-		{
-			sRev.Format(_T("%s"), pRev->m_CommitHash.ToString());
-			if (std::regex_search(std::wstring((LPCTSTR)sRev), pat, flags))
-			{
-				return TRUE;
-			}
-		}
-
-		if (m_SelectedFilters & LOGFILTER_REFNAME)
-		{
-			STRING_VECTOR refs = m_HashMap[pRev->m_CommitHash];
-			for (auto it = refs.cbegin(); it != refs.cend(); ++it)
-			{
-				if (std::regex_search(std::wstring((LPCTSTR)*it), pat, flags))
-				{
-					return TRUE;
-				}
-			}
-		}
-
-		if (m_SelectedFilters & LOGFILTER_PATHS)
-		{
-			CTGitPathList *pathList=NULL;
-			if( pRev->m_IsDiffFiles)
-				pathList = &pRev->GetFiles(this);
-			else
-			{
-				if(!pRev->m_IsSimpleListReady)
-					pRev->SafeGetSimpleList(&g_Git);
-			}
-
-			if(pathList)
-				for (INT_PTR cpPathIndex = 0; cpPathIndex < pathList->GetCount(); ++cpPathIndex)
-				{
-					if (std::regex_search(std::wstring((LPCTSTR)pathList->m_paths.at(cpPathIndex).GetGitOldPathString()), pat, flags))
+					ATLTRACE(_T("bugID = \"%s\"\n"), sBugIds);
+					if (std::regex_search(std::wstring(sBugIds), pat, flags))
 					{
-						return true;
-					}
-					if (std::regex_search(std::wstring((LPCTSTR)pathList->m_paths.at(cpPathIndex).GetGitPathString()), pat, flags))
-					{
-						return true;
+						return TRUE;
 					}
 				}
+				break;
 
-			for (size_t i = 0; i < pRev->m_SimpleFileList.size(); ++i)
-			{
-				if (std::regex_search(std::wstring((LPCTSTR)pRev->m_SimpleFileList[i]), pat, flags))
+			case LOGFILTER_SUBJECT:
+				if (m_SelectedFilters & LOGFILTER_MESSAGES)
+					break;
+			case LOGFILTER_MESSAGES:
+				ATLTRACE(_T("messge = \"%s\"\n"), pRev->GetSubject());
+				if (std::regex_search(std::wstring((LPCTSTR)pRev->GetSubject()), pat, flags))
 				{
-					return true;
+					return TRUE;
 				}
+
+				if (filter == LOGFILTER_MESSAGES)
+				{
+					ATLTRACE(_T("messge = \"%s\"\n"),pRev->GetBody());
+					if (std::regex_search(std::wstring((LPCTSTR)pRev->GetBody()), pat, flags))
+					{
+						return TRUE;
+					}
+				}
+				break;
+
+			case LOGFILTER_AUTHORS:
+				if (std::regex_search(std::wstring(pRev->GetAuthorName()), pat, flags))
+				{
+					return TRUE;
+				}
+
+				if (std::regex_search(std::wstring(pRev->GetCommitterName()), pat, flags))
+				{
+					return TRUE;
+				}
+				break;
+
+			case LOGFILTER_EMAILS:
+				if (std::regex_search(std::wstring(pRev->GetAuthorEmail()), pat, flags))
+				{
+					return TRUE;
+				}
+
+				if (std::regex_search(std::wstring(pRev->GetCommitterEmail()), pat, flags))
+				{
+					return TRUE;
+				}
+				break;
+
+			case LOGFILTER_REVS:
+				sRev.Format(_T("%s"), pRev->m_CommitHash.ToString());
+				if (std::regex_search(std::wstring((LPCTSTR)sRev), pat, flags))
+				{
+					return TRUE;
+				}
+				break;
+
+			case LOGFILTER_REFNAME:
+				{
+					STRING_VECTOR refs = m_HashMap[pRev->m_CommitHash];
+					for (auto it = refs.cbegin(); it != refs.cend(); ++it)
+					{
+						if (std::regex_search(std::wstring((LPCTSTR)*it), pat, flags))
+						{
+							return TRUE;
+						}
+					}
+				}
+				break;
+
+			case LOGFILTER_PATHS:
+				{
+					CTGitPathList *pathList=NULL;
+					if( pRev->m_IsDiffFiles)
+						pathList = &pRev->GetFiles(this);
+					else
+					{
+						if(!pRev->m_IsSimpleListReady)
+							pRev->SafeGetSimpleList(&g_Git);
+					}
+
+					if (pathList)
+					{
+						for (INT_PTR cpPathIndex = 0; cpPathIndex < pathList->GetCount(); ++cpPathIndex)
+						{
+							if (std::regex_search(std::wstring((LPCTSTR)pathList->m_paths.at(cpPathIndex).GetGitOldPathString()), pat, flags))
+							{
+								return true;
+							}
+							if (std::regex_search(std::wstring((LPCTSTR)pathList->m_paths.at(cpPathIndex).GetGitPathString()), pat, flags))
+							{
+								return true;
+							}
+						}
+					}
+
+					for (size_t i = 0; i < pRev->m_SimpleFileList.size(); ++i)
+					{
+						if (std::regex_search(std::wstring((LPCTSTR)pRev->m_SimpleFileList[i]), pat, flags))
+						{
+							return true;
+						}
+					}
+				}
+				break;
 			}
 		}
 	}
@@ -2991,119 +3041,135 @@ BOOL CGitLogListBase::IsMatchFilter(bool bRegex, GitRev *pRev, std::tr1::wregex 
 		CString find = m_sFilterText;
 		find.MakeLower();
 
-		if (m_SelectedFilters & LOGFILTER_BUGID)
+		for (int &filter : filters)
 		{
-			if(this->m_bShowBugtraqColumn)
+			switch (m_SelectedFilters & filter)
 			{
-				CString sBugIds = m_ProjectProperties.FindBugID(pRev->GetSubject() + _T("\r\n\r\n") + pRev->GetBody());
-
-				sBugIds.MakeLower();
-				if ((sBugIds.Find(find) >= 0))
+			case LOGFILTER_BUGID:
+				if (this->m_bShowBugtraqColumn)
 				{
-					return TRUE;
-				}
-			}
-		}
+					CString sBugIds = m_ProjectProperties.FindBugID(pRev->GetSubject() + _T("\r\n\r\n") + pRev->GetBody());
 
-		if ((m_SelectedFilters & LOGFILTER_SUBJECT) || (m_SelectedFilters & LOGFILTER_MESSAGES))
-		{
-			CString msg = pRev->GetSubject();
-
-			msg = msg.MakeLower();
-			if ((msg.Find(find) >= 0))
-			{
-				return TRUE;
-			}
-		}
-
-		if (m_SelectedFilters & LOGFILTER_MESSAGES)
-		{
-			CString msg = pRev->GetBody();
-
-			msg = msg.MakeLower();
-			if ((msg.Find(find) >= 0))
-			{
-				return TRUE;
-			}
-		}
-
-		if (m_SelectedFilters & LOGFILTER_AUTHORS)
-		{
-			CString msg = pRev->GetAuthorName();
-			msg = msg.MakeLower();
-			if ((msg.Find(find) >= 0))
-			{
-				return TRUE;
-			}
-		}
-
-		if (m_SelectedFilters & LOGFILTER_EMAILS)
-		{
-			CString msg = pRev->GetAuthorEmail();
-			msg = msg.MakeLower();
-			if ((msg.Find(find) >= 0))
-			{
-				return TRUE;
-			}
-		}
-
-		if (m_SelectedFilters & LOGFILTER_REVS)
-		{
-			sRev.Format(_T("%s"), pRev->m_CommitHash.ToString());
-			if ((sRev.Find(find) >= 0))
-			{
-				return TRUE;
-			}
-		}
-
-		if (m_SelectedFilters & LOGFILTER_REFNAME)
-		{
-			STRING_VECTOR refs = m_HashMap[pRev->m_CommitHash];
-			for (auto it = refs.cbegin(); it != refs.cend(); ++it)
-			{
-				if (it->Find(find) >= 0)
-				{
-					return TRUE;
-				}
-			}
-		}
-
-		if (m_SelectedFilters & LOGFILTER_PATHS)
-		{
-			CTGitPathList *pathList=NULL;
-			if( pRev->m_IsDiffFiles)
-				pathList = &pRev->GetFiles(this);
-			else
-			{
-				if(!pRev->m_IsSimpleListReady)
-					pRev->SafeGetSimpleList(&g_Git);
-			}
-			if(pathList)
-				for (INT_PTR cpPathIndex = 0; cpPathIndex < pathList->GetCount() ; ++cpPathIndex)
-				{
-					CTGitPath *cpath = &pathList->m_paths.at(cpPathIndex);
-					CString path = cpath->GetGitOldPathString();
-					path.MakeLower();
-					if ((path.Find(find)>=0))
+					sBugIds.MakeLower();
+					if ((sBugIds.Find(find) >= 0))
 					{
-						return true;
-					}
-					path = cpath->GetGitPathString();
-					path.MakeLower();
-					if ((path.Find(find)>=0))
-					{
-						return true;
+						return TRUE;
 					}
 				}
+				break;
 
-			for (size_t i = 0; i < pRev->m_SimpleFileList.size(); ++i)
-			{
-				CString path = pRev->m_SimpleFileList[i];
-				path.MakeLower();
-				if ((path.Find(find)>=0))
+			case LOGFILTER_SUBJECT:
+				if (m_SelectedFilters & LOGFILTER_MESSAGES)
+					break;
+			case LOGFILTER_MESSAGES:
 				{
-					return true;
+					CString msg = pRev->GetSubject();
+
+					msg = msg.MakeLower();
+					if ((msg.Find(find) >= 0))
+					{
+						return TRUE;
+					}
+
+					if (filter == LOGFILTER_MESSAGES)
+					{
+						CString msg = pRev->GetBody();
+
+						msg = msg.MakeLower();
+						if ((msg.Find(find) >= 0))
+						{
+							return TRUE;
+						}
+					}
+					break;
 				}
+
+			case LOGFILTER_AUTHORS:
+				{
+					CString msg = pRev->GetAuthorName();
+					msg = msg.MakeLower();
+					if ((msg.Find(find) >= 0))
+					{
+						return TRUE;
+					}
+				}
+				break;
+
+			case LOGFILTER_EMAILS:
+				{
+					CString msg = pRev->GetAuthorEmail();
+					msg = msg.MakeLower();
+					if ((msg.Find(find) >= 0))
+					{
+						return TRUE;
+					}
+				}
+				break;
+
+			case LOGFILTER_REVS:
+				{
+					sRev.Format(_T("%s"), pRev->m_CommitHash.ToString());
+					if ((sRev.Find(find) >= 0))
+					{
+						return TRUE;
+					}
+				}
+				break;
+
+			case LOGFILTER_REFNAME:
+				{
+					STRING_VECTOR refs = m_HashMap[pRev->m_CommitHash];
+					for (auto it = refs.cbegin(); it != refs.cend(); ++it)
+					{
+						if (it->Find(find) >= 0)
+						{
+							return TRUE;
+						}
+					}
+				}
+				break;
+
+			case LOGFILTER_PATHS:
+				{
+					CTGitPathList *pathList=NULL;
+					if( pRev->m_IsDiffFiles)
+						pathList = &pRev->GetFiles(this);
+					else
+					{
+						if(!pRev->m_IsSimpleListReady)
+							pRev->SafeGetSimpleList(&g_Git);
+					}
+					if (pathList)
+					{
+						for (INT_PTR cpPathIndex = 0; cpPathIndex < pathList->GetCount() ; ++cpPathIndex)
+						{
+							CTGitPath *cpath = &pathList->m_paths.at(cpPathIndex);
+							CString path = cpath->GetGitOldPathString();
+							path.MakeLower();
+							if ((path.Find(find)>=0))
+							{
+								return true;
+							}
+							path = cpath->GetGitPathString();
+							path.MakeLower();
+							if ((path.Find(find)>=0))
+							{
+								return true;
+							}
+						}
+					}
+
+					for (size_t i = 0; i < pRev->m_SimpleFileList.size(); ++i)
+					{
+						CString path = pRev->m_SimpleFileList[i];
+						path.MakeLower();
+						if ((path.Find(find)>=0))
+						{
+							return true;
+						}
+					}
+				}
+				break;
 			}
 		}
 	} // else (from if (bRegex))
