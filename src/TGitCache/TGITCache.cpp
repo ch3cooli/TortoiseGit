@@ -566,7 +566,7 @@ DWORD WINAPI PipeThread(LPVOID lpvParam)
 			continue;	// don't end the thread!
 		}
 	}
-	CTraceToOutputDebugString::Instance()(__FUNCTION__ ": Pipe thread exited\n");
+	CTraceToOutputDebugString::Instance()(__FUNCTION__ ": PipeThread exited 0\n");
 	return 0;
 }
 
@@ -646,7 +646,7 @@ DWORD WINAPI CommandWaitThread(LPVOID lpvParam)
 			continue;	// don't end the thread!
 		}
 	}
-	CTraceToOutputDebugString::Instance()(__FUNCTION__ ": CommandWait thread exited\n");
+	CTraceToOutputDebugString::Instance()(__FUNCTION__ ": CommandWaitThread exited 0\n");
 	return 0;
 }
 
@@ -675,7 +675,7 @@ DWORD WINAPI InstanceThread(LPVOID lpvParam)
 		if (! fSuccess || cbBytesRead == 0)
 		{
 			DisconnectNamedPipe(hPipe);
-			CTraceToOutputDebugString::Instance()(__FUNCTION__ ": Instance thread exited\n");
+			CTraceToOutputDebugString::Instance()(__FUNCTION__ ": InstanceThread exited 1\n");
 			InterlockedDecrement(&nThreadCount);
 			if (nThreadCount == 0)
 				PostMessage(hWnd, WM_CLOSE, 0, 0);
@@ -696,7 +696,7 @@ DWORD WINAPI InstanceThread(LPVOID lpvParam)
 		if (! fSuccess || responseLength != cbWritten)
 		{
 			DisconnectNamedPipe(hPipe);
-			CTraceToOutputDebugString::Instance()(__FUNCTION__ ": Instance thread exited\n");
+			CTraceToOutputDebugString::Instance()(__FUNCTION__ ": InstanceThread exited 2\n");
 			InterlockedDecrement(&nThreadCount);
 			if (nThreadCount == 0)
 				PostMessage(hWnd, WM_CLOSE, 0, 0);
@@ -710,7 +710,7 @@ DWORD WINAPI InstanceThread(LPVOID lpvParam)
 
 	FlushFileBuffers(hPipe);
 	DisconnectNamedPipe(hPipe);
-	CTraceToOutputDebugString::Instance()(__FUNCTION__ ": Instance thread exited\n");
+	CTraceToOutputDebugString::Instance()(__FUNCTION__ ": InstanceThread exited 0\n");
 	InterlockedDecrement(&nThreadCount);
 	if (nThreadCount == 0)
 		PostMessage(hWnd, WM_CLOSE, 0, 0);
@@ -741,7 +741,7 @@ DWORD WINAPI CommandThread(LPVOID lpvParam)
 		if (! fSuccess || cbBytesRead == 0)
 		{
 			DisconnectNamedPipe(hPipe);
-			CTraceToOutputDebugString::Instance()(__FUNCTION__ ": Command thread exited\n");
+			CTraceToOutputDebugString::Instance()(__FUNCTION__ ": CommandThread exited 1\n");
 			return 1;
 		}
 
@@ -750,7 +750,7 @@ DWORD WINAPI CommandThread(LPVOID lpvParam)
 			case TGITCACHECOMMAND_END:
 				FlushFileBuffers(hPipe);
 				DisconnectNamedPipe(hPipe);
-				CTraceToOutputDebugString::Instance()(__FUNCTION__ ": Command thread exited\n");
+				CTraceToOutputDebugString::Instance()(__FUNCTION__ ": CommandThread exited 0\n");
 				return 0;
 			case TGITCACHECOMMAND_CRAWL:
 				{
@@ -806,6 +806,6 @@ DWORD WINAPI CommandThread(LPVOID lpvParam)
 
 	FlushFileBuffers(hPipe);
 	DisconnectNamedPipe(hPipe);
-	CTraceToOutputDebugString::Instance()(__FUNCTION__ ": Command thread exited\n");
+	CTraceToOutputDebugString::Instance()(__FUNCTION__ ": CommandThread exited 0\n");
 	return 0;
 }
