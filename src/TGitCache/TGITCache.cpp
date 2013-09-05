@@ -700,7 +700,7 @@ DWORD WINAPI InstanceThread(LPVOID lpvParam)
 			InterlockedDecrement(&nThreadCount);
 			if (nThreadCount == 0)
 				PostMessage(hWnd, WM_CLOSE, 0, 0);
-			return 1;
+			return 2;
 		}
 	}
 
