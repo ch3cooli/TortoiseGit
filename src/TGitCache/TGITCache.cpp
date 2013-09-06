@@ -1,6 +1,6 @@
 // TortoiseGit - a Windows shell extension for easy version control
 
-// External Cache Copyright (C) 2005 - 2006,2010 - Will Dean, Stefan Kueng
+// External Cache Copyright (C) 2005 - 2009, 2011-2012 - TortoiseSVN
 // Copyright (C) 2008-2014 - TortoiseGit
 
 // This program is free software; you can redistribute it and/or
@@ -93,6 +93,20 @@ void DebugOutputLastError()
 	LocalFree( lpMsgBuf );
 }
 
+static HWND CreateHiddenWindow(HINSTANCE hInstance)
+{
+	TCHAR szWindowClass[] = {TGIT_CACHE_WINDOW_NAME};
+
+	WNDCLASSEX wcex = {};
+	wcex.cbSize = sizeof(WNDCLASSEX);
+	wcex.style			= CS_HREDRAW | CS_VREDRAW;
+	wcex.lpfnWndProc	= (WNDPROC)WndProc;
+	wcex.hInstance		= hInstance;
+	wcex.lpszClassName	= szWindowClass;
+	RegisterClassEx(&wcex);
+	return CreateWindow(TGIT_CACHE_WINDOW_NAME, TGIT_CACHE_WINDOW_NAME, WS_CAPTION, 0, 0, 800, 300, NULL, 0, hInstance, 0);
+}
+
 void HandleCommandLine(LPSTR lpCmdLine)
 {
 	char *ptr = strstr(lpCmdLine, "/kill:");
@@ -154,25 +168,9 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR lp
 	SecureZeroMemory(szCurrentCrawledPath, sizeof(szCurrentCrawledPath));
 
 	DWORD dwThreadId;
-	MSG msg;
-	TCHAR szWindowClass[] = {TGIT_CACHE_WINDOW_NAME};
 
 	// create a hidden window to receive window messages.
-	WNDCLASSEX wcex;
-	wcex.cbSize = sizeof(WNDCLASSEX);
-	wcex.style			= CS_HREDRAW | CS_VREDRAW;
-	wcex.lpfnWndProc	= (WNDPROC)WndProc;
-	wcex.cbClsExtra		= 0;
-	wcex.cbWndExtra		= 0;
-	wcex.hInstance		= hInstance;
-	wcex.hIcon			= 0;
-	wcex.hCursor		= 0;
-	wcex.hbrBackground	= 0;
-	wcex.lpszMenuName	= NULL;
-	wcex.lpszClassName	= szWindowClass;
-	wcex.hIconSm		= 0;
-	RegisterClassEx(&wcex);
-	hWnd = CreateWindow(TGIT_CACHE_WINDOW_NAME, TGIT_CACHE_WINDOW_NAME, WS_CAPTION, 0, 0, 800, 300, NULL, 0, hInstance, 0);
+	hWnd = CreateHiddenWindow(hInstance);
 	hTrayWnd = hWnd;
 	if (hWnd == NULL)
 	{
@@ -249,6 +247,7 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR lp
 	// loop to handle window messages.
 	while (bRun)
 	{
+		MSG msg;
 		BOOL bLoopRet = GetMessage(&msg, NULL, 0, 0);
 		if ((bLoopRet != -1)&&(bLoopRet != 0))
 		{
@@ -282,11 +281,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		case WM_MOUSEMOVE:
 			{
 				CString sInfoTip;
-				NOTIFYICONDATA SystemTray;
 				sInfoTip.Format(_T("TortoiseGit Overlay Icon Server\nCached Directories: %Id\nWatched paths: %d"),
 					CGitStatusCache::Instance().GetCacheSize(),
 					CGitStatusCache::Instance().GetNumberOfWatchedPaths());
 
+				NOTIFYICONDATA SystemTray = {};
 				SystemTray.cbSize = sizeof(NOTIFYICONDATA);
 				SystemTray.hWnd   = hTrayWnd;
 				SystemTray.uID    = TRAY_ID;
