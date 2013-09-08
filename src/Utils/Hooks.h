@@ -37,6 +37,7 @@ typedef enum hooktype
 	issue_tracker_hook,
 	pre_push_hook,
 	post_push_hook,
+	post_export_hook,
 } hooktype;
 
 /**
@@ -174,6 +175,8 @@ public:
 
 	bool	PrePush(const CTGitPathList& pathList,DWORD& exitcode, CString& error);
 	bool	PostPush(const CTGitPathList& pathList,DWORD& exitcode, CString& error);
+
+	bool	PostExport(const CTGitPath& exportPath, const CString&revision, const CTGitPath& cwd, DWORD& exitcode, CString& error);
 private:
 	/**
 	 * Starts a new process, specified in \c cmd.

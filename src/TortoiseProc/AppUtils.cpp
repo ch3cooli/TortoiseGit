@@ -1094,7 +1094,20 @@ bool CAppUtils::Export(CString *BashHash)
 
 		CProgressDlg pro;
 		pro.m_GitCmd=cmd;
-		return (pro.DoModal() == IDOK);
+		INT_PTR ret = pro.DoModal();
+		DWORD exitcode;
+		CString error;
+		if (CHooks::Instance().PostExport(CTGitPath(dlg.m_strFile), g_Git.FixBranchName(dlg.m_VersionName), CTGitPath(g_Git.m_CurrentDir), exitcode, error))
+		{
+			if (exitcode)
+			{
+				CString temp;
+				temp.Format(IDS_ERR_HOOKFAILED, (LPCTSTR)error);
+				CMessageBox::Show(NULL, temp, _T("TortoiseGit"), MB_OK | MB_ICONERROR);
+				return false;
+			}
+		}
+		return ret == IDOK;
 	}
 	return false;
 }

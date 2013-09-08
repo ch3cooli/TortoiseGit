@@ -1,0 +1,18 @@
+/* this script is a local post-export hook script. */
+
+var objArgs = WScript.Arguments;
+if (objArgs.length !== 4)
+{
+    WScript.Echo("Usage: [CScript | WScript] PostExport.js path/to/exportfile revision error path/to/CWD ");
+    WScript.Quit(1);
+}
+
+var message = "Exported archive:\n";
+
+message = message + "filename is: " + objArgs(0) + "\n";
+message = message + "revision is: " + objArgs(1) + "\n";
+message = message + "file containing error message is: " + objArgs(2) + "\n";
+message = message + "CWD is: " + objArgs(3) + "\n";
+
+WScript.Echo(message);
+WScript.Quit(0);

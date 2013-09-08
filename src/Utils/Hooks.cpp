@@ -173,6 +173,8 @@ CString CHooks::GetHookTypeString(hooktype t)
 		return _T("pre_push_hook");
 	case post_push_hook:
 		return _T("post_push_hook");
+	case post_export_hook:
+		return _T("post_export_hook");
 	}
 	return _T("");
 }
@@ -189,6 +191,8 @@ hooktype CHooks::GetHookType(const CString& s)
 		return pre_push_hook;
 	if (s.Compare(_T("post_push_hook"))==0)
 		return post_push_hook;
+	if (s.Compare(_T("post_export_hook"))==0)
+		return post_export_hook;
 
 	return unknown_hook;
 }
@@ -309,6 +313,25 @@ bool CHooks::PostPush(const CTGitPathList& pathList,DWORD& exitcode, CString& er
 	return true;
 
 }
+
+bool CHooks::PostExport(const CTGitPath& exportPath, const CString& revision, const CTGitPath& cwd, DWORD& exitcode, CString& error)
+{
+	CTGitPathList cwdList;
+	cwdList.AddPath(cwd);
+	hookiterator it = FindItem(post_export_hook, cwdList);
+	if (it == end())
+		return false;
+	CString sCmd = it->second.commandline;
+	CTGitPathList exportList;
+	exportList.AddPath(exportPath);
+	AddPathParam(sCmd, exportList);
+	AddParam(sCmd, revision);
+	AddErrorParam(sCmd, error);
+	AddCWDParam(sCmd, cwdList);
+	exitcode = RunScript(sCmd, cwd.GetWinPath(), error, it->second.bWait, it->second.bShow);
+	return true;
+}
+
 hookiterator CHooks::FindItem(hooktype t, const CTGitPathList& pathList)
 {
 	hookkey key;

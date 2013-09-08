@@ -932,6 +932,7 @@
 #define IDS_REPOBROWSE_INFODIR          1434
 #define IDS_REPOBROWSE_INFOFILE         1435
 #define IDS_REPOBROWSE_INFOMULTI        1436
+#define IDS_HOOKTYPE_POSTEXPORT         1437
 #define IDC_TEXTSIZE2                   1462
 #define IDC_SHOWUNVERSIONEDOVERLAY      1462
 #define IDC_LINK                        1466
