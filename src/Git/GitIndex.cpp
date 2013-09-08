@@ -206,7 +206,6 @@ int CGitIndexList::GetStatus(const CString &gitdir,const CString &pathParam, git
 
 	if (status)
 	{
-		git_wc_status_kind dirstatus = git_wc_status_none;
 		int result;
 		if (path.IsEmpty())
 			result = g_Git.GetFileModifyTime(gitdir, &time, &isDir);
@@ -229,6 +228,7 @@ int CGitIndexList::GetStatus(const CString &gitdir,const CString &pathParam, git
 					path += _T("\\");
 			}
 			int len = path.GetLength();
+			git_wc_status_kind dirstatus = git_wc_status_none;
 
 				for (size_t i = 0; i < size(); ++i)
 				{

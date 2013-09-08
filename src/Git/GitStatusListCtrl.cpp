@@ -1325,12 +1325,11 @@ int CGitStatusListCtrl::GetGroupFromPoint(POINT * ppt)
 	POINT pt = *ppt;
 	pt.x = 10;
 	UINT flags = 0;
-	int nItem = -1;
 	RECT rc;
 	GetWindowRect(&rc);
 	while (((flags & LVHT_BELOW) == 0)&&(pt.y < rc.bottom))
 	{
-		nItem = HitTest(pt, &flags);
+		int nItem = HitTest(pt, &flags);
 		if ((flags & LVHT_ONITEM)||(flags & LVHT_EX_GROUP_HEADER))
 		{
 			// the first item below the point
@@ -1945,15 +1944,14 @@ void CGitStatusListCtrl::OnContextMenuList(CWnd * pWnd, CPoint point)
 			case IDGITLC_COMPARETWOFILES:
 				{
 					POSITION pos = GetFirstSelectedItemPosition();
-					CTGitPath * firstfilepath = NULL, * secondfilepath = NULL;
 					if (pos)
 					{
-						firstfilepath = (CTGitPath * )GetItemData(GetNextSelectedItem(pos));
+						auto firstfilepath = (CTGitPath *)GetItemData(GetNextSelectedItem(pos));
 						ASSERT(firstfilepath != NULL);
 						if (firstfilepath == NULL)
 							break;
 
-						secondfilepath = (CTGitPath * )GetItemData(GetNextSelectedItem(pos));
+						auto secondfilepath = (CTGitPath *)GetItemData(GetNextSelectedItem(pos));
 						ASSERT(secondfilepath != NULL);
 						if (secondfilepath == NULL)
 							break;
@@ -3627,14 +3625,13 @@ bool CGitStatusListCtrl::PrepareGroups(bool bForce /* = false */)
 	EnableGroupView(bHasGroups);
 
 	TCHAR groupname[1024] = { 0 };
-	int groupindex = 0;
 
 	if(bHasGroups)
 	{
 		LVGROUP grp = {0};
 		grp.cbSize = sizeof(LVGROUP);
 		grp.mask = LVGF_ALIGN | LVGF_GROUPID | LVGF_HEADER;
-		groupindex=0;
+		int groupindex = 0;
 
 		//if(m_UnRevFileList.GetCount()>0)
 		if(max >0)
