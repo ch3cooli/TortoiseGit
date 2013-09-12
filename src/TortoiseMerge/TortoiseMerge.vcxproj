@@ -63,6 +63,7 @@
     <ClCompile Include="..\Utils\TaskbarUUID.cpp" />
     <ClCompile Include="EncodingDlg.cpp" />
     <ClCompile Include="EOL.cpp" />
+    <ClCompile Include="InputBox.cpp" />
     <ClCompile Include="libsvn_diff\adler32.c">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PreprocessorDefinitions>WIN32;WINNT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -315,6 +316,7 @@
     <ClInclude Include="..\Utils\SimpleIni.h" />
     <ClInclude Include="..\Utils\TaskbarUUID.h" />
     <ClInclude Include="EncodingDlg.h" />
+    <ClInclude Include="InputBox.h" />
     <ClInclude Include="TempFile.h" />
     <ClInclude Include="AboutDlg.h" />
     <ClInclude Include="BaseView.h" />
