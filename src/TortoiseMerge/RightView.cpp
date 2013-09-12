@@ -25,6 +25,9 @@
 
 #include "RightView.h"
 #include "BottomView.h"
+#include "InputBox.h"
+#include "TempFile.h"
+#include "UnicodeUtils.h"
 
 IMPLEMENT_DYNCREATE(CRightView, CBaseView)
 
@@ -235,5 +238,21 @@ void CRightView::AddContextItems(CIconMenu& popup, DiffStates state)
 
 void CRightView::EditComment()
 {
+	CInputBox inputBox(this->m_hWnd);
+	CString caption = _T("Edit Comment");
+	CString prompt = _T("Enter comment for this line");
+	if (!inputBox.DoModal(caption, prompt))
+		return;
 
+	CString filename = CTempFiles::Instance().GetTempFilePathString();
+	FILE *fp;
+	if (_tfopen_s(&fp, filename, _T("wb")))
+		return;
+	const unsigned char bom[] = { 0xEF, 0xBB, 0xBF };
+	CStringA content = CUnicodeUtils::GetUTF8(inputBox.Text);
+	fwrite(bom, 1, 3, fp);
+	fwrite(content, 1, content.GetLength(), fp);
+	fclose(fp);
+	CString cmd = _T("/command:sendmail /path:\"") + filename + _T("\"");
+	CAppUtils::RunTortoiseGitProc(cmd);
 }
