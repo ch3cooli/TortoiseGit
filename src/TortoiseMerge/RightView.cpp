@@ -228,6 +228,12 @@ void CRightView::AddContextItems(CIconMenu& popup, DiffStates state)
 			popup.AppendMenuIcon(POPUPCOMMAND_USERIGHTFILE, IDS_VIEWCONTEXTMENU_USETHISFILE);
 		}
 	}
+	popup.AppendMenuIcon(POPUPCOMMAND_COMMENT, IDS_VIEWCONTEXTMENU_COMMENT);
 
 	CBaseView::AddContextItems(popup, state);
+}
+
+void CRightView::EditComment()
+{
+
 }

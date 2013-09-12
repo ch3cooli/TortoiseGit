@@ -188,6 +188,8 @@ public: // methods
 	virtual void	UseRightBlock() {return UseViewBlock(m_pwndRight); }
 	virtual void	UseRightFile() {return UseViewFile(m_pwndRight); }
 
+	virtual void	EditComment() { }
+
 	// ViewData methods
 	void			InsertViewData(int index, const CString& sLine, DiffStates state, int linenumber, EOL ending, HIDESTATE hide, int movedline);
 	void			InsertViewData(int index, const viewdata& data);
@@ -597,6 +599,7 @@ protected:  // variables
 		POPUPCOMMAND_USELEFTFILE,
 		POPUPCOMMAND_USEBOTHLEFTFIRST,
 		POPUPCOMMAND_USEBOTHRIGHTFIRST,
+		POPUPCOMMAND_COMMENT,
 		// multiple writable views
 		POPUPCOMMAND_PREPENDFROMRIGHT,
 		POPUPCOMMAND_REPLACEBYRIGHT,

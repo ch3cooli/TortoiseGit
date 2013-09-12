@@ -36,6 +36,8 @@ public:
 	void	UseLeftBlock(); ///< Use Block from Left
 	void	UseLeftFile(); ///< Use File from Left
 
+	void	EditComment();
+
 protected:
 	void	AddContextItems(CIconMenu& popup, DiffStates state);
 };

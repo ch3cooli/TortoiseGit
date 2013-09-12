@@ -695,6 +695,7 @@ BEGIN
                             "TortoiseGitMerge cannot process this patch file. The filename ""%s"" appears more than once."
     IDS_ERR_MAINFRAME_FILECONFLICTNOVERSION 
                             "The patch does not apply cleanly to %s and no version information is given.\nPatching is not possible!"
+    IDS_VIEWCONTEXTMENU_COMMENT "Comment"
 END
 
 STRINGTABLE

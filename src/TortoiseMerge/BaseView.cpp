@@ -2364,6 +2364,9 @@ void CBaseView::OnContextMenu(CPoint point, DiffStates state)
 	case POPUPCOMMAND_USEBOTHRIGHTFIRST:
 		m_pwndRight->UseBothRightFirst();
 		break;
+	case POPUPCOMMAND_COMMENT:
+		m_pwndRight->EditComment();
+		break;
 	// 2-pane view multiedit commands; target is left view
 	case POPUPCOMMAND_PREPENDFROMRIGHT:
 		if (!m_pwndLeft->IsReadonly())
