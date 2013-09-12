@@ -171,7 +171,7 @@ public:
 	static CString GetClipboardLink(const CString &skipGitPrefix = _T(""), int paramsCount = 0);
 	static CString ChooseRepository(CString *path);
 
-	static bool SendPatchMail(CTGitPathList &pathlist, CString to = _T(""), CString cc = _T(""), CString subject = _T(""));
+	static bool SendPatchMail(CTGitPathList &pathlist, CString to = _T(""), CString cc = _T(""), CString subject = _T(""), bool isPatch = true);
 	static bool SendPatchMail(CString &cmd,CString &formatpatchoutput);
 
 	static int  SaveCommitUnicodeFile(CString &filename, CString &mesage);

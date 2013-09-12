@@ -2067,7 +2067,7 @@ CString CAppUtils::ChooseRepository(CString *path)
 	}
 }
 
-bool CAppUtils::SendPatchMail(CTGitPathList &list, CString to, CString cc, CString subject)
+bool CAppUtils::SendPatchMail(CTGitPathList &list, CString to, CString cc, CString subject, bool isPatch)
 {
 	CSendMailDlg dlg;
 
@@ -2093,10 +2093,18 @@ bool CAppUtils::SendPatchMail(CTGitPathList &list, CString to, CString cc, CStri
 				//progDlg.SetProjectProperties(props);
 		progDlg.SetItemCount(dlg.m_PathList.GetCount());
 
-		CSendMailPatch sendMailPatch(dlg.m_To, dlg.m_CC, dlg.m_Subject, !!dlg.m_bAttachment, !!dlg.m_bCombine);
-		progDlg.SetSendMailOption(&sendMailPatch);
-
-		progDlg.DoModal();
+		if (isPatch)
+		{
+			CSendMailPatch sendMailPatch(dlg.m_To, dlg.m_CC, dlg.m_Subject, !!dlg.m_bAttachment, !!dlg.m_bCombine);
+			progDlg.SetSendMailOption(&sendMailPatch);
+			progDlg.DoModal();
+		}
+		else
+		{
+			CSendMailCombineable sendMailCombineable(dlg.m_To, dlg.m_CC, dlg.m_Subject, !!dlg.m_bAttachment, !!dlg.m_bCombine);
+			progDlg.SetSendMailOption(&sendMailCombineable);
+			progDlg.DoModal();
+		}
 
 		return true;
 	}

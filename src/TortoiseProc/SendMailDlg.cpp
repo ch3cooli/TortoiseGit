@@ -131,7 +131,6 @@ BOOL CSendMailDlg::OnInitDialog()
 	if (m_bCustomSubject)
 	{
 		GetDlgItem(IDC_SENDMAIL_COMBINE)->EnableWindow(FALSE);
-		m_bCombine = TRUE;
 		GetDlgItem(IDC_SENDMAIL_SUBJECT)->SetWindowText(m_Subject);
 	}
 

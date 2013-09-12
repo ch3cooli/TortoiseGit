@@ -253,6 +253,6 @@ void CRightView::EditComment()
 	fwrite(bom, 1, 3, fp);
 	fwrite(content, 1, content.GetLength(), fp);
 	fclose(fp);
-	CString cmd = _T("/command:sendmail /path:\"") + filename + _T("\"");
+	CString cmd = _T("/command:sendmail /combine /path:\"") + filename + _T("\"");
 	CAppUtils::RunTortoiseGitProc(cmd);
 }

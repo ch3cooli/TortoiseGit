@@ -25,6 +25,7 @@ bool SendMailCommand::Execute()
 	CString to = parser.GetVal(_T("to"));
 	CString cc = parser.GetVal(_T("cc"));
 	CString subject = parser.GetVal(_T("subject"));
+	bool isPatch = !parser.HasKey(_T("combine"));
 
-	return CAppUtils::SendPatchMail(this->orgPathList, to, cc, subject);
+	return CAppUtils::SendPatchMail(this->orgPathList, to, cc, subject, isPatch);
 }
