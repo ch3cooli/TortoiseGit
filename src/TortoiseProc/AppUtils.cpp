@@ -2067,10 +2067,14 @@ CString CAppUtils::ChooseRepository(CString *path)
 	}
 }
 
-bool CAppUtils::SendPatchMail(CTGitPathList& list)
+bool CAppUtils::SendPatchMail(CTGitPathList &list, CString to, CString cc, CString subject)
 {
 	CSendMailDlg dlg;
 
+	dlg.m_To = to;
+	dlg.m_CC = cc;
+	dlg.m_Subject = subject;
+	dlg.m_bCustomSubject = !subject.IsEmpty();
 	dlg.m_PathList  = list;
 
 	if(dlg.DoModal()==IDOK)

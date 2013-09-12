@@ -128,6 +128,13 @@ BOOL CSendMailDlg::OnInitDialog()
 	if (m_PathList.GetCount() == 1)
 		m_ctrlList.SetItemState(0, LVIS_SELECTED, LVIS_SELECTED);
 
+	if (m_bCustomSubject)
+	{
+		GetDlgItem(IDC_SENDMAIL_COMBINE)->EnableWindow(FALSE);
+		m_bCombine = TRUE;
+		GetDlgItem(IDC_SENDMAIL_SUBJECT)->SetWindowText(m_Subject);
+	}
+
 	this->UpdateData(FALSE);
 	OnBnClickedSendmailCombine();
 

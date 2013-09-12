@@ -22,5 +22,9 @@
 
 bool SendMailCommand::Execute()
 {
-	return CAppUtils::SendPatchMail(orgPathList);
+	CString to = parser.GetVal(_T("to"));
+	CString cc = parser.GetVal(_T("cc"));
+	CString subject = parser.GetVal(_T("subject"));
+
+	return CAppUtils::SendPatchMail(this->orgPathList, to, cc, subject);
 }
