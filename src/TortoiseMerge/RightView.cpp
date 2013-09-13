@@ -244,28 +244,44 @@ void CRightView::EditComment()
 	if (!GetViewSelection(nFirstViewLine, nLastViewLine))
 		return;
 
+	int lineNo = GetLineNumber(nLastViewLine) + 1;
 	CInputBox inputBox(this->m_hWnd);
 	CString caption = _T("Edit Comment");
 	CString prompt;
-	prompt.Format(_T("Enter comment for line %d"), nLastViewLine + 1);
+	prompt.Format(_T("Enter comment for line %d"), lineNo);
 	if (!inputBox.DoModal(caption, prompt))
 		return;
 
 	CString rightFilename = CTempFiles::Instance().GetTempFilePathString();
 	SaveExtFile(rightFilename);
-	nFirstViewLine = 0;
-	nLastViewLine  = 0;
-	m_pwndLeft->GetViewSelection(nFirstViewLine, nLastViewLine);
+	int leftFirstViewLine = 0;
+	int leftLastViewLine  = 0;
+	m_pwndLeft->GetViewSelection(leftFirstViewLine, leftLastViewLine);
 	CString leftFilename = CTempFiles::Instance().GetTempFilePathString();
 	m_pwndLeft->SaveExtFile(leftFilename);
 	CString filename = CTempFiles::Instance().GetTempFilePathString();
 	if (!CAppUtils::CreateUnifiedDiff(leftFilename, rightFilename, filename, true))
 		return;
 
+	CPatch patch;
+	patch.OpenUnifiedDiffFile(filename, &lineNo);
+	CStringArray lines;
+	patch.GetPatchLines(lines);
+
 	FILE *fp;
-	if (_tfopen_s(&fp, filename, _T("a")))
+	if (_tfopen_s(&fp, filename, _T("w")))
 		return;
-	CStringA content = CUnicodeUtils::GetUTF8(CString(_T("\n")) + inputBox.Text);
+	for (int i = 0; i < lines.GetCount(); i++)
+	{
+		CStringA patchLines = CUnicodeUtils::GetUTF8(lines.GetAt(i));
+		char arrow[] = "> ";
+		fwrite(arrow, 1, 2, fp);
+		fwrite(patchLines, 1, patchLines.GetLength(), fp);
+	}
+	CStringA content;
+	content.Format("\nLine %d: ", lineNo);
+	fwrite(content, 1, content.GetLength(), fp);
+	content = CUnicodeUtils::GetUTF8(inputBox.Text);
 	fwrite(content, 1, content.GetLength(), fp);
 	fclose(fp);
 	CString cmd = _T("/command:sendmail /hide /mailtype:combined /subject:\"Comment on ")

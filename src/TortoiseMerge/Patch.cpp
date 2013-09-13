@@ -58,7 +58,7 @@ void CPatch::FreeMemory()
 	m_arFileDiffs.RemoveAll();
 }
 
-BOOL CPatch::ParsePatchFile(CFileTextLines &PatchLines)
+BOOL CPatch::ParsePatchFile(CFileTextLines &PatchLines, int *targetLine)
 {
 	CString sLine;
 	EOL ending = EOL_NOENDING;
@@ -281,6 +281,21 @@ BOOL CPatch::ParsePatchFile(CFileTextLines &PatchLines)
 					chunk->lAddLength = _ttol(sAdd);
 				}
 				++state;
+				if (targetLine && chunk->lAddStart > *targetLine)
+				{
+					if (chunks->chunks.GetCount() > 0)
+					{
+						while (chunks->chunks.GetCount() > 1)
+							chunks->chunks.RemoveAt(0);
+						Chunk *chunk0 = chunks->chunks.GetAt(0);
+						while (chunk0->arLines.GetCount() > *targetLine - chunk0->lAddStart + 1)
+							chunk0->arLines.RemoveAt(chunk0->arLines.GetCount() - 1);
+					}
+					delete chunk;
+					chunk = nullptr;
+					nIndex = PatchLines.GetCount(); // exit loop condition
+					break;
+				}
 			}
 			break;
 
@@ -400,7 +415,41 @@ errorcleanup:
 	return FALSE;
 }
 
-BOOL CPatch::OpenUnifiedDiffFile(const CString& filename)
+void CPatch::GetPatchLines(CStringArray &arr)
+{
+	if (m_arFileDiffs.GetCount() == 0)
+		return;
+	auto chunks = m_arFileDiffs.GetAt(0)->chunks;
+	for (int i = 0; i < chunks.GetCount(); i++)
+	{
+		Chunk *chunk = chunks.GetAt(i);
+		CString atat;
+		atat.Format(_T("@@ -%d,%d +%d,%d @@\n"), chunk->lRemoveStart, chunk->lRemoveLength, chunk->lAddStart, chunk->lAddLength);
+		arr.Add(atat);
+		for (int j = 0; j < chunk->arLines.GetCount(); j++)
+		{
+			CString prefix;
+			int lineState = chunk->arLinesStates.GetAt(j);
+			if (lineState == PATCHSTATE_ADDED)
+				prefix = _T("+");
+			else if (lineState == PATCHSTATE_REMOVED)
+				prefix = _T("-");
+			else
+				prefix = _T(" ");
+			CString suffix;
+			EOL eol = chunk->arEOLs.at(j);
+			if (eol == EOL::EOL_CRLF || eol == EOL::EOL_AUTOLINE)
+				suffix = _T("\r\n");
+			else if (eol == EOL::EOL_LF)
+				suffix = _T("\n");
+			else if (eol == EOL::EOL_CR)
+				suffix = _T("\r");
+			arr.Add(prefix + chunk->arLines.GetAt(j) + suffix);
+		}
+	}
+}
+
+BOOL CPatch::OpenUnifiedDiffFile(const CString& filename, int *targetLine)
 {
 	CCrashReport::Instance().AddFile2(filename, NULL, _T("unified diff file"), CR_AF_MAKE_FILE_COPY);
 
@@ -414,7 +463,7 @@ BOOL CPatch::OpenUnifiedDiffFile(const CString& filename)
 
 	//now we got all the lines of the patch file
 	//in our array - parsing can start...
-	return ParsePatchFile(PatchLines);
+	return ParsePatchFile(PatchLines, targetLine);
 }
 
 CString CPatch::GetFilename(int nIndex)

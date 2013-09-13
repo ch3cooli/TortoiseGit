@@ -37,7 +37,7 @@ public:
 	CPatch(void);
 	~CPatch(void);
 
-	BOOL		OpenUnifiedDiffFile(const CString& filename);
+	BOOL		OpenUnifiedDiffFile(const CString& filename, int *targetLine = nullptr);
 	int			PatchFile(const int strip, const int nIndex, const CString& sPath, const CString& sSavePath = _T(""), const CString& sBaseFile = _T(""), const bool force = false);
 	int			GetNumberOfFiles() const  {return m_arFileDiffs.GetCount();}
 	CString		GetFilename(int nIndex);
@@ -47,6 +47,7 @@ public:
 	CString		GetFullPath(const CString& sPath, int nIndex, int fileno = 0);
 	CString		GetErrorMessage() const  {return m_sErrorMessage;}
 	CString		CheckPatchPath(const CString& path);
+	void		GetPatchLines(CStringArray &arr);
 
 	/**
 	 * Returns TRUE if stripping prefixes from the paths in the patch file
@@ -61,7 +62,7 @@ protected:
 	int			CountDirMatches(const CString& path);
 	CString		RemoveUnicodeBOM(const CString& str);
 
-	BOOL		ParsePatchFile(CFileTextLines &PatchLines);
+	BOOL		ParsePatchFile(CFileTextLines &PatchLines, int *targetLine = nullptr);
 
 	/**
 	 * Strips the filename by removing m_nStrip prefixes.
