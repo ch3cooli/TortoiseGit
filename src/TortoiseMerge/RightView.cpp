@@ -239,21 +239,35 @@ void CRightView::AddContextItems(CIconMenu& popup, DiffStates state)
 
 void CRightView::EditComment()
 {
+	int nFirstViewLine = 0;
+	int nLastViewLine  = 0;
+	if (!GetViewSelection(nFirstViewLine, nLastViewLine))
+		return;
+
 	CInputBox inputBox(this->m_hWnd);
 	CString caption = _T("Edit Comment");
-	CString prompt = _T("Enter comment for this line");
+	CString prompt;
+	prompt.Format(_T("Enter comment for line %d"), nLastViewLine + 1);
 	if (!inputBox.DoModal(caption, prompt))
 		return;
 
+	CString rightFilename = CTempFiles::Instance().GetTempFilePathString();
+	SaveExtFile(rightFilename);
+	nFirstViewLine = 0;
+	nLastViewLine  = 0;
+	m_pwndLeft->GetViewSelection(nFirstViewLine, nLastViewLine);
+	CString leftFilename = CTempFiles::Instance().GetTempFilePathString();
+	m_pwndLeft->SaveExtFile(leftFilename);
 	CString filename = CTempFiles::Instance().GetTempFilePathString();
-	FILE *fp;
-	if (_tfopen_s(&fp, filename, _T("wb")))
+	if (!CAppUtils::CreateUnifiedDiff(leftFilename, rightFilename, filename, true))
 		return;
-	const unsigned char bom[] = { 0xEF, 0xBB, 0xBF };
-	CStringA content = CUnicodeUtils::GetUTF8(inputBox.Text);
-	fwrite(bom, 1, 3, fp);
+
+	FILE *fp;
+	if (_tfopen_s(&fp, filename, _T("a")))
+		return;
+	CStringA content = CUnicodeUtils::GetUTF8(CString(_T("\n")) + inputBox.Text);
 	fwrite(content, 1, content.GetLength(), fp);
-	fclose(fp);	
+	fclose(fp);
 	CString cmd = _T("/command:sendmail /hide /mailtype:combined /subject:\"Comment on ")
 		+ CBaseView::m_pMainFrame->m_Data.m_yourFile.GetDescriptiveName() + _T("\" /path:\"") + filename + _T("\"");
 	CAppUtils::RunTortoiseGitProc(cmd);

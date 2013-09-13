@@ -263,6 +263,7 @@ public: // variables
 #define SAVE_REMOVEDLINES 1
 	int				SaveFile(int Flags = 0);
 	int				SaveFileTo(CString FileName, int Flags = 0);
+	int				SaveExtFile(CString FileName, int Flags = 0) const;
 
 	EOL				GetLineEndings();											///< Get Line endings on view from lineendings or "mixed"
 	EOL				GetLineEndings(bool MixelEols);

@@ -5642,6 +5642,70 @@ int CBaseView::SaveFile(int nFlags)
 	return 1;
 }
 
+int CBaseView::SaveExtFile(CString FileName, int nFlags) const
+{
+	if (m_pViewData != nullptr && m_pWorkingFile != nullptr)
+	{
+		CFileTextLines file;
+		CFileTextLines::SaveParams saveParams = m_SaveParams;
+		saveParams.m_LineEndings = m_lineendings;
+		saveParams.m_UnicodeType = m_texttype;
+		file.SetSaveParams(saveParams);
+
+		for (int i = 0; i < m_pViewData->GetCount(); i++)
+		{
+			//only copy non-removed lines
+			DiffStates state = m_pViewData->GetState(i);
+			switch (state)
+			{
+			case DIFFSTATE_CONFLICTED:
+			case DIFFSTATE_CONFLICTED_IGNORED:
+				{
+					int first = i;
+					int last = i;
+					do
+					{
+						last++;
+					} while((last<m_pViewData->GetCount()) && ((m_pViewData->GetState(last)==DIFFSTATE_CONFLICTED)||(m_pViewData->GetState(last)==DIFFSTATE_CONFLICTED_IGNORED)));
+					file.Add(_T("<<<<<<< .mine"), EOL_NOENDING);
+					for (int j=first; j<last; j++)
+					{
+						file.Add(m_pwndRight->m_pViewData->GetLine(j), m_pwndRight->m_pViewData->GetLineEnding(j));
+					}
+					file.Add(_T("======="), EOL_NOENDING);
+					for (int j=first; j<last; j++)
+					{
+						file.Add(m_pwndLeft->m_pViewData->GetLine(j), m_pwndLeft->m_pViewData->GetLineEnding(j));
+					}
+					file.Add(_T(">>>>>>> .theirs"), EOL_NOENDING);
+					i = last-1;
+				}
+				break;
+			case DIFFSTATE_EMPTY:
+				break;
+			case DIFFSTATE_CONFLICTEMPTY:
+			case DIFFSTATE_IDENTICALREMOVED:
+			case DIFFSTATE_REMOVED:
+			case DIFFSTATE_THEIRSREMOVED:
+			case DIFFSTATE_YOURSREMOVED:
+			case DIFFSTATE_CONFLICTRESOLVEDEMPTY:
+				if ((nFlags & SAVE_REMOVEDLINES) == 0)
+				{
+					// do not save removed lines
+					break;
+				}
+			default:
+				file.Add(m_pViewData->GetLine(i), m_pViewData->GetLineEnding(i));
+				break;
+			}
+		}
+		if (file.Save(FileName))
+			return 0;
+		return -1;
+	}	
+	return 1;
+}
+
 
 int CBaseView::SaveFileTo(CString sFileName, int nFlags)
 {
