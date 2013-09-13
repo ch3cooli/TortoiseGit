@@ -2067,7 +2067,7 @@ CString CAppUtils::ChooseRepository(CString *path)
 	}
 }
 
-bool CAppUtils::SendPatchMail(CTGitPathList &list, CString to, CString cc, CString subject, bool isPatch)
+bool CAppUtils::SendPatchMail(CTGitPathList &list, CString to, CString cc, CString subject, bool isPatch, bool combine, bool hide)
 {
 	CSendMailDlg dlg;
 
@@ -2075,9 +2075,10 @@ bool CAppUtils::SendPatchMail(CTGitPathList &list, CString to, CString cc, CStri
 	dlg.m_CC = cc;
 	dlg.m_Subject = subject;
 	dlg.m_bCustomSubject = !subject.IsEmpty();
+	dlg.m_bCombine = combine;
 	dlg.m_PathList  = list;
 
-	if(dlg.DoModal()==IDOK)
+	if (hide || dlg.DoModal() == IDOK)
 	{
 		if (dlg.m_PathList.IsEmpty())
 			return FALSE;

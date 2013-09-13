@@ -28,6 +28,7 @@
 #include "InputBox.h"
 #include "TempFile.h"
 #include "UnicodeUtils.h"
+#include "MainFrm.h"
 
 IMPLEMENT_DYNCREATE(CRightView, CBaseView)
 
@@ -252,7 +253,8 @@ void CRightView::EditComment()
 	CStringA content = CUnicodeUtils::GetUTF8(inputBox.Text);
 	fwrite(bom, 1, 3, fp);
 	fwrite(content, 1, content.GetLength(), fp);
-	fclose(fp);
-	CString cmd = _T("/command:sendmail /combine /path:\"") + filename + _T("\"");
+	fclose(fp);	
+	CString cmd = _T("/command:sendmail /hide /mailtype:combined /subject:\"Comment on ")
+		+ CBaseView::m_pMainFrame->m_Data.m_yourFile.GetDescriptiveName() + _T("\" /path:\"") + filename + _T("\"");
 	CAppUtils::RunTortoiseGitProc(cmd);
 }

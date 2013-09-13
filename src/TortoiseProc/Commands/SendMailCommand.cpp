@@ -25,7 +25,11 @@ bool SendMailCommand::Execute()
 	CString to = parser.GetVal(_T("to"));
 	CString cc = parser.GetVal(_T("cc"));
 	CString subject = parser.GetVal(_T("subject"));
-	bool isPatch = !parser.HasKey(_T("combine"));
+	bool isPatch = true;
+	if (parser.HasVal(_T("mailtype")))
+		isPatch = CString(parser.GetVal(_T("mailtype"))) == _T("patch");
+	bool combine = !!parser.HasKey(_T("combine"));
+	bool hide = !!parser.HasKey(_T("hide"));
 
-	return CAppUtils::SendPatchMail(this->orgPathList, to, cc, subject, isPatch);
+	return CAppUtils::SendPatchMail(this->orgPathList, to, cc, subject, isPatch, combine, hide);
 }
