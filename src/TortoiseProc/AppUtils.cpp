@@ -2543,7 +2543,8 @@ bool CAppUtils::Push(CString selectLocalBranch)
 			}
 			if(ret == IDC_PROGRESS_BUTTON1)
 			{
-				RequestPull(dlg.m_BranchRemoteName);
+				CString url = dlg.m_bRemoteSelected ? g_Git.GetConfigValue(_T("remote.") + dlg.m_URL + _T(".url")) : dlg.m_URL;
+				RequestPull(dlg.m_BranchRemoteName, url);
 			}
 			else if(ret == IDC_PROGRESS_BUTTON1 + 1)
 			{
