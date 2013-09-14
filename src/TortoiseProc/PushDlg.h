@@ -1,6 +1,6 @@
 // TortoiseGit - a Windows shell extension for easy version control
 
-// Copyright (C) 2008-2013 - TortoiseGit
+// Copyright (C) 2008-2014 - TortoiseGit
 
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -59,6 +59,7 @@ public:
 	BOOL			m_bPushAllRemotes;
 	BOOL			m_bSetUpstream;
 	int				m_RecurseSubmodules;
+	BOOL			m_bRemoteSelected;
 
 protected:
 	CRegDWORD		m_regPushAllRemotes;

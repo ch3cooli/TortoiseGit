@@ -1,6 +1,6 @@
 // TortoiseGit - a Windows shell extension for easy version control
 
-// Copyright (C) 2008-2013 - TortoiseGit
+// Copyright (C) 2008-2014 - TortoiseGit
 
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -48,6 +48,7 @@ CPushDlg::CPushDlg(CWnd* pParent /*=NULL*/)
 	, m_bSetPushRemote(FALSE)
 	, m_bSetUpstream(FALSE)
 	, m_RecurseSubmodules(0)
+	, m_bRemoteSelected(FALSE)
 {
 	m_bAutoLoad = CAppUtils::IsSSHPutty();
 }
@@ -386,6 +387,7 @@ void CPushDlg::OnBnClickedOk()
 
 	if( GetCheckedRadioButton(IDC_RD_REMOTE,IDC_RD_URL) == IDC_RD_REMOTE)
 	{
+		m_bRemoteSelected = TRUE;
 		m_URL=m_Remote.GetString();
 		if (m_URL.IsEmpty())
 		{
@@ -396,6 +398,7 @@ void CPushDlg::OnBnClickedOk()
 	}
 	if( GetCheckedRadioButton(IDC_RD_REMOTE,IDC_RD_URL) == IDC_RD_URL)
 	{
+		m_bRemoteSelected = FALSE;
 		m_URL=m_RemoteURL.GetString();
 	}
 
