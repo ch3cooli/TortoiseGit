@@ -760,14 +760,13 @@ void CGitLogList::ContextMenuAction(int cmd,int FirstSelect, int LastSelect, CMe
 				cmd += _T(" /path:\"")+g_Git.m_CurrentDir+_T("\" ");
 
 				GitRev * r1 = reinterpret_cast<GitRev*>(m_arShownList.GetAt(FirstSelect));
-				GitRev * r2 = NULL;
 				if(select == 1)
 				{
 					cmd += _T(" /startrev:")+r1->m_CommitHash.ToString();
 				}
 				else
 				{
-					r2 = reinterpret_cast<GitRev*>(m_arShownList.GetAt(LastSelect));
+					GitRev * r2 = reinterpret_cast<GitRev*>(m_arShownList.GetAt(LastSelect));
 					if( this->m_IsOldFirst )
 					{
 						cmd += _T(" /startrev:")+r1->m_CommitHash.ToString()+_T("~1");
@@ -1141,10 +1140,9 @@ void CGitLogList::SetSelectedRebaseAction(int action)
 {
 	POSITION pos = GetFirstSelectedItemPosition();
 	if (!pos) return;
-	int index;
 	while(pos)
 	{
-		index = GetNextSelectedItem(pos);
+		int index = GetNextSelectedItem(pos);
 		if (((GitRev*)m_arShownList[index])->GetRebaseAction() & (LOGACTIONS_REBASE_CURRENT | LOGACTIONS_REBASE_DONE))
 			continue;
 		((GitRev*)m_arShownList[index])->GetRebaseAction() = action;
@@ -1158,10 +1156,9 @@ void CGitLogList::SetSelectedRebaseAction(int action)
 void CGitLogList::ShiftSelectedRebaseAction()
 {
 	POSITION pos = GetFirstSelectedItemPosition();
-	int index;
 	while(pos)
 	{
-		index = GetNextSelectedItem(pos);
+		int index = GetNextSelectedItem(pos);
 		int dummyAction = 0;
 		int *action = &dummyAction;
 		action = &((GitRev*)m_arShownList[index])->GetRebaseAction();

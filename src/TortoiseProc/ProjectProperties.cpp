@@ -229,8 +229,6 @@ void ProjectProperties::AutoUpdateRegex()
 
 std::vector<CHARRANGE> ProjectProperties::FindBugIDPositions(const CString& msg)
 {
-	size_t offset1 = 0;
-	size_t offset2 = 0;
 	std::vector<CHARRANGE> result;
 
 	// first use the checkre string to find bug ID's in the message
@@ -290,6 +288,8 @@ std::vector<CHARRANGE> ProjectProperties::FindBugIDPositions(const CString& msg)
 		CString sFirstPart;
 		CString sLastPart;
 		BOOL bTop = FALSE;
+		size_t offset1 = 0;
+		size_t offset2 = 0;
 		if (nBugIdPos < 0)
 			return result;
 
@@ -420,11 +420,10 @@ BOOL ProjectProperties::CheckBugID(const CString& sID)
 	{
 		// check if the revision actually _is_ a number
 		// or a list of numbers separated by colons
-		TCHAR c = 0;
 		int len = sID.GetLength();
 		for (int i=0; i<len; ++i)
 		{
-			c = sID.GetAt(i);
+			TCHAR c = sID.GetAt(i);
 			if ((c < '0')&&(c != ',')&&(c != ' '))
 			{
 				return FALSE;

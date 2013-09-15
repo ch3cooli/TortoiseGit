@@ -180,8 +180,6 @@ BOOL CRebaseDlg::OnInitDialog()
 	m_LogMessageCtrl.Init(0);
 	m_LogMessageCtrl.Call(SCI_SETREADONLY, TRUE);
 
-	dwStyle = LBS_NOINTEGRALHEIGHT | WS_CHILD | WS_VISIBLE | WS_HSCROLL | WS_VSCROLL;
-
 	if (!m_wndOutputRebase.Create(_T("Scintilla"),_T("source"),0,rectDummy, &m_ctrlTabCtrl, 0,0) )
 	{
 		TRACE0("Failed to create output windows\n");

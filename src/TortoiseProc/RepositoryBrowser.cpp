@@ -776,7 +776,6 @@ void CRepositoryBrowser::ShowContextMenu(CPoint point, TShadowFilesTreeList &sel
 
 	if (bAddSeparator)
 		popupMenu.AppendMenu(MF_SEPARATOR);
-	bAddSeparator = false;
 
 	if (!selectedLeafs.empty())
 	{
@@ -1242,8 +1241,7 @@ void CRepositoryBrowser::OpenFile(const CString path, eOpenType mode, bool isSub
 	}
 	else if (mode == OPEN)
 	{
-		int ret = HINSTANCE_ERROR;
-		ret = (int)ShellExecute(this->m_hWnd, NULL, file, NULL, NULL, SW_SHOW);
+		int ret = (int)ShellExecute(this->m_hWnd, NULL, file, NULL, NULL, SW_SHOW);
 
 		if (ret > HINSTANCE_ERROR)
 			return;
