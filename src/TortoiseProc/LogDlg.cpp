@@ -2357,6 +2357,7 @@ void CLogDlg::ShowStartRef()
 void CLogDlg::SetRange(const CString& range)
 {
 	m_LogList.SetRange(range);
+	m_rangeList.push_back(range);
 
 	ShowStartRef();
 }

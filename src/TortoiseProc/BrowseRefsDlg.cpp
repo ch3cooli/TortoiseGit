@@ -1277,7 +1277,7 @@ void CBrowseRefsDlg::OnNMDblclkListRefLeafs(NMHDR * /*pNMHDR*/, LRESULT *pResult
 	EndDialog(IDOK);
 }
 
-CString CBrowseRefsDlg::PickRef(bool /*returnAsHash*/, CString initialRef, int pickRef_Kind, bool pickMultipleRefs)
+CString CBrowseRefsDlg::PickRef(bool /*returnAsHash*/, CString initialRef, int pickRef_Kind, bool pickMultipleRefs, RefHistory *refHistory)
 {
 	CBrowseRefsDlg dlg(CString(),NULL);
 
@@ -1286,6 +1286,7 @@ CString CBrowseRefsDlg::PickRef(bool /*returnAsHash*/, CString initialRef, int p
 	dlg.m_initialRef = initialRef;
 	dlg.m_pickRef_Kind = pickRef_Kind;
 	dlg.m_bPickOne = !pickMultipleRefs;
+	dlg.m_refHistory = refHistory;
 
 	if(dlg.DoModal() != IDOK)
 		return CString();

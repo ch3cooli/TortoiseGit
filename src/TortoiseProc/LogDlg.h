@@ -193,6 +193,7 @@ private:
 	CString				m_hightlightRevision;
 
 	CString				m_sSelectedHash;	// set to selected commit hash on OK if appropriate
+	CBrowseRefsDlg::RefHistory		m_rangeList;
 	bool				m_bSelectionMustBeContinuous;
 	bool				m_bSelectionMustBeSingle;
 	bool				m_bCancelled;

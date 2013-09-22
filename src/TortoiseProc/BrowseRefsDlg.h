@@ -111,6 +111,13 @@ public:
 		eCol_Description,
 	};
 
+	class RefHistory
+	{
+	public:
+		STRING_VECTOR m_list;
+		int m_pos;
+	};
+
 // Dialog Data
 	enum { IDD = IDD_DIALOG_BROWSE_REFS };
 
@@ -183,8 +190,9 @@ private:
 	int		m_pickRef_Kind;
 	CString m_pickedRef;
 	bool	m_bPickOne;
+	RefHistory *m_refHistory;
 
 public:
-	static CString	PickRef(bool returnAsHash = false, CString initialRef = CString(), int pickRef_Kind = gPickRef_All, bool pickMultipleRefs = false);
+	static CString	PickRef(bool returnAsHash = false, CString initialRef = CString(), int pickRef_Kind = gPickRef_All, bool pickMultipleRefs = false, RefHistory *refHistory = nullptr);
 	static bool		PickRefForCombo(CComboBoxEx* pComboBox, int pickRef_Kind = gPickRef_All);
 };
