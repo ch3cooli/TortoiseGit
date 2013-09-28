@@ -170,6 +170,7 @@ private:
 	void CheckRegexpTooltip();
 	void GetChangedPaths(std::vector<CString>& changedpaths, std::vector<LogChangedPath*>& changedlogpaths);
 	void SetDlgTitle();
+	CString GetShowingPath();
 	CString GetAbsoluteUrlFromRelativeUrl(const CString& url);
 
 

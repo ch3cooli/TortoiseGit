@@ -513,12 +513,15 @@ void CLogDlg::SetDlgTitle()
 	if (m_sTitle.IsEmpty())
 		GetWindowText(m_sTitle);
 
+	CAppUtils::SetWindowTitle(m_hWnd, GetShowingPath(), m_sTitle);
+}
+
+CString CLogDlg::GetShowingPath()
+{
 	if (m_LogList.m_Path.IsEmpty() || m_orgPath.GetWinPathString().IsEmpty())
-	{
-		CAppUtils::SetWindowTitle(m_hWnd, g_Git.m_CurrentDir, m_sTitle);
-	}
+		return g_Git.m_CurrentDir;
 	else
-		CAppUtils::SetWindowTitle(m_hWnd, m_orgPath.GetWinPathString(), m_sTitle);
+		m_orgPath.GetWinPathString();
 }
 
 void CLogDlg::CheckRegexpTooltip()
