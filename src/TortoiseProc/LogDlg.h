@@ -1,7 +1,7 @@
 // TortoiseGit - a Windows shell extension for easy version control
 
 // Copyright (C) 2003-2008 - TortoiseSVN
-// Copyright (C) 2008-2013 - TortoiseGit
+// Copyright (C) 2008-2014 - TortoiseGit
 
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -62,6 +62,7 @@ public:
 	void SetFilter(const CString& findstr, LONG findtype, bool findregex);
 	bool IsThreadRunning() {return !!m_LogList.m_bThreadRunning;}
 	void SetSelect(bool bSelect) {m_bSelect = bSelect;}
+	void CanBeWorkDirRevSelection(bool bCanBeWorkDirRev) { m_bSelectionCanBeWorkDirRev = bCanBeWorkDirRev; }
 	void ContinuousSelection(bool bCont = true) {m_bSelectionMustBeContinuous = bCont;}
 	void SingleSelection(bool bSingle = true) {m_bSelectionMustBeSingle = bSingle;}
 	void SetRange(const CString& range);
@@ -199,6 +200,7 @@ private:
 	CString				m_hightlightRevision;
 
 	CString				m_sSelectedHash;	// set to selected commit hash on OK if appropriate
+	bool				m_bSelectionCanBeWorkDirRev;
 	bool				m_bSelectionMustBeContinuous;
 	bool				m_bSelectionMustBeSingle;
 	bool				m_bCancelled;

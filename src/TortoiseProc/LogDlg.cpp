@@ -44,6 +44,7 @@ CLogDlg::CLogDlg(CWnd* pParent /*=NULL*/)
 	, m_nSortColumn(0)
 	, m_bFollowRenames(false)
 	, m_bSelect(false)
+	, m_bSelectionCanBeWorkDirRev(false)
 	, m_bSelectionMustBeSingle(true)
 	, m_bShowTags(true)
 	, m_bShowLocalBranches(true)
@@ -539,6 +540,21 @@ void CLogDlg::EnableOKButton()
 {
 	if (m_bSelect)
 	{
+		POSITION pos = m_LogList.GetFirstSelectedItemPosition();
+		if (pos)
+		{
+			int index = m_LogList.GetNextSelectedItem(pos);
+			GitRev* pLogEntry = reinterpret_cast<GitRev *>(m_LogList.m_arShownList.SafeGetAt(index));
+			if (pLogEntry)
+			{
+				if (!m_bSelectionCanBeWorkDirRev && pLogEntry->m_CommitHash.IsEmpty())
+				{
+					DialogEnableWindow(IDOK, FALSE);
+					return;
+				}
+			}
+		}
+
 		// the dialog is used to select revisions
 		if (m_bSelectionMustBeSingle)
 		{
