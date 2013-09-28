@@ -1191,6 +1191,17 @@ BOOL CLogDlg::PreTranslateMessage(MSG* pMsg)
 			FillLogMessageCtrl(false);
 		}
 	}
+	if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_ESCAPE)
+	{
+		CString strConfirmCloseDialog, format;
+		format.LoadString(IDS_PROC_CONFIRMCLOSEDIALOG);
+		strConfirmCloseDialog.Format(format, GetShowingPath());
+		DWORD dwConfirmCloseDialog = CRegDWORD(_T("Software\\TortoiseGit\\ConfirmCloseDialog"));
+		if (dwConfirmCloseDialog && CMessageBox::Show(m_hWnd, strConfirmCloseDialog, _T("TortoiseGit"), MB_YESNO | MB_ICONQUESTION) != IDYES)
+			return TRUE;
+		SendMessage(WM_CLOSE);
+		return TRUE;
+	}
 	if (m_hAccel && !bSkipAccelerator)
 	{
 		int ret = TranslateAccelerator(m_hWnd, m_hAccel, pMsg);
