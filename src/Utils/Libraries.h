@@ -26,6 +26,7 @@
 void	EnsureGitLibrary(bool bCreate = true);
 HRESULT	GetShellLibraryItem(LPWSTR pwszLibraryName, IShellItem2** ppShellItem);
 HRESULT	OpenShellLibrary(LPWSTR pwszLibraryName, IShellLibrary** ppShellLib);
+HRESULT	AddFolderToShellLibrary(LPCWSTR pwszFolderPath);
 
 EXTERN_C const CLSID FOLDERTYPEID_GITWC;
 

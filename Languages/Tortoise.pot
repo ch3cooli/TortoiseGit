@@ -1621,6 +1621,10 @@ msgstr ""
 msgid "Add new files automatically to Git"
 msgstr ""
 
+#. Resource IDs: (1781)
+msgid "Add this folder to Library"
+msgstr ""
+
 #. Resource IDs: (13)
 msgid "Add to &ignore list"
 msgstr ""

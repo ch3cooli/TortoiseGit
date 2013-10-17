@@ -81,6 +81,7 @@ BEGIN_MESSAGE_MAP(CSetMainPage, ISettingsPropPage)
 	ON_EN_CHANGE(IDC_MSYSGIT_EXTERN_PATH, OnModified)
 	ON_BN_CLICKED(IDC_BUTTON_SHOW_ENV, &CSetMainPage::OnBnClickedButtonShowEnv)
 	ON_BN_CLICKED(IDC_CREATELIB, &CSetMainPage::OnBnClickedCreatelib)
+	ON_BN_CLICKED(IDC_ADDFOLDERTOLIB, OnBnClickedAddfoldertolib)
 END_MESSAGE_MAP()
 
 BOOL CSetMainPage::OnInitDialog()
@@ -302,5 +303,12 @@ void CSetMainPage::OnBnClickedCreatelib()
 {
 	CoInitialize(NULL);
 	EnsureGitLibrary();
+	CoUninitialize();
+}
+
+void CSetMainPage::OnBnClickedAddfoldertolib()
+{
+	CoInitialize(NULL);
+	AddFolderToShellLibrary(g_Git.m_CurrentDir);
 	CoUninitialize();
 }

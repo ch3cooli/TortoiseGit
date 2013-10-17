@@ -145,3 +145,18 @@ HRESULT GetShellLibraryItem(LPWSTR pwszLibraryName, IShellItem2** ppShellItem)
 
     return hr;
 }
+
+HRESULT AddFolderToShellLibrary(LPCWSTR pwszFolderPath)
+{
+    BOOL bIsWow64 = FALSE;
+    IsWow64Process(GetCurrentProcess(), &bIsWow64);
+    if (bIsWow64)
+        return S_OK;
+
+	HRESULT hr;
+    CComPtr<IShellLibrary> pLibrary = NULL;
+    if (SUCCEEDED(hr = OpenShellLibrary(L"Git", &pLibrary)))
+		if ((hr = SHAddFolderPathToLibrary(pLibrary, pwszFolderPath)) == S_OK)
+			hr = pLibrary->Commit();
+	return hr;
+}
