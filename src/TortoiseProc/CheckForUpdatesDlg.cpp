@@ -1,7 +1,7 @@
 // TortoiseGit - a Windows shell extension for easy version control
 
 // Copyright (C) 2003-2008 - TortoiseSVN
-// Copyright (C) 2008-2013 - TortoiseGit
+// Copyright (C) 2008-2014 - TortoiseGit
 
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -165,6 +165,8 @@ resend:
 
 	CFile destinationFile(dest, CFile::modeCreate | CFile::modeWrite);
 	DWORD downloadedSum = 0; // sum of bytes downloaded so far
+	DWORD downloadProgress = 0;
+	DWORD downloadReport = GetTickCount();
 	do
 	{
 		DWORD size; // size of the data available
@@ -202,20 +204,30 @@ resend:
 		delete[] lpszData;
 
 		downloadedSum += downloaded;
+		ULONG downloadDelta = 0;
+		double downloadSpeed = 0;
+		DWORD timeDelta = GetTickCount() - downloadReport;
+		if (timeDelta > 1000)
+		{
+			downloadDelta = downloadedSum - downloadProgress;
+			downloadSpeed = (double)downloadDelta / (double)timeDelta;
+			downloadReport = GetTickCount();
+			downloadProgress = downloadedSum;
+		}
 
 		if (!showProgress)
 			continue;
 
 		if (contentLength == 0) // got no content-length from webserver
 		{
-			DOWNLOADSTATUS downloadStatus = { 0, 1 + 1 }; // + 1 for download of signature file
+			DOWNLOADSTATUS downloadStatus = { 0, 1 + 1, downloadSpeed }; // + 1 for download of signature file
 			::SendMessage(m_hWnd, WM_USER_DISPLAYSTATUS, 0, reinterpret_cast<LPARAM>(&downloadStatus));
 		}
 		else
 		{
 			if (downloadedSum > contentLength)
 				downloadedSum = contentLength - 1;
-			DOWNLOADSTATUS downloadStatus = { downloadedSum, contentLength + 1 }; // + 1 for download of signature file
+			DOWNLOADSTATUS downloadStatus = { downloadedSum, contentLength + 1, downloadSpeed }; // + 1 for download of signature file
 			::SendMessage(m_hWnd, WM_USER_DISPLAYSTATUS, 0, reinterpret_cast<LPARAM>(&downloadStatus));
 		}
 
@@ -837,6 +849,7 @@ LRESULT CCheckForUpdatesDlg::OnEndDownload(WPARAM, LPARAM)
 	m_pDownloadThread = NULL;
 
 	m_progress.ShowWindow(SW_HIDE);
+	GetDlgItem(IDC_INFOTEXT)->SetWindowText(_T(""));
 
 	if (dwExitCode == TRUE)
 	{
@@ -920,6 +933,12 @@ LRESULT CCheckForUpdatesDlg::OnDisplayStatus(WPARAM, LPARAM lParam)
 		{
 			m_pTaskbarList->SetProgressState(m_hWnd, TBPF_NORMAL);
 			m_pTaskbarList->SetProgressValue(m_hWnd, pDownloadStatus->ulProgress, pDownloadStatus->ulProgressMax);
+		}
+		if (pDownloadStatus->ulSpeed > 0)
+		{
+			CString speed;
+			speed.Format(IDS_SVN_PROGRESS_KBYTES_SEC, (double)pDownloadStatus->ulSpeed);
+			GetDlgItem(IDC_INFOTEXT)->SetWindowText(speed);
 		}
 	}
 
