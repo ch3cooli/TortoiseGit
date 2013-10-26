@@ -154,7 +154,7 @@ public:
 	static bool PerformSwitch(CString ref, bool bForce = false, CString sNewBranch = CString(), bool bBranchOverride = false, BOOL bTrack = 2, bool bMerge = false);
 
 	static bool IgnoreFile(CTGitPathList &filelist,bool IsMask);
-	static bool GitReset(CString *CommitHash,int type=1);
+	static bool GitReset(CString *CommitHash, int type = 1, bool autoclose = false);
 	static bool ConflictEdit(CTGitPath &file,bool bAlternativeTool=false,bool revertTheirMy=false);
 
 	static CString GetMergeTempFile(CString str,CTGitPath &merge);

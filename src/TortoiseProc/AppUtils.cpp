@@ -1358,7 +1358,7 @@ bool CAppUtils::IgnoreFile(CTGitPathList &path,bool IsMask)
 }
 
 
-bool CAppUtils::GitReset(CString *CommitHash,int type)
+bool CAppUtils::GitReset(CString *CommitHash,int type, bool autoclose)
 {
 	CResetDlg dlg;
 	dlg.m_ResetType=type;
@@ -1390,6 +1390,7 @@ bool CAppUtils::GitReset(CString *CommitHash,int type)
 		{
 			CProgressDlg progress;
 			progress.m_GitCmd=cmd;
+			progress.m_bAutoCloseOnSuccess = autoclose;
 
 			CTGitPath gitPath = g_Git.m_CurrentDir;
 			if (gitPath.HasSubmodules() && dlg.m_ResetType == 2)
@@ -1404,6 +1405,7 @@ bool CAppUtils::GitReset(CString *CommitHash,int type)
 				gitdlg.SetCommand(CGitProgressList::GitProgress_Reset);
 				gitdlg.SetRevision(dlg.m_ResetToVersion);
 				gitdlg.SetResetType(dlg.m_ResetType);
+				gitdlg.SetAutoClose(autoclose);
 				ret = gitdlg.DoModal();
 			}
 			else

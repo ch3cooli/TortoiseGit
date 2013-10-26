@@ -153,6 +153,9 @@
     <Filter Include="Commands\AutoTextTest">
       <UniqueIdentifier>{9baf680f-fe31-4b6d-bd01-50b7a2c043b8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Commands\Reset">
+      <UniqueIdentifier>{e5068ff2-232b-4be5-945d-8201ba00cbeb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AddRemoteDlg.cpp">
@@ -680,6 +683,9 @@
     <ClCompile Include="ChangedDlg.cpp">
       <Filter>Commands\ReposStatus</Filter>
     </ClCompile>
+    <ClCompile Include="Commands\ResetCommand.cpp">
+      <Filter>Commands\Reset</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AddRemoteDlg.h">
@@ -1197,6 +1203,9 @@
     </ClInclude>
     <ClInclude Include="ChangedDlg.h">
       <Filter>Commands\ReposStatus</Filter>
+    </ClInclude>
+    <ClInclude Include="Commands\ResetCommand.h">
+      <Filter>Commands\Reset</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
