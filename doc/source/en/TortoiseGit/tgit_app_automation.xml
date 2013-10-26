@@ -280,6 +280,19 @@ Don't touch these lines:
 							</entry>
 						</row>
 						<row>
+							<entry condition="pot">:reset</entry>
+							<entry>
+								Sets the current head to the specified commit and optionally
+								resets the index and working tree to match.
+								The <option>/rev</option> tells which revision
+								to be reset to.
+								The <option>/type</option> tells which type
+								of reset, supported values are <emphasis>soft</emphasis>,
+								<emphasis>mixed</emphasis> and <emphasis>hard</emphasis>.
+								You can find more information at <xref linkend="git-reset(1)"/>
+							</entry>
+						</row>
+						<row>
 							<entry condition="pot">:cleanup</entry>
 							<entry>
 								Cleans up interrupted or aborted operations and
