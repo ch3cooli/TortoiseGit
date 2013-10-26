@@ -69,6 +69,8 @@
 			solution is simple: either empty the recycle bin or deactivate
 			the <guilabel>Use recycle bin when reverting</guilabel> box
 			in TortoiseGit's settings.
+			If you really want to abort changes quickly without regret,
+			you may consider using <emphasis>Hard Reset</emphasis> instead.
 		</para>
 	</tip>
 </sect1>
