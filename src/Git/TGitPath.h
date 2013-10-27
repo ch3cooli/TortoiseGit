@@ -249,8 +249,11 @@ public:
 	bool HasGitSVNDir() const;
 	bool IsBisectActive() const;
 	bool IsMergeActive() const;
+	bool IsRevertActive() const;
+	bool IsCherryPickActive() const;
 	bool HasStashDir() const;
 	bool HasRebaseApply() const;
+	bool HasRebaseMerge() const;
 
 	bool IsWCRoot() const;
 

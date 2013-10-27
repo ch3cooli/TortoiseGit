@@ -917,6 +917,35 @@ bool CTGitPath::IsMergeActive() const
 
 	return !!PathFileExists(dotGitPath + _T("MERGE_HEAD"));
 }
+
+bool CTGitPath::IsRevertActive() const
+{
+	CString topdir;
+	if(!g_GitAdminDir.HasAdminDir(GetWinPathString(),&topdir))
+	{
+		return false;
+	}
+
+	CString dotGitPath;
+	g_GitAdminDir.GetAdminDirPath(topdir, dotGitPath);
+
+	return !!PathFileExists(dotGitPath + _T("REVERT_HEAD"));
+}
+
+bool CTGitPath::IsCherryPickActive() const
+{
+	CString topdir;
+	if(!g_GitAdminDir.HasAdminDir(GetWinPathString(),&topdir))
+	{
+		return false;
+	}
+
+	CString dotGitPath;
+	g_GitAdminDir.GetAdminDirPath(topdir, dotGitPath);
+
+	return !!PathFileExists(dotGitPath + _T("CHERRY_PICK_HEAD"));
+}
+
 bool CTGitPath::HasRebaseApply() const
 {
 	CString topdir;
@@ -929,6 +958,20 @@ bool CTGitPath::HasRebaseApply() const
 	g_GitAdminDir.GetAdminDirPath(topdir, dotGitPath);
 
 	return !!PathFileExists(dotGitPath + _T("rebase-apply"));
+}
+
+bool CTGitPath::HasRebaseMerge() const
+{
+	CString topdir;
+	if(!g_GitAdminDir.HasAdminDir(GetWinPathString(),&topdir))
+	{
+		return false;
+	}
+
+	CString dotGitPath;
+	g_GitAdminDir.GetAdminDirPath(topdir, dotGitPath);
+
+	return !!PathFileExists(dotGitPath + _T("rebase-merge"));
 }
 
 bool CTGitPath::HasAdminDir(CString *ProjectTopDir) const
