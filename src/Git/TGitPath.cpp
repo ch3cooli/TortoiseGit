@@ -852,6 +852,14 @@ int CTGitPath::GetAdminDirMask() const
 
 	if (PathFileExists(dotGitPath + _T("MERGE_HEAD")))
 		status |= ITEMIS_MERGEACTIVE;
+	else if (PathFileExists(dotGitPath + _T("rebase-apply")))
+		status |= ITEMIS_MERGEACTIVE;
+	else if (PathFileExists(dotGitPath + _T("rebase-merge")))
+		status |= ITEMIS_MERGEACTIVE;
+	else if (PathFileExists(dotGitPath + _T("CHERRY_PICK_HEAD")))
+		status |= ITEMIS_MERGEACTIVE;
+	else if (PathFileExists(dotGitPath + _T("REVERT_HEAD")))
+		status |= ITEMIS_MERGEACTIVE;
 
 	if (PathFileExists(dotGitPath + _T("refs\\stash")))
 		status |= ITEMIS_STASH;
