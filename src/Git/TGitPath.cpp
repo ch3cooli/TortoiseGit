@@ -904,6 +904,12 @@ bool CTGitPath::IsBisectActive() const
 
 	return !!PathFileExists(dotGitPath + _T("BISECT_START"));
 }
+
+bool CTGitPath::IsMergeTypeActive() const
+{
+	return IsMergeActive() || HasRebaseApply() || HasRebaseMerge() || IsCherryPickActive() || IsRevertActive();
+}
+
 bool CTGitPath::IsMergeActive() const
 {
 	CString topdir;
