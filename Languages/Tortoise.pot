@@ -8197,7 +8197,7 @@ msgstr ""
 
 #. Resource IDs: (76)
 #, c-format
-msgid "Showing %ld revision(s), from revision %s to revision %s - %ld revision(s) selected, %ld file(s) selected\r\n"
+msgid "Showing %ld revision(s), from revision %s to revision %s - %ld revision(s) selected, %ld file(s) selected"
 msgstr ""
 
 #. Resource IDs: (24)
@@ -9004,7 +9004,7 @@ msgstr ""
 
 #. Resource IDs: (107)
 #, c-format
-msgid "TortoiseGit %d.%d.%d.%d %s \r\n%s \r\n"
+msgid "TortoiseGit %d.%d.%d.%d %s\r\n%s"
 msgstr ""
 
 #. Resource IDs: (1410)
