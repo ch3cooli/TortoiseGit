@@ -611,9 +611,6 @@
     <ClCompile Include="ProgressDlg.cpp">
       <Filter>Utility Dialogs</Filter>
     </ClCompile>
-    <ClCompile Include="ResetDlg.cpp">
-      <Filter>Utility Dialogs</Filter>
-    </ClCompile>
     <ClCompile Include="SubmoduleDiffDlg.cpp">
       <Filter>Utility Dialogs</Filter>
     </ClCompile>
@@ -684,6 +681,9 @@
       <Filter>Commands\ReposStatus</Filter>
     </ClCompile>
     <ClCompile Include="Commands\ResetCommand.cpp">
+      <Filter>Commands\Reset</Filter>
+    </ClCompile>
+    <ClCompile Include="ResetDlg.cpp">
       <Filter>Commands\Reset</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1120,9 +1120,6 @@
     <ClInclude Include="ProgressDlg.h">
       <Filter>Utility Dialogs</Filter>
     </ClInclude>
-    <ClInclude Include="ResetDlg.h">
-      <Filter>Utility Dialogs</Filter>
-    </ClInclude>
     <ClInclude Include="SubmoduleDiffDlg.h">
       <Filter>Utility Dialogs</Filter>
     </ClInclude>
@@ -1205,6 +1202,9 @@
       <Filter>Commands\ReposStatus</Filter>
     </ClInclude>
     <ClInclude Include="Commands\ResetCommand.h">
+      <Filter>Commands\Reset</Filter>
+    </ClInclude>
+    <ClInclude Include="ResetDlg.h">
       <Filter>Commands\Reset</Filter>
     </ClInclude>
   </ItemGroup>
