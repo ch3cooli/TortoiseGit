@@ -8811,10 +8811,6 @@ msgstr ""
 msgid "Trim right"
 msgstr ""
 
-#. Resource IDs: (73)
-msgid "Try again"
-msgstr ""
-
 #. Resource IDs: (65535)
 msgid "Turkish"
 msgstr ""
