@@ -45,11 +45,6 @@ msgstr ""
 msgid "%.2f MBytes transferred"
 msgstr ""
 
-#. Resource IDs: (357)
-#, c-format
-msgid "%.2f kBytes/s"
-msgstr ""
-
 #. Resource IDs: (3868)
 #, c-format
 msgid "%1 contained an unexpected object."
@@ -268,16 +263,6 @@ msgstr ""
 #. Resource IDs: (151)
 #, c-format
 msgid "%s: Working Tree"
-msgstr ""
-
-#. Resource IDs: (145)
-#, c-format
-msgid "%s\\Export (%d) of %s"
-msgstr ""
-
-#. Resource IDs: (145)
-#, c-format
-msgid "%s\\Export of %s"
 msgstr ""
 
 #. Resource IDs: (3850)
@@ -1672,11 +1657,6 @@ msgstr ""
 msgid "Added"
 msgstr ""
 
-#. Resource IDs: (145)
-#, c-format
-msgid "Added the file pattern(s)\n%s\nto the ignore list."
-msgstr ""
-
 #. Resource IDs: (263)
 msgid "Adding"
 msgstr ""
@@ -2192,10 +2172,6 @@ msgstr ""
 msgid "Browse References"
 msgstr ""
 
-#. Resource IDs: (78)
-msgid "Browse for the external diff program"
-msgstr ""
-
 #. Resource IDs: (322)
 msgid "Browse references"
 msgstr ""
@@ -2240,10 +2216,6 @@ msgstr ""
 msgid "C&ommands:"
 msgstr ""
 
-#. Resource IDs: (77)
-msgid "C&reate branch/tag from revision"
-msgstr ""
-
 #. Resource IDs: (65535)
 msgid "C&urrent Keys:"
 msgstr ""
@@ -2270,11 +2242,6 @@ msgstr ""
 
 #. Resource IDs: (3865)
 msgid "Can not activate a static ActiveX object."
-msgstr ""
-
-#. Resource IDs: (82)
-#, c-format
-msgid "Can't copy \n%s\nto\n%s"
 msgstr ""
 
 #. Resource IDs: (1001)
@@ -2391,11 +2358,6 @@ msgstr ""
 msgid "Changed files between %s, %s and %s, %s"
 msgstr ""
 
-#. Resource IDs: (163)
-#, c-format
-msgid "Changed files: %d"
-msgstr ""
-
 #. Resource IDs: (2054)
 msgid "Changed lines including added/deleted files"
 msgstr ""
@@ -2443,10 +2405,6 @@ msgstr ""
 
 #. Resource IDs: (13)
 msgid "Check for modi&fications"
-msgstr ""
-
-#. Resource IDs: (251)
-msgid "Check the path and/or URL you've entered."
 msgstr ""
 
 #. Resource IDs: (194)
@@ -2563,10 +2521,6 @@ msgstr ""
 msgid "Clears cached logs from %ld repositories"
 msgstr ""
 
-#. Resource IDs: (195)
-msgid "Clears the stored authentication.\r\nYou will have to enter your username/password again for all repositories."
-msgstr ""
-
 #. Resource IDs: (196)
 #, c-format
 msgid "Clears the stored sizes and positions of %ld dialogs"
@@ -2590,10 +2544,6 @@ msgstr ""
 
 #. Resource IDs: (2058)
 msgid "Click to see commands to move blocks of text\nUse text blocks"
-msgstr ""
-
-#. Resource IDs: (257)
-msgid "Clipboard"
 msgstr ""
 
 #. Resource IDs: (606)
@@ -2765,10 +2715,6 @@ msgstr ""
 msgid "Committer Email"
 msgstr ""
 
-#. Resource IDs: (170)
-msgid "Committing an unversioned folder will not recursively add its child items!\nYou might want to add these folders recursively by using the 'Add...' context menu item.\n\nAre you sure that you want to continue the commit?"
-msgstr ""
-
 #. Resource IDs: (2054)
 msgid "Compare &HEAD revisions"
 msgstr ""
@@ -2803,11 +2749,6 @@ msgstr ""
 
 #. Resource IDs: (12)
 msgid "Compares the file with the last committed revision to show you the changes you made"
-msgstr ""
-
-#. Resource IDs: (120)
-#, c-format
-msgid "Comparing %s to %s"
 msgstr ""
 
 #. Resource IDs: (74)
@@ -2952,10 +2893,6 @@ msgstr ""
 msgid "Copy ref names"
 msgstr ""
 
-#. Resource IDs: (323)
-msgid "Copy selection to cli&pboard"
-msgstr ""
-
 #. Resource IDs: (3603)
 msgid "Copy the selection and put it on the Clipboard\nCopy"
 msgstr ""
@@ -2984,11 +2921,6 @@ msgstr ""
 
 #. Resource IDs: (1254)
 msgid "Corrections"
-msgstr ""
-
-#. Resource IDs: (81)
-#, c-format
-msgid "Could not add %s to the ignore list!"
 msgstr ""
 
 #. Resource IDs: (201)
@@ -3052,11 +2984,6 @@ msgstr ""
 
 #. Resource IDs: (70)
 msgid "Could not reset to original HEAD."
-msgstr ""
-
-#. Resource IDs: (81)
-#, c-format
-msgid "Could not retrieve URL of the file!\n%s"
 msgstr ""
 
 #. Resource IDs: (66)
@@ -3542,10 +3469,6 @@ msgstr ""
 msgid "Directory:"
 msgstr ""
 
-#. Resource IDs: (195)
-msgid "Disable this option if you have really big working trees and experience\r\ntoo much disk access when browsing the working tree."
-msgstr ""
-
 #. Resource IDs: (2054)
 msgid "Disabled"
 msgstr ""
@@ -3638,16 +3561,6 @@ msgstr ""
 
 #. Resource IDs: (69)
 msgid "Do you really want to restore the copy? You will lose all changes that you have done after creating the copy."
-msgstr ""
-
-#. Resource IDs: (119)
-#, c-format
-msgid "Do you really want to revert all changes in\n%s\nand go back to this revision? These changes will be reverted by reverse-merging the revisions into your working tree."
-msgstr ""
-
-#. Resource IDs: (76)
-#, c-format
-msgid "Do you really want to revert all changes in\n%s\nwhich were made in this revision? These changes will be reverted by reverse-merging the revision into your working tree."
 msgstr ""
 
 #. Resource IDs: (93)
@@ -3953,10 +3866,6 @@ msgstr ""
 msgid "Enter Log Message"
 msgstr ""
 
-#. Resource IDs: (80)
-msgid "Enter URL"
-msgstr ""
-
 #. Resource IDs: (3858)
 msgid "Enter a GUID."
 msgstr ""
@@ -4040,11 +3949,6 @@ msgstr ""
 msgid "Error rebuilding Shell Icon Cache!"
 msgstr ""
 
-#. Resource IDs: (70)
-#, c-format
-msgid "Error while reading/writing the registry key %s\n%s"
-msgstr ""
-
 #. Resource IDs: (75)
 msgid "Everything updated."
 msgstr ""
@@ -4086,29 +3990,12 @@ msgstr ""
 msgid "Export Zip File"
 msgstr ""
 
-#. Resource IDs: (94)
-msgid "Export directory:"
-msgstr ""
-
 #. Resource IDs: (1258)
 msgid "Export selection to..."
 msgstr ""
 
 #. Resource IDs: (1254)
 msgid "Export this version..."
-msgstr ""
-
-#. Resource IDs: (79)
-msgid "Export unversioned files too"
-msgstr ""
-
-#. Resource IDs: (284)
-#, c-format
-msgid "Exporting %s"
-msgstr ""
-
-#. Resource IDs: (79)
-msgid "Exporting..."
 msgstr ""
 
 #. Resource IDs: (10)
@@ -4207,11 +4094,6 @@ msgstr ""
 
 #. Resource IDs: (3857)
 msgid "Failed to save document."
-msgstr ""
-
-#. Resource IDs: (264)
-#, c-format
-msgid "Failed to set/remove changelist '%s'"
 msgstr ""
 
 #. Resource IDs: (83)
@@ -4404,10 +4286,6 @@ msgstr ""
 msgid "First Parent"
 msgstr ""
 
-#. Resource IDs: (119)
-msgid "First Parent Only"
-msgstr ""
-
 #. Resource IDs: (1617)
 msgid "First known &bad:"
 msgstr ""
@@ -4438,10 +4316,6 @@ msgstr ""
 
 #. Resource IDs: (3585)
 msgid "For Help, press F1. Scroll horizontally with Ctrl-Scrollwheel"
-msgstr ""
-
-#. Resource IDs: (119)
-msgid "For complete history deselect 'Stop on copy/rename'"
 msgstr ""
 
 #. Resource IDs: (1521)
@@ -4549,10 +4423,6 @@ msgstr ""
 msgid "GDI+ couldn't create a bitmap object. You probably don't have enough memory."
 msgstr ""
 
-#. Resource IDs: (284)
-msgid "Gathering information. Please wait..."
-msgstr ""
-
 #. Resource IDs: (2054)
 msgid "Gathering statistics"
 msgstr ""
@@ -4601,26 +4471,9 @@ msgstr ""
 msgid "Get merge logs"
 msgstr ""
 
-#. Resource IDs: (119)
-#, c-format
-msgid "Getting file %s"
-msgstr ""
-
 #. Resource IDs: (120)
 #, c-format
 msgid "Getting file %s, revision %s"
-msgstr ""
-
-#. Resource IDs: (120)
-msgid "Getting information..."
-msgstr ""
-
-#. Resource IDs: (220)
-msgid "Getting required information..."
-msgstr ""
-
-#. Resource IDs: (119)
-msgid "Getting unified diff"
 msgstr ""
 
 #. Resource IDs: (4569)
@@ -4705,10 +4558,6 @@ msgstr ""
 
 #. Resource IDs: (84)
 msgid "Git for Windows (http://code.google.com/p/msysgit/) not found."
-msgstr ""
-
-#. Resource IDs: (79)
-msgid "Git reported an error while creating a repository!\n"
 msgstr ""
 
 #. Resource IDs: (2050)
@@ -5141,20 +4990,12 @@ msgstr ""
 msgid "If checked, double-clicking on a revision in the log list compares it with the previous revision"
 msgstr ""
 
-#. Resource IDs: (196)
-msgid "If checked, the commit dialog will be started again automatically after an error,\r\nwhile preserving your last selection and log message."
-msgstr ""
-
 #. Resource IDs: (194)
 msgid "If enabled, TortoiseGit checks once a week if a newer version is available"
 msgstr ""
 
 #. Resource IDs: (197)
 msgid "If enabled, working tree folders which are excluded from\nshowing overlays still show the overlay for status 'normal'"
-msgstr ""
-
-#. Resource IDs: (196)
-msgid "If set, files inside unversioned folders can be shown in the status control.\r\nThe status control is used for example in the commit dialog."
 msgstr ""
 
 #. Resource IDs: (196)
@@ -5254,15 +5095,6 @@ msgstr ""
 msgid "Immediate children, including folders"
 msgstr ""
 
-#. Resource IDs: (77)
-msgid "Import"
-msgstr ""
-
-#. Resource IDs: (229)
-#, c-format
-msgid "Import %s to %s%s"
-msgstr ""
-
 #. Resource IDs: (22, 329)
 msgid "Import SVN Ignore"
 msgstr ""
@@ -5273,11 +5105,6 @@ msgstr ""
 
 #. Resource IDs: (1640)
 msgid "Import svn ignore file to .git/info/exclude file (file will be overwritten)"
-msgstr ""
-
-#. Resource IDs: (120)
-#, c-format
-msgid "Importing file %s"
 msgstr ""
 
 #. Resource IDs: (75)
@@ -5306,10 +5133,6 @@ msgstr ""
 
 #. Resource IDs: (3857)
 msgid "Incorrect filename."
-msgstr ""
-
-#. Resource IDs: (76)
-msgid "Initial import"
 msgstr ""
 
 #. Resource IDs: (87)
@@ -5351,10 +5174,6 @@ msgstr ""
 
 #. Resource IDs: (82)
 msgid "Invalid revision number!"
-msgstr ""
-
-#. Resource IDs: (145)
-msgid "It is not possible to rename a file by changing the case of its name alone.\nFor example, you can't make MyFile.txt become MYFILE.txt.\nPlease consult the documentation for a way to work around this limitation."
 msgstr ""
 
 #. Resource IDs: (1074)
@@ -5572,10 +5391,6 @@ msgstr ""
 msgid "Local changes ignored (assumed valid/unchanged or skip worktree flagged files)"
 msgstr ""
 
-#. Resource IDs: (63)
-msgid "Local status"
-msgstr ""
-
 #. Resource IDs: (65535)
 msgid "Local:"
 msgstr ""
@@ -5742,10 +5557,6 @@ msgstr ""
 msgid "Merge Point"
 msgstr ""
 
-#. Resource IDs: (221)
-msgid "Merge Reintegrate"
-msgstr ""
-
 #. Resource IDs: (90)
 msgid "Merge between original branch, working tree contents, and the branch to switch to"
 msgstr ""
@@ -5773,20 +5584,6 @@ msgstr ""
 
 #. Resource IDs: (1073)
 msgid "Merging"
-msgstr ""
-
-#. Resource IDs: (229)
-#, c-format
-msgid "Merging from %s, revision %s to %s, revision %s into %s, %s%s"
-msgstr ""
-
-#. Resource IDs: (83)
-msgid "Merging requires different revisions or different URLs in 'From:' and 'To:'"
-msgstr ""
-
-#. Resource IDs: (229)
-#, c-format
-msgid "Merging revisions %s of %s into %s, %s%s"
 msgstr ""
 
 #. Resource IDs: (604, 1251, 1359)
@@ -5827,10 +5624,6 @@ msgstr ""
 
 #. Resource IDs: (1551)
 msgid "Mixed: Leave working tree untouched, reset index"
-msgstr ""
-
-#. Resource IDs: (208)
-msgid "Modification date"
 msgstr ""
 
 #. Resource IDs: (74, 264, 1257, 65535)
@@ -5951,10 +5744,6 @@ msgstr ""
 msgid "Navigation Pane Options..."
 msgstr ""
 
-#. Resource IDs: (213)
-msgid "Nested"
-msgstr ""
-
 #. Resource IDs: (102)
 msgid "Network"
 msgstr ""
@@ -5987,17 +5776,8 @@ msgstr ""
 msgid "New message"
 msgstr ""
 
-#. Resource IDs: (97)
-#, c-format
-msgid "New name for %s"
-msgstr ""
-
 #. Resource IDs: (92)
 msgid "New name must not be empty or the same as the original name!"
-msgstr ""
-
-#. Resource IDs: (98)
-msgid "New name:"
 msgstr ""
 
 #. Resource IDs: (605)
@@ -6060,10 +5840,6 @@ msgstr ""
 msgid "No command specified!\n\nTortoiseGitProc.exe is used by the Shell extension and should not be called directly!"
 msgstr ""
 
-#. Resource IDs: (81)
-msgid "No command value specified!"
-msgstr ""
-
 #. Resource IDs: (87)
 msgid "No differences found!"
 msgstr ""
@@ -6078,10 +5854,6 @@ msgstr ""
 
 #. Resource IDs: (3867, 3868)
 msgid "No error occurred."
-msgstr ""
-
-#. Resource IDs: (82)
-msgid "No files or folders were modified. There is nothing for TortoiseGit to revert!"
 msgstr ""
 
 #. Resource IDs: (239)
@@ -6163,10 +5935,6 @@ msgstr ""
 
 #. Resource IDs: (3857)
 msgid "Not all of the system registry entries (or INI file) were removed."
-msgstr ""
-
-#. Resource IDs: (83)
-msgid "Not enough memory to complete operation."
 msgstr ""
 
 #. Resource IDs: (606)
@@ -6897,11 +6665,6 @@ msgstr ""
 msgid "Putty Private Key (*.ppk)|*.ppk|All Files (*.*)|*.*||"
 msgstr ""
 
-#. Resource IDs: (246)
-#, c-format
-msgid "Q%d/%.2d"
-msgstr ""
-
 #. Resource IDs: (3605)
 msgid "Quit the application; prompts to save documents\nExit"
 msgstr ""
@@ -7149,10 +6912,6 @@ msgstr ""
 msgid "Remote name must not be empty."
 msgstr ""
 
-#. Resource IDs: (63)
-msgid "Remote status"
-msgstr ""
-
 #. Resource IDs: (65535)
 msgid "Remote:"
 msgstr ""
@@ -7234,11 +6993,6 @@ msgstr ""
 
 #. Resource IDs: (79, 1257)
 msgid "Rename"
-msgstr ""
-
-#. Resource IDs: (97)
-#, c-format
-msgid "Rename %s"
 msgstr ""
 
 #. Resource IDs: (151)
@@ -7437,16 +7191,6 @@ msgstr ""
 
 #. Resource IDs: (208, 1253, 1522)
 msgid "Revision"
-msgstr ""
-
-#. Resource IDs: (119)
-#, c-format
-msgid "Revision %d"
-msgstr ""
-
-#. Resource IDs: (120)
-#, c-format
-msgid "Revision %s"
 msgstr ""
 
 #. Resource IDs: (23)
@@ -7794,16 +7538,8 @@ msgstr ""
 msgid "Select folder to associate with this issue tracker"
 msgstr ""
 
-#. Resource IDs: (79)
-msgid "Select folder to export to.\nYou might need to create a new folder before performing this export."
-msgstr ""
-
 #. Resource IDs: (197)
 msgid "Select folder to run script for"
-msgstr ""
-
-#. Resource IDs: (119)
-msgid "Select folder to save the selected files to"
 msgstr ""
 
 #. Resource IDs: (197)
@@ -8623,11 +8359,6 @@ msgstr ""
 msgid "Tag Info"
 msgstr ""
 
-#. Resource IDs: (79)
-#, c-format
-msgid "Tagged the working tree to %s"
-msgstr ""
-
 #. Resource IDs: (1485, 1513, 65535)
 msgid "Tags"
 msgstr ""
@@ -8738,11 +8469,6 @@ msgstr ""
 msgid "The folder %s\ncontains unversioned and/or modified file(s). Do you want to remove it anyway?"
 msgstr ""
 
-#. Resource IDs: (88)
-#, c-format
-msgid "The folder \n%s\ndoes not exist.\nWould you like to create it first?"
-msgstr ""
-
 #. Resource IDs: (83)
 #, c-format
 msgid "The hook script returned an error:\n%s"
@@ -8823,10 +8549,6 @@ msgstr ""
 msgid "The remote \"%s\" already exists.\nDo you want to overwrite it?"
 msgstr ""
 
-#. Resource IDs: (80)
-msgid "The repository was successfully created."
-msgstr ""
-
 #. Resource IDs: (78)
 msgid "The selected file appears to still have one or more conflict markers in it.\nAre you sure you want to mark the file resolved?"
 msgstr ""
@@ -8847,10 +8569,6 @@ msgstr ""
 
 #. Resource IDs: (195)
 msgid "The time in seconds after which the parsing of the selected files stops.\r\nA lower value will make the auto-completion list available sooner,\r\nbut maybe not scan all files."
-msgstr ""
-
-#. Resource IDs: (82)
-msgid "The two selected URL's are not created from the same root.\nIt's not possible to show the log messages between them!"
 msgstr ""
 
 #. Resource IDs: (65535)
@@ -8901,14 +8619,6 @@ msgstr ""
 
 #. Resource IDs: (78)
 msgid "This field is required and must not be empty."
-msgstr ""
-
-#. Resource IDs: (83)
-msgid "This is not a valid URL.\nPlease enter an URL here."
-msgstr ""
-
-#. Resource IDs: (82)
-msgid "This is not a valid path!\nA valid path must not contain '<<>|\"?*:' or one of the following device names:\ncom1-com9, lpt1-lpt9, prn, aux, con, nul, clock$"
 msgstr ""
 
 #. Resource IDs: (3857)
@@ -8999,22 +8709,12 @@ msgstr ""
 
 #. Resource IDs: (107)
 #, c-format
-msgid "TortoiseGit %d.%d.%d, Build %d - %s, %s"
-msgstr ""
-
-#. Resource IDs: (107)
-#, c-format
 msgid "TortoiseGit %d.%d.%d.%d %s \r\n%s \r\n"
 msgstr ""
 
 #. Resource IDs: (1410)
 #, c-format
 msgid "TortoiseGit detected that the file \"%s\" does not exist, but is staged as \"Added\".\nThe commit dialog cannot handle this.\n\nDo you want to remove it from the index?"
-msgstr ""
-
-#. Resource IDs: (98)
-#, c-format
-msgid "TortoiseGit has detected similar filenames. Do you want the files:%s\nto be renamed too?"
 msgstr ""
 
 #. Resource IDs: (198)
@@ -9103,21 +8803,12 @@ msgstr ""
 msgid "Tracked Remote Branch:"
 msgstr ""
 
-#. Resource IDs: (357)
-#, c-format
-msgid "Transferring at %s"
-msgstr ""
-
 #. Resource IDs: (32816)
 msgid "Transparent &color..."
 msgstr ""
 
 #. Resource IDs: (501)
 msgid "Trim right"
-msgstr ""
-
-#. Resource IDs: (251)
-msgid "Try a 'Cleanup'. If that doesn't work you need to do a fresh checkout."
 msgstr ""
 
 #. Resource IDs: (73)
@@ -9183,10 +8874,6 @@ msgstr ""
 
 #. Resource IDs: (3865)
 msgid "Unable to read write-only property."
-msgstr ""
-
-#. Resource IDs: (119)
-msgid "Unable to reconstruct working tree path!\nThis can happen if the file has been renamed.\nPlease start the log dialog on this specific file alone and then revert the changes\nfrom the top pane in the log dialog."
 msgstr ""
 
 #. Resource IDs: (3865)
@@ -9269,11 +8956,6 @@ msgstr ""
 
 #. Resource IDs: (1313)
 msgid "Unversioned files mark parent folder as modified"
-msgstr ""
-
-#. Resource IDs: (286)
-#, c-format
-msgid "Unversioning %s"
 msgstr ""
 
 #. Resource IDs: (1384)
@@ -9856,21 +9538,12 @@ msgstr ""
 msgid "You selected a folder.\r\nExports are only possible to a (zip) file."
 msgstr ""
 
-#. Resource IDs: (77)
-msgid "You selected an unversioned file.\nThe file will be added to version control when you commit."
-msgstr ""
-
 #. Resource IDs: (1001)
 msgid "You should enter a text!"
 msgstr ""
 
 #. Resource IDs: (1001)
 msgid "You should select an image!"
-msgstr ""
-
-#. Resource IDs: (195)
-#, c-format
-msgid "You've changed the icon set from <i>%s</i> to <i>%s</i>.\nThat change won't take effect until you restart your computer or logoff and logon again!"
 msgstr ""
 
 #. Resource IDs: (170)
@@ -10047,11 +9720,6 @@ msgstr ""
 msgid "conflicted"
 msgstr ""
 
-#. Resource IDs: (208)
-#, c-format
-msgid "copied from\r\n%s - revision %ld"
-msgstr ""
-
 #. Resource IDs: (605)
 msgid "day"
 msgstr ""
@@ -10070,11 +9738,6 @@ msgstr ""
 
 #. Resource IDs: (1580)
 msgid "eMail settings"
-msgstr ""
-
-#. Resource IDs: (79)
-#, c-format
-msgid "exported\n%s\nto\n%s"
 msgstr ""
 
 #. Resource IDs: (13)
@@ -10100,10 +9763,6 @@ msgstr ""
 
 #. Resource IDs: (1780, 1781, 1782, 1783)
 msgid "inherit"
-msgstr ""
-
-#. Resource IDs: (214)
-msgid "item kept locally"
 msgstr ""
 
 #. Resource IDs: (65535)
@@ -10211,11 +9870,6 @@ msgstr ""
 
 #. Resource IDs: (195)
 msgid "skip-worktree"
-msgstr ""
-
-#. Resource IDs: (208)
-#, c-format
-msgid "switched to\r\n%s"
 msgstr ""
 
 #. Resource IDs: (1386)
