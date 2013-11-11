@@ -77,6 +77,7 @@
 #include "RevisiongraphCommand.h"
 #include "ShowCompareCommand.h"
 #include "DaemonCommand.h"
+#include "StartCommand.h"
 
 #if 0
 
@@ -167,6 +168,7 @@ typedef enum
 	cmdRepoBrowser,
 	cmdRevisionGraph,
 	cmdDaemon,
+	cmdStart,
 } TGitCommand;
 
 static const struct CommandInfo
@@ -240,6 +242,7 @@ static const struct CommandInfo
 	{	cmdRepoBrowser,		_T("repobrowser")		},
 	{	cmdRevisionGraph,	_T("revisiongraph")		},
 	{	cmdDaemon,			_T("daemon")			},
+	{	cmdStart,			_T("start")				},
 };
 
 
@@ -378,6 +381,8 @@ Command * CommandServer::GetCommand(const CString& sCmd)
 		return new ShowCompareCommand;
 	case cmdDaemon:
 		return new DaemonCommand;
+	case cmdStart:
+		return new StartCommand;
 
 #if 0
 

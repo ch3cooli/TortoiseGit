@@ -153,6 +153,9 @@
     <Filter Include="Commands\AutoTextTest">
       <UniqueIdentifier>{9baf680f-fe31-4b6d-bd01-50b7a2c043b8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Commands\Start">
+      <UniqueIdentifier>{058be2f6-60f9-4bb2-b12a-ca55169b4eb8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AddRemoteDlg.cpp">
@@ -680,6 +683,12 @@
     <ClCompile Include="AutoTextTestDlg.cpp">
       <Filter>Commands\AutoTextTest</Filter>
     </ClCompile>
+    <ClCompile Include="StartDlg.cpp">
+      <Filter>Commands\Start</Filter>
+    </ClCompile>
+    <ClCompile Include="Commands\StartCommand.cpp">
+      <Filter>Commands\Start</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AddRemoteDlg.h">
@@ -1197,6 +1206,12 @@
     </ClInclude>
     <ClInclude Include="Commands\AutoTextTestCommand.h">
       <Filter>Commands\AutoTextTest</Filter>
+    </ClInclude>
+    <ClInclude Include="StartDlg.h">
+      <Filter>Commands\Start</Filter>
+    </ClInclude>
+    <ClInclude Include="Commands\StartCommand.h">
+      <Filter>Commands\Start</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

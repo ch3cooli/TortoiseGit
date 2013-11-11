@@ -1685,6 +1685,7 @@
 #define IDD_SETTINGSCREDENTIAL          4591
 #define IDD_MERGEABORT                  4592
 #define IDD_SETTINGSDIALOGS3            4593
+#define IDD_START                       4594
 #define IDC_COMBOBOXEX_LOCAL_BRANCH     5000
 #define IDC_COMBOBOXEX_REMOTE_BRANCH    5001
 #define IDC_COMBOBOXEX_BAD              5001

@@ -133,6 +133,7 @@
     <ClCompile Include="..\TGitCache\CacheInterface.cpp" />
     <ClCompile Include="AutoTextTestDlg.cpp" />
     <ClCompile Include="Commands\DaemonCommand.cpp" />
+    <ClCompile Include="Commands\StartCommand.cpp" />
     <ClCompile Include="GravatarPictureBox.cpp" />
     <ClCompile Include="MergeAbortDlg.cpp" />
     <ClCompile Include="GitRefCompareList.cpp" />
@@ -173,6 +174,7 @@
     <ClCompile Include="LogDlg.cpp" />
     <ClCompile Include="LogDlgHelper.cpp" />
     <ClCompile Include="LoglistUtils.cpp" />
+    <ClCompile Include="StartDlg.cpp" />
     <ClCompile Include="StatGraphDlg.cpp" />
     <ClCompile Include="Commands\RefLogCommand.cpp" />
     <ClCompile Include="RefLogDlg.cpp" />
@@ -314,6 +316,7 @@
     <ClInclude Include="AutoTextTestDlg.h" />
     <ClInclude Include="Commands\AutoTextTestCommand.h" />
     <ClInclude Include="Commands\DaemonCommand.h" />
+    <ClInclude Include="Commands\StartCommand.h" />
     <ClInclude Include="GravatarPictureBox.h" />
     <ClInclude Include="MergeAbortDlg.h" />
     <ClInclude Include="GitRefCompareList.h" />
@@ -352,6 +355,7 @@
     <ClInclude Include="LogDlg.h" />
     <ClInclude Include="LogDlgHelper.h" />
     <ClInclude Include="LoglistUtils.h" />
+    <ClInclude Include="StartDlg.h" />
     <ClInclude Include="StatGraphDlg.h" />
     <ClInclude Include="Commands\RefLogCommand.h" />
     <ClInclude Include="RefLogDlg.h" />
