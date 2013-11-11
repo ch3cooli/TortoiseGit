@@ -62,6 +62,14 @@ BOOL CStartDlg::OnInitDialog()
 	SetTimer(ID_EFFECTTIMER, 40, NULL);
 	SetTimer(ID_DROPTIMER, 1500, NULL);
 
+	RECT rectTab;
+	GetDlgItem(IDC_TABSTART)->GetWindowRect(&rectTab);
+	m_wndTab.Create(CMFCTabCtrl::STYLE_3D_ROUNDED, rectTab, this, 1, CMFCTabCtrl::LOCATION_TOP);
+	m_wndButton1.Create(_T("Hi 1"), WS_CHILD | WS_VISIBLE, CRect(0, 0, 0, 0), &m_wndTab, 1);
+	m_wndTab.AddTab(&m_wndButton1, _T("One"), 0, FALSE);
+	m_wndButton2.Create(_T("Hi 2"), WS_CHILD | WS_VISIBLE, CRect(0, 0, 0, 0), &m_wndTab, 2);
+	m_wndTab.AddTab(&m_wndButton2, _T("Two"), 1, FALSE);
+
 	CenterWindow(CWnd::FromHandle(hWndExplorer));
 	GetDlgItem(IDOK)->SetFocus();
 	return FALSE;

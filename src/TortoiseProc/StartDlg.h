@@ -45,6 +45,9 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 
+	CMFCTabCtrl m_wndTab;
+	CButton		m_wndButton1;
+	CButton		m_wndButton2;
 private:
 	CWaterEffect m_waterEffect;
 	CDib m_renderSrc;

@@ -1407,6 +1407,7 @@
 #define IDC_CHECK_INHERIT_KEYID         1782
 #define IDC_CHECK_INHERIT_ICONPATH      1782
 #define IDC_CHECK_INHERIT_BTMSG         1782
+#define IDC_TABSTART                    1782
 #define IDC_CHECK_INHERIT_BTLABEL       1783
 #define IDC_CURRENTBRANCH               1784
 #define IDS_LOG_FILTER_BY               1850
