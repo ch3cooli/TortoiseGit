@@ -123,8 +123,6 @@ BOOL CTortoiseProcApp::InitInstance()
 		CCrashReport::Instance().AddUserInfoToReport(L"LanguageID", langStr);
 	}
 	CString langDll;
-	CStringA langpath = CStringA(CPathUtils::GetAppParentDirectory());
-	langpath += "Languages";
 	do
 	{
 		langDll.Format(_T("%sLanguages\\TortoiseProc%ld.dll"), (LPCTSTR)CPathUtils::GetAppParentDirectory(), langId);
