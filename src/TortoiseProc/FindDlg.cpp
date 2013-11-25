@@ -1,6 +1,6 @@
 // TortoiseGit - a Windows shell extension for easy version control
 
-// Copyright (C) 2011-2013 - TortoiseGit
+// Copyright (C) 2011-2014 - TortoiseGit
 // Copyright (C) 2006 - Stefan Kueng
 
 // This program is free software; you can redistribute it and/or
@@ -165,11 +165,11 @@ void CFindDlg::AddToList()
 	{
 		int nImage = -1;
 		CString ref = m_RefList[i];
-		if(ref.Find(_T("refs/tags")) == 0)
+		if (ref.Find(_T("refs/tags/")) == 0)
 			nImage = 0;
-		else if(ref.Find(_T("refs/remotes"))==0)
+		else if(ref.Find(_T("refs/remotes/"))==0)
 			nImage = 2;
-		else if(ref.Find(_T("refs/heads"))== 0)
+		else if(ref.Find(_T("refs/heads/"))== 0)
 			nImage = 1;
 
 		if(ref.Find(filter)>=0)
