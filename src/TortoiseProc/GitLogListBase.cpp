@@ -1,6 +1,6 @@
 // TortoiseGit - a Windows shell extension for easy version control
 
-// Copyright (C) 2008-2013 - TortoiseGit
+// Copyright (C) 2008-2014 - TortoiseGit
 // Copyright (C) 2005-2007 Marco Costalba
 // Copyright (C) 2011-2013 - Sven Strickroth <email@cs-ware.de>
 
@@ -2157,7 +2157,14 @@ void CGitLogListBase::OnContextMenu(CWnd* pWnd, CPoint point)
 						submenu.CreatePopupMenu();
 						for (size_t i = 0; i < branchs.size(); ++i)
 						{
-							submenu.AppendMenuIcon(ID_DELETE + (i << 16), *branchs[i]);
+							UINT icon = 0;
+							if (branchs[i]->Find(_T("refs/heads/")) == 0)
+								icon = IDI_COPY;
+							else if (branchs[i]->Find(_T("refs/remotes/")) == 0)
+								icon = IDI_GITREMOTE;
+							else if (branchs[i]->Find(_T("refs/tags/")) == 0)
+								icon = IDI_TAG;
+							submenu.AppendMenuIcon(ID_DELETE + (i << 16), *branchs[i], icon);
 							submenu.SetMenuItemData(ID_DELETE + (i << 16), (ULONG_PTR)branchs[i]);
 						}
 
