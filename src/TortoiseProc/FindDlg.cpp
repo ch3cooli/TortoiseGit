@@ -1,6 +1,6 @@
 // TortoiseGit - a Windows shell extension for easy version control
 
-// Copyright (C) 2011-2013 - TortoiseGit
+// Copyright (C) 2011-2014 - TortoiseGit
 // Copyright (C) 2006 - Stefan Kueng
 
 // This program is free software; you can redistribute it and/or
@@ -171,6 +171,8 @@ void CFindDlg::AddToList()
 			nImage = 2;
 		else if(ref.Find(_T("refs/heads"))== 0)
 			nImage = 1;
+		else if (ref == _T("refs/stash"))
+			nImage = 3;
 
 		if(ref.Find(filter)>=0)
 			m_ctrlRefList.InsertItem(item++,ref,nImage);
