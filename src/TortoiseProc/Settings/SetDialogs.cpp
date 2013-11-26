@@ -118,8 +118,6 @@ BOOL CSetDialogs::OnInitDialog()
 	m_GravatarUrl = m_regGravatarUrl;
 	m_bDrawBranchesTagsOnRightSide = m_regDrawBranchesTagsOnRightSide;
 
-	CString temp;
-
 	m_tooltips.Create(this);
 	m_tooltips.AddTool(IDC_SHORTDATEFORMAT, IDS_SETTINGS_SHORTDATEFORMAT_TT);
 	m_tooltips.AddTool(IDC_RELATIVETIMES, IDS_SETTINGS_RELATIVETIMES_TT);
@@ -134,8 +132,7 @@ BOOL CSetDialogs::OnInitDialog()
 	int count = 0;
 	for (int i=6; i<32; i=i+2)
 	{
-		temp.Format(_T("%d"), i);
-		m_cFontSizes.AddString(temp);
+		m_cFontSizes.AddString(std::to_wstring(i).c_str());
 		m_cFontSizes.SetItemData(count++, i);
 	}
 	BOOL foundfont = FALSE;
@@ -148,10 +145,7 @@ BOOL CSetDialogs::OnInitDialog()
 		}
 	}
 	if (!foundfont)
-	{
-		temp.Format(_T("%lu"), m_dwFontSize);
-		m_cFontSizes.SetWindowText(temp);
-	}
+		m_cFontSizes.SetWindowText(std::to_wstring(m_dwFontSize).c_str());
 
 	m_cFontNames.Setup(DEVICE_FONTTYPE|RASTER_FONTTYPE|TRUETYPE_FONTTYPE, 1, FIXED_PITCH);
 	m_cFontNames.SelectFont(m_sFontName);

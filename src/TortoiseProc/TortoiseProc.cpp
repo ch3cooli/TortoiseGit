@@ -106,11 +106,7 @@ BOOL CTortoiseProcApp::InitInstance()
 	//set the resource dll for the required language
 	CRegDWORD loc = CRegDWORD(_T("Software\\TortoiseGit\\LanguageID"), 1033);
 	long langId = loc;
-	{
-		CString langStr;
-		langStr.Format(_T("%ld"), langId);
-		CCrashReport::Instance().AddUserInfoToReport(L"LanguageID", langStr);
-	}
+	CCrashReport::Instance().AddUserInfoToReport(L"LanguageID", std::to_wstring(langId).c_str());
 	CString langDll;
 	CStringA langpath = CStringA(CPathUtils::GetAppParentDirectory());
 	langpath += "Languages";
@@ -223,12 +219,8 @@ BOOL CTortoiseProcApp::InitInstance()
 		}
 	}
 
-	{
-		CCrashReport::Instance().AddUserInfoToReport(L"msysGitDir", CGit::ms_LastMsysGitDir);
-		CString versionString;
-		versionString.Format(_T("%d"), CGit::ms_LastMsysGitVersion);
-		CCrashReport::Instance().AddUserInfoToReport(L"msysGitVersion", versionString);
-	}
+	CCrashReport::Instance().AddUserInfoToReport(L"msysGitDir", CGit::ms_LastMsysGitDir);
+	CCrashReport::Instance().AddUserInfoToReport(L"msysGitVersion", std::to_wstring(CGit::ms_LastMsysGitVersion).c_str());
 
 	// InitCommonControls() is required on Windows XP if an application
 	// manifest specifies use of ComCtl32.dll version 6 or later to enable

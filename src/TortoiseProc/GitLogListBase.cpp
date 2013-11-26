@@ -1501,16 +1501,8 @@ void CGitLogListBase::OnLvnGetdispinfoLoglist(NMHDR *pNMHDR, LRESULT *pResult)
 	if (itemid < m_arShownList.GetCount())
 		pLogEntry = reinterpret_cast<GitRev*>(m_arShownList.SafeGetAt(pItem->iItem));
 
-	CString temp;
-	if(m_IsOldFirst)
-	{
-		temp.Format(_T("%d"),pItem->iItem+1);
-
-	}
-	else
-	{
-		temp.Format(_T("%d"),m_arShownList.GetCount()-pItem->iItem);
-	}
+	int itemp = m_IsOldFirst ? pItem->iItem + 1 : (int)m_arShownList.GetCount() - pItem->iItem;
+	std::wstring temp = std::to_wstring(itemp);
 
 	// Which column?
 	switch (pItem->iSubItem)
@@ -1535,7 +1527,7 @@ void CGitLogListBase::OnLvnGetdispinfoLoglist(NMHDR *pNMHDR, LRESULT *pResult)
 		break;
 	case this->LOGLIST_ID:
 		if(this->m_IsIDReplaceAction)
-			lstrcpyn(pItem->pszText, temp, pItem->cchTextMax);
+			lstrcpyn(pItem->pszText, temp.c_str(), pItem->cchTextMax);
 		break;
 	case this->LOGLIST_MESSAGE: //Message
 		if (pLogEntry)

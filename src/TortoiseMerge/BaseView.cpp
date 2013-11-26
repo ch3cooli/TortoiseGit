@@ -1288,9 +1288,7 @@ int CBaseView::GetMarginWidth()
 		{
 			int nLength = (int)m_pViewData->GetCount();
 			// find out how many digits are needed to show the highest line number
-			CString sMax;
-			sMax.Format(_T("%d"), nLength);
-			m_nDigits = sMax.GetLength();
+			m_nDigits = std::to_wstring(nLength).size();
 		}
 		int nWidth = GetCharWidth();
 		return (MARGINWIDTH + (m_nDigits * nWidth) + 2);

@@ -1239,11 +1239,9 @@ STDMETHODIMP CShellExt::InvokeCommand_Wrap(LPCMINVOKECOMMANDINFO lpcmi)
 				//#region case
 			case ShellMenuSync:
 				{
-					TCHAR syncSeq[12];
-					_stprintf_s(syncSeq, _T("%d"), g_syncSeq++);
 					AddPathCommand(gitCmd, L"sync", false);
 					gitCmd += _T(" /seq:");
-					gitCmd += syncSeq;
+					gitCmd += std::to_wstring(g_syncSeq++);
 				}
 				break;
 			case ShellMenuSubSync:

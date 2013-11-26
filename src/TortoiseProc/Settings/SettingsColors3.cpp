@@ -77,23 +77,14 @@ BOOL CSettingsColors3::OnInitDialog()
 		m_cLine[i].EnableOtherButton(sCustomText);
 	}
 
-	CString text;
 	for (int i = 1; i <= 10; i++)
-	{
-		text.Format(_T("%d"), i);
-		m_LogGraphLineWidth.AddString(text);
-	}
+		m_LogGraphLineWidth.AddString(std::to_wstring(i).c_str());
 	for (int i = 1; i <= 30; i++)
-	{
-		text.Format(_T("%d"), i);
-		m_LogGraphNodeSize.AddString(text);
-	}
+		m_LogGraphNodeSize.AddString(std::to_wstring(i).c_str());
 	m_regLogGraphLineWidth = CRegDWORD(_T("Software\\TortoiseGit\\TortoiseProc\\Graph\\LogLineWidth"), 2);
-	text.Format(_T("%d"), (DWORD)m_regLogGraphLineWidth);
-	m_LogGraphLineWidth.SelectString(-1, text);
+	m_LogGraphLineWidth.SelectString(-1, std::to_wstring((DWORD)m_regLogGraphLineWidth).c_str());
 	m_regLogGraphNodeSize = CRegDWORD(_T("Software\\TortoiseGit\\TortoiseProc\\Graph\\LogNodeSize"), 10);
-	text.Format(_T("%d"), (DWORD)m_regLogGraphNodeSize);
-	m_LogGraphNodeSize.SelectString(-1, text);
+	m_LogGraphNodeSize.SelectString(-1, std::to_wstring((DWORD)m_regLogGraphNodeSize).c_str());
 
 	return TRUE;
 }
