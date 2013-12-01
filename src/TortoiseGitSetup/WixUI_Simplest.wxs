@@ -63,7 +63,8 @@ First-time install dialog sequence:      Maintenance dialog sequence:
 			<UIText Id="GB">$(loc.UITextGB)</UIText>
 			<UIText Id="KB">$(loc.UITextKB)</UIText>
 			<UIText Id="MB">$(loc.UITextMB)</UIText>
-			<UIText Id="MenuAbsent">$(loc.UITextMenuAbsent)</UIText>			<UIText Id="MenuAdvertise">$(loc.UITextMenuAdvertise)</UIText>
+			<UIText Id="MenuAbsent">$(loc.UITextMenuAbsent)</UIText>
+			<UIText Id="MenuAdvertise">$(loc.UITextMenuAdvertise)</UIText>
 			<UIText Id="MenuAllCD">$(loc.UITextMenuAllCD)</UIText>
 			<UIText Id="MenuAllLocal">$(loc.UITextMenuAllLocal)</UIText>
 			<UIText Id="MenuAllNetwork">$(loc.UITextMenuAllNetwork)</UIText>
