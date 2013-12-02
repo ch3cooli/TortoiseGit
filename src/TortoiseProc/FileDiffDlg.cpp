@@ -1,6 +1,6 @@
 // TortoiseGit - a Windows shell extension for easy version control
 
-// Copyright (C) 2008-2013 - TortoiseGit
+// Copyright (C) 2008-2014 - TortoiseGit
 // Copyright (C) 2003-2008 - TortoiseSVN
 
 // This program is free software; you can redistribute it and/or
@@ -530,6 +530,8 @@ UINT CFileDiffDlg::LoadRefThread()
 {
 	g_Git.GetBranchList(m_Reflist,NULL,CGit::BRANCH_ALL_F);
 	g_Git.GetTagList(m_Reflist);
+	for (size_t i = 0; i < m_Reflist.size(); ++i)
+		m_Reflist[i].Append(_T("^{}"));
 
 	this->PostMessage(MSG_REF_LOADED);
 	InterlockedExchange(&m_bLoadingRef, FALSE);
