@@ -1,6 +1,6 @@
 // TortoiseGit - a Windows shell extension for easy version control
 
-// Copyright (C) 2009-2013 - TortoiseGit
+// Copyright (C) 2009-2014 - TortoiseGit
 
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -136,6 +136,8 @@ protected:
 	bool			SelectRef(CString refName, bool bExactMatch);
 
 	bool			ConfirmDeleteRef(VectorPShadowTree& leafs);
+	bool			IsSelectedRemoteBranch(CString completeRefName, CString& remote, CString& branch);
+	bool			DoDeleteRemoteRefs(CString remote, STRING_VECTOR &branchList);
 	bool			DoDeleteRefs(VectorPShadowTree& leafs, bool bForce);
 	bool			DoDeleteRef(CString completeRefName, bool bForce);
 

@@ -1,6 +1,6 @@
 // TortoiseGit - a Windows shell extension for easy version control
 
-// Copyright (C) 2009-2013 - TortoiseGit
+// Copyright (C) 2009-2014 - TortoiseGit
 
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -35,6 +35,7 @@
 #include "UnicodeUtils.h"
 #include "InputDlg.h"
 #include "SysProgressDlg.h"
+#include "MassiveGitTask.h"
 
 static int SplitRemoteBranchName(CString ref, CString &remote, CString &branch)
 {
@@ -743,11 +744,88 @@ bool CBrowseRefsDlg::ConfirmDeleteRef(VectorPShadowTree& leafs)
 
 }
 
+bool CBrowseRefsDlg::IsSelectedRemoteBranch(CString completeRefName, CString& remote, CString& branch)
+{
+	if (wcsncmp(completeRefName, L"refs/remotes/", 13))
+		return false;
+	
+	CString branchToDelete = completeRefName.Mid(13);
+	CString remoteName, remoteBranchToDelete;
+	if (SplitRemoteBranchName(branchToDelete, remoteName, remoteBranchToDelete))
+		return false;
+
+	remote = remoteName;
+	branch = remoteBranchToDelete;
+	return true;
+}
+
 bool CBrowseRefsDlg::DoDeleteRefs(VectorPShadowTree& leafs, bool bForce)
 {
-	for(VectorPShadowTree::iterator i = leafs.begin(); i != leafs.end(); ++i)
-		if(!DoDeleteRef((*i)->GetRefName(), bForce))
+	STRING_VECTOR branchList;
+	CString currentRemote;
+	for (VectorPShadowTree::iterator i = leafs.begin(); i != leafs.end(); ++i)
+	{
+		CString thisRemote, thisBranch;
+		if (IsSelectedRemoteBranch((*i)->GetRefName(), thisRemote, thisBranch))
+		{
+			if (currentRemote != thisRemote)
+			{
+				if (!DoDeleteRemoteRefs(currentRemote, branchList))
+					return false;
+				currentRemote = thisRemote;
+				branchList.clear();
+			}
+			branchList.push_back(thisBranch);
+		}
+		else
+		{
+			if (!branchList.empty())
+			{
+				if (!DoDeleteRemoteRefs(currentRemote, branchList))
+					return false;
+				currentRemote = _T("");
+				branchList.clear();
+			}
+
+			if (!DoDeleteRef((*i)->GetRefName(), bForce))
+				return false;
+		}
+	}
+	if (!branchList.empty())
+		if (!DoDeleteRemoteRefs(currentRemote, branchList))
 			return false;
+
+	return true;
+}
+
+bool CBrowseRefsDlg::DoDeleteRemoteRefs(CString remote, STRING_VECTOR &branchList)
+{
+	if (branchList.empty())
+		return true;
+	
+	CString cmd;
+	cmd.Format(_T("push \"%s\""), remote);
+	CMassiveGitTask mgt(cmd, FALSE);
+	for (size_t i = 0; i < branchList.size(); ++i)
+		mgt.AddFile(_T(":refs/heads/") + branchList[i]);
+
+	if (CAppUtils::IsSSHPutty())
+		CAppUtils::LaunchPAgent(NULL, &remote);
+	CSysProgressDlg sysProgressDlg;
+	sysProgressDlg.SetTitle(CString(MAKEINTRESOURCE(IDS_APPNAME)));
+	sysProgressDlg.SetLine(1, CString(MAKEINTRESOURCE(IDS_DELETING_REMOTE_REFS)));
+	sysProgressDlg.SetLine(2, CString(MAKEINTRESOURCE(IDS_PROGRESSWAIT)));
+	sysProgressDlg.SetShowProgressBar(false);
+	sysProgressDlg.ShowModal(this, true);
+	BOOL cancel = FALSE;
+	if (!mgt.Execute(cancel))
+	{
+		sysProgressDlg.Stop();
+		BringWindowToTop();
+		return false;
+	}
+	sysProgressDlg.Stop();
+	BringWindowToTop();
 	return true;
 }
 
