@@ -1,7 +1,7 @@
 // TortoiseGit - a Windows shell extension for easy version control
 
 // Copyright (C) 2003-2008 - TortoiseSVN
-// Copyright (C) 2008-2013 - TortoiseGit
+// Copyright (C) 2008-2014 - TortoiseGit
 
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -171,6 +171,7 @@ BEGIN_MESSAGE_MAP(CLogDlg, CResizableStandAloneDialog)
 	ON_COMMAND(ID_EDIT_COPY, &CLogDlg::OnEditCopy)
 	ON_MESSAGE(MSG_REFLOG_CHANGED, OnRefLogChanged)
 	ON_REGISTERED_MESSAGE(WM_TASKBARBTNCREATED, OnTaskbarBtnCreated)
+	ON_BN_CLICKED(IDC_LOG_POPUP_FIND, OnBnClickedLogPopupFind)
 END_MESSAGE_MAP()
 
 enum JumpType
@@ -257,6 +258,7 @@ BOOL CLogDlg::OnInitDialog()
 	m_LogList.m_Path=m_path;
 	m_LogList.m_hasWC = m_LogList.m_bShowWC = !g_GitAdminDir.IsBareRepo(g_Git.m_CurrentDir);
 	m_LogList.InsertGitColumn();
+	m_LogList.m_ContextMenuMask &= ~m_LogList.GetContextMenuBit(CGitLogListBase::ID_FINDENTRY);
 
 	if (m_bWholeProject)
 		m_LogList.m_Path.Reset();
@@ -319,6 +321,7 @@ BOOL CLogDlg::OnInitDialog()
 	AddAnchor(IDC_LOG_ALLBRANCH,BOTTOM_LEFT);
 	AddAnchor(IDC_SHOWWHOLEPROJECT, BOTTOM_LEFT);
 	AddAnchor(IDC_REFRESH, BOTTOM_LEFT);
+	AddAnchor(IDC_LOG_POPUP_FIND, BOTTOM_LEFT);
 	AddAnchor(IDC_STATBUTTON, BOTTOM_RIGHT);
 	AddAnchor(IDC_PROGRESS, BOTTOM_LEFT, BOTTOM_RIGHT);
 	AddAnchor(IDOK, BOTTOM_RIGHT);
@@ -859,6 +862,17 @@ void CLogDlg::Refresh (bool clearfilter /*autoGoOnline*/)
 	FillLogMessageCtrl(false);
 }
 
+void CLogDlg::OnBnClickedLogPopupFind()
+{
+	m_LogList.m_nSearchIndex = m_LogList.GetSelectionMark();
+	if (m_LogList.m_nSearchIndex < 0)
+		m_LogList.m_nSearchIndex = 0;
+	if (!m_LogList.m_pFindDialog)
+	{
+		m_LogList.m_pFindDialog = new CFindDlg();
+		m_LogList.m_pFindDialog->Create(&m_LogList);
+	}
+}
 
 
 BOOL CLogDlg::Cancel()
