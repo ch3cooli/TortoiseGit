@@ -1,6 +1,6 @@
 // TortoiseGit - a Windows shell extension for easy version control
 
-// Copyright (C) 2008-2013 - TortoiseGit
+// Copyright (C) 2008-2014 - TortoiseGit
 // Copyright (C) 2005-2007 Marco Costalba
 // Copyright (C) 2011-2013 - Sven Strickroth <email@cs-ware.de>
 
@@ -3338,6 +3338,18 @@ bool CGitLogListBase::ShouldShowFilter(GitRev *pRev, const std::map<CGitHash, st
 		}
 	}
 	return false;
+}
+
+void CGitLogListBase::ShowFindDialog()
+{
+	m_nSearchIndex = GetSelectionMark();
+	if (m_nSearchIndex < 0)
+		m_nSearchIndex = 0;
+	if (!m_pFindDialog)
+	{
+		m_pFindDialog = new CFindDlg();
+		m_pFindDialog->Create(this);
+	}
 }
 
 void CGitLogListBase::ShowGraphColumn(bool bShow)

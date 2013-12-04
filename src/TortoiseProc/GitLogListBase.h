@@ -1,6 +1,6 @@
 // TortoiseGit - a Windows shell extension for easy version control
 
-// Copyright (C) 2008-2013 - TortoiseGit
+// Copyright (C) 2008-2014 - TortoiseGit
 
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -309,6 +309,7 @@ public:
 	int  FillGitLog(CTGitPath *path, CString *range = NULL, int infomask = CGit::LOG_INFO_STAT| CGit::LOG_INFO_FILESTATE | CGit::LOG_INFO_SHOW_MERGEDFILE);
 	int  FillGitLog(std::set<CGitHash>& hashes);
 	BOOL IsMatchFilter(bool bRegex, GitRev *pRev, std::tr1::wregex &pat);
+	void ShowFindDialog();
 	bool ShouldShowFilter(GitRev *pRev, const std::map<CGitHash, std::set<CGitHash>> &commitChildren);
 	void ShowGraphColumn(bool bShow);
 

@@ -908,20 +908,7 @@ void CGitLogList::ContextMenuAction(int cmd,int FirstSelect, int LastSelect, CMe
 			break;
 
 		case ID_FINDENTRY:
-			{
-				m_nSearchIndex = GetSelectionMark();
-				if (m_nSearchIndex < 0)
-					m_nSearchIndex = 0;
-				if (m_pFindDialog)
-				{
-					break;
-				}
-				else
-				{
-					m_pFindDialog = new CFindDlg();
-					m_pFindDialog->Create(this);
-				}
-			}
+			ShowFindDialog();
 			break;
 		case ID_MERGEREV:
 			{
