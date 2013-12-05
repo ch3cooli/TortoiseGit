@@ -1,6 +1,6 @@
 // TortoiseGit - a Windows shell extension for easy version control
 
-// Copyright (C) 2008-2013 - TortoiseGit
+// Copyright (C) 2008-2014 - TortoiseGit
 
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -40,7 +40,7 @@ CPushDlg::CPushDlg(CWnd* pParent /*=NULL*/)
 	: CHorizontalResizableStandAloneDialog(CPushDlg::IDD, pParent)
 	, m_bPushAllBranches(FALSE)
 	, m_bForce(FALSE)
-	, m_bPack(FALSE)
+	, m_bPack(TRUE)
 	, m_bTags(FALSE)
 	, m_bAutoLoad(FALSE)
 	, m_bPushAllRemotes(FALSE)
@@ -166,7 +166,7 @@ BOOL CPushDlg::OnInitDialog()
 	CheckRadioButton(IDC_RD_REMOTE,IDC_RD_URL,IDC_RD_REMOTE);
 
 
-	m_regThinPack = CRegDWORD(_T("Software\\TortoiseGit\\TortoiseProc\\Push\\") + WorkingDir + _T("\\ThinPack"), FALSE);
+	m_regThinPack = CRegDWORD(_T("Software\\TortoiseGit\\TortoiseProc\\Push\\") + WorkingDir + _T("\\ThinPack"), TRUE);
 	m_bPack = m_regThinPack;
 	this->m_regAutoLoad = CRegDWORD(CString(_T("Software\\TortoiseGit\\History\\PushDlgAutoLoad\\"))+WorkingDir,
 									m_bAutoLoad);

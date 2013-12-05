@@ -2463,8 +2463,8 @@ bool CAppUtils::Push(CString selectLocalBranch)
 	{
 		CString arg;
 
-		if(dlg.m_bPack)
-			arg += _T("--thin ");
+		if (!dlg.m_bPack)
+			arg += _T("--no-thin ");
 		if(dlg.m_bTags && !dlg.m_bPushAllBranches)
 			arg += _T("--tags ");
 		if(dlg.m_bForce)
