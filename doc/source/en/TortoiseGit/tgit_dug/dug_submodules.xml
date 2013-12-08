@@ -33,6 +33,7 @@
 		</figure>
 	</para>
 	<para>
+		<?dbhh topicname="HIDD_SUBMODULE_UPDATE"?>
 		<guimenuitem>Submodule Update</guimenuitem>: 
 		<figure id="tgit-dug-submodules-update">
 			<title>The update submodule dialog</title>
