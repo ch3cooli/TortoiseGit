@@ -1393,8 +1393,10 @@ bool CAppUtils::GitReset(CString *CommitHash,int type, bool autoclose)
 			progress.m_bAutoCloseOnSuccess = autoclose;
 
 			CTGitPath gitPath = g_Git.m_CurrentDir;
+			INT_PTR idSubmoduleUpdate = -1;
 			if (gitPath.HasSubmodules() && dlg.m_ResetType == 2)
-				progress.m_PostCmdList.Add(CString(MAKEINTRESOURCE(IDS_PROC_SUBMODULESUPDATE)));
+				idSubmoduleUpdate = IDC_PROGRESS_BUTTON1 + progress.m_PostCmdList.Add(CString(MAKEINTRESOURCE(IDS_PROC_SUBMODULESUPDATE)));
+			INT_PTR idCleanup = IDC_PROGRESS_BUTTON1 + progress.m_PostCmdList.Add(CString(MAKEINTRESOURCE(IDS_MENUCLEANUP)));
 
 			progress.m_PostFailCmdList.Add(CString(MAKEINTRESOURCE(IDS_MSGBOX_RETRY)));
 
@@ -1411,11 +1413,18 @@ bool CAppUtils::GitReset(CString *CommitHash,int type, bool autoclose)
 			else
 				ret = progress.DoModal();
 
-			if (progress.m_GitStatus == 0 && gitPath.HasSubmodules() && dlg.m_ResetType == 2 && ret == IDC_PROGRESS_BUTTON1)
+			if (ret == idSubmoduleUpdate)
 			{
 				CString sCmd;
 				sCmd.Format(_T("/command:subupdate /bkpath:\"%s\""), g_Git.m_CurrentDir);
 
+				RunTortoiseGitProc(sCmd);
+				return TRUE;
+			}
+			else if (ret == idCleanup)
+			{
+				CString sCmd;
+				sCmd.Format(_T("/command:cleanup /path:\"%s\""), g_Git.m_CurrentDir);
 				RunTortoiseGitProc(sCmd);
 				return TRUE;
 			}
