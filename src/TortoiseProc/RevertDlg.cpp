@@ -1,6 +1,6 @@
 // TortoiseGit - a Windows shell extension for easy version control
 
-// Copyright (C) 2009-2013 - TortoiseGit
+// Copyright (C) 2009-2014 - TortoiseGit
 // Copyright (C) 2003-2008 - TortoiseSVN
 
 // This program is free software; you can redistribute it and/or
@@ -52,6 +52,7 @@ void CRevertDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CRevertDlg, CResizableStandAloneDialog)
 	ON_BN_CLICKED(IDC_SELECTALL, OnBnClickedSelectall)
+	ON_BN_CLICKED(IDC_RESET, OnBnClickedReset)
 	ON_REGISTERED_MESSAGE(CGitStatusListCtrl::GITSLNM_NEEDSREFRESH, OnSVNStatusListCtrlNeedsRefresh)
 	ON_REGISTERED_MESSAGE(CGitStatusListCtrl::GITSLNM_ADDFILE, OnFileDropped)
 	ON_WM_TIMER()
@@ -83,6 +84,7 @@ BOOL CRevertDlg::OnInitDialog()
 	AddAnchor(IDC_REVERTLIST, TOP_LEFT, BOTTOM_RIGHT);
 	AddAnchor(IDC_SELECTALL, BOTTOM_LEFT);
 	AddAnchor(IDC_UNVERSIONEDITEMS, BOTTOM_RIGHT);
+	AddAnchor(IDC_RESET, BOTTOM_LEFT);
 	AddAnchor(IDOK, BOTTOM_RIGHT);
 	AddAnchor(IDCANCEL, BOTTOM_RIGHT);
 	AddAnchor(IDHELP, BOTTOM_RIGHT);
@@ -205,6 +207,12 @@ void CRevertDlg::OnBnClickedSelectall()
 	theApp.DoWaitCursor(1);
 	m_RevertList.SelectAll(state == BST_CHECKED);
 	theApp.DoWaitCursor(-1);
+}
+
+void CRevertDlg::OnBnClickedReset()
+{
+	CString rev = _T("HEAD");
+	CAppUtils::GitReset(&rev, 2);
 }
 
 BOOL CRevertDlg::PreTranslateMessage(MSG* pMsg)
