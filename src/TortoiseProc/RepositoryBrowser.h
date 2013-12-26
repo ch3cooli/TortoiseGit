@@ -125,8 +125,20 @@ private:
 	afx_msg void			OnDestroy();
 	virtual BOOL			OnInitDialog();
 
+	class CMyListCtrl : public CListCtrl
+	{
+		DECLARE_MESSAGE_MAP()
+
+		afx_msg void OnContextMenu(CWnd* pWnd, CPoint point)
+		{
+			if (pWnd == GetHeaderCtrl())
+				return;
+			((CRepositoryBrowser*)this->GetParent())->OnContextMenu(this, point);
+		}
+	};
+
 	CTreeCtrl				m_RepoTree;
-	CListCtrl				m_RepoList;
+	CMyListCtrl				m_RepoList;
 	ColumnManager			m_ColumnManager;
 
 	afx_msg void			OnLvnColumnclickRepoList(NMHDR *pNMHDR, LRESULT *pResult);

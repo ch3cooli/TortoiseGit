@@ -175,6 +175,9 @@ BEGIN_MESSAGE_MAP(CRepositoryBrowser, CResizableStandAloneDialog)
 	ON_WM_LBUTTONUP()
 END_MESSAGE_MAP()
 
+BEGIN_MESSAGE_MAP(CRepositoryBrowser::CMyListCtrl, CListCtrl)
+	ON_WM_CONTEXTMENU()
+END_MESSAGE_MAP()
 
 // CRepositoryBrowser message handlers
 
