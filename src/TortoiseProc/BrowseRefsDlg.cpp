@@ -194,6 +194,10 @@ BEGIN_MESSAGE_MAP(CBrowseRefsDlg, CResizableStandAloneDialog)
 	ON_BN_CLICKED(IDC_CURRENTBRANCH, OnBnClickedCurrentbranch)
 END_MESSAGE_MAP()
 
+BEGIN_MESSAGE_MAP(CBrowseRefsDlg::CMyListCtrl, CListCtrl)
+	ON_WM_CONTEXTMENU()
+END_MESSAGE_MAP()
+
 
 // CBrowseRefsDlg message handlers
 

@@ -142,6 +142,18 @@ protected:
 	CString			GetFullRefName(CString partialRefName);
 
 private:
+	class CMyListCtrl : public CListCtrl
+	{
+		DECLARE_MESSAGE_MAP()
+
+		afx_msg void OnContextMenu(CWnd* pWnd, CPoint point)
+		{
+			if (pWnd == GetHeaderCtrl())
+				return;
+			((CBrowseRefsDlg*)this->GetParent())->OnContextMenu(this, point);
+		}
+	};
+
 	bool			m_bHasWC;
 
 	CString			m_cmdPath;
@@ -149,7 +161,7 @@ private:
 	CShadowTree		m_TreeRoot;
 	CShadowTree*	m_pListCtrlRoot;
 	CTreeCtrl		m_RefTreeCtrl;
-	CListCtrl		m_ListRefLeafs;
+	CMyListCtrl		m_ListRefLeafs;
 	ColumnManager	m_ColumnManager;
 
 	CFilterEdit		m_ctrlFilter;
