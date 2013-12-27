@@ -1,6 +1,6 @@
 // TortoiseGit - a Windows shell extension for easy version control
 
-// Copyright (C) 2008-2013 - TortoiseGit
+// Copyright (C) 2008-2014 - TortoiseGit
 // Copyright (C) 2003-2008 - TortoiseSVN
 
 // This program is free software; you can redistribute it and/or
@@ -104,6 +104,7 @@ BEGIN_MESSAGE_MAP(CFileDiffDlg, CResizableStandAloneDialog)
 	ON_REGISTERED_MESSAGE(WM_DISABLEBUTTONS, OnDisableButtons)
 	ON_REGISTERED_MESSAGE(WM_DIFFFINISHED, OnDiffFinished)
 	ON_BN_CLICKED(IDC_LOG, &CFileDiffDlg::OnBnClickedLog)
+	ON_BN_CLICKED(IDC_BUTTON_UNIFIEDDIFF, OnBnClickedButtonUnifieddiff)
 END_MESSAGE_MAP()
 
 
@@ -259,6 +260,7 @@ BOOL CFileDiffDlg::OnInitDialog()
 	AddAnchor(IDC_REV1EDIT,TOP_LEFT);
 	AddAnchor(IDC_REV2EDIT,TOP_LEFT);
 	AddAnchor(IDC_LOG, TOP_RIGHT);
+	AddAnchor(IDC_BUTTON_UNIFIEDDIFF, TOP_RIGHT);
 
 	EnableSaveRestore(_T("FileDiffDlg"));
 
@@ -1284,4 +1286,9 @@ void CFileDiffDlg::OnBnClickedLog()
 	CLogDlg dlg;
 	dlg.SetRange(m_rev2.m_CommitHash.ToString() + _T("..") + m_rev1.m_CommitHash.ToString());
 	dlg.DoModal();
+}
+
+void CFileDiffDlg::OnBnClickedButtonUnifieddiff()
+{
+	CAppUtils::StartShowUnifiedDiff(m_hWnd, CTGitPath(), m_rev2.m_CommitHash.ToString(), CTGitPath(), m_rev1.m_CommitHash.ToString());
 }
