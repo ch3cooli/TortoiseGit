@@ -1,6 +1,6 @@
 // TortoiseGit - a Windows shell extension for easy version control
 
-// Copyright (C) 2008-2013 - TortoiseGit
+// Copyright (C) 2008-2014 - TortoiseGit
 
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -102,6 +102,27 @@ BEGIN_MESSAGE_MAP(CSyncDlg, CResizableStandAloneDialog)
 	ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
+
+void CSyncDlg::CheckSubmoduleExists()
+{
+	git_repository *repo;
+	if (git_repository_open(&repo, CUnicodeUtils::GetUTF8(g_Git.m_CurrentDir)))
+	{
+		MessageBox(CGit::GetLibGit2LastErr(_T("Could not open repository.")), _T("TortoiseGit"), MB_ICONERROR);
+		return;
+	}
+
+	bool found = false;
+	if (git_submodule_foreach(repo, [] (git_submodule *, const char *, void *payload) -> int { *(bool *)payload = true; return 0; }, &found))
+	{
+		git_repository_free(repo);
+		MessageBox(CGit::GetLibGit2LastErr(_T("Could not get submodule list.")), _T("TortoiseGit"), MB_ICONERROR);
+		return;
+	}
+
+	git_repository_free(repo);
+	GetDlgItem(IDC_BUTTON_SUBMODULE)->ShowWindow(found ? SW_SHOW : SW_HIDE);
+}
 
 void CSyncDlg::EnableControlButton(bool bEnabled)
 {
@@ -345,6 +366,7 @@ void CSyncDlg::PullComplete()
 	EnableControlButton(true);
 	SwitchToInput();
 	this->FetchOutList(true);
+	CheckSubmoduleExists();
 
 	CGitHash newhash;
 	if (g_Git.GetHash(newhash, _T("HEAD")))
@@ -960,6 +982,7 @@ BOOL CSyncDlg::OnInitDialog()
 
 	this->m_bInited=true;
 	FetchOutList();
+	CheckSubmoduleExists();
 
 	m_ctrlTabCtrl.ShowTab(IDC_CMD_LOG-1,false);
 	m_ctrlTabCtrl.ShowTab(IDC_IN_LOGLIST-1,false);

@@ -1,6 +1,6 @@
 // TortoiseGit - a Windows shell extension for easy version control
 
-// Copyright (C) 2008-2009,2012-2013 - TortoiseGit
+// Copyright (C) 2008-2009,2012-2014 - TortoiseGit
 
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -219,6 +219,7 @@ protected:
 	CAnimateCtrl	m_ctrlAnimate;
 	CStatic			m_ctrlProgLabel;
 
+	void CheckSubmoduleExists();
 	void EnableControlButton(bool bEnabled=true);
 	afx_msg void OnBnClickedButtonCommit();
 
