@@ -148,7 +148,7 @@ BEGIN
         MENUITEM "&Find\tCtrl+F",               ID_EDIT_FIND
         MENUITEM "&Go to\tCtrl+G",              ID_EDIT_GOTO
         MENUITEM SEPARATOR
-        POPUP "Encode"
+        POPUP "Encoding"
         BEGIN
             MENUITEM "UTF-8",                       IDM_FORMAT_UTF8
             MENUITEM "UTF-16 LE",                   IDM_FORMAT_UTF16LE

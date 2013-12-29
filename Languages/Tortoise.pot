@@ -3896,10 +3896,6 @@ msgstr ""
 msgid "Enabled Overlay Handlers"
 msgstr ""
 
-#. Resource IDs: (65535)
-msgid "Encode"
-msgstr ""
-
 #. Resource IDs: (300, 301)
 msgid "Encoding"
 msgstr ""
