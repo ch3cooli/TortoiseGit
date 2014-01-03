@@ -1,6 +1,7 @@
 // TortoiseGit - a Windows shell extension for easy version control
 
 // Copyright (C) 2008 - TortoiseSVN
+// Copyright (C) 2014 - TortoiseGit
 
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -33,9 +34,7 @@ public:
 
     DWORD           GetFullVersion() const {return MAKEWORD(inf.dwMinorVersion, inf.dwMajorVersion);}
     bool            IsXP() const {return (GetFullVersion() < 0x0600);} // cover Win5.1 and 5.2 alike
-    bool            IsVista() const {return (GetFullVersion() == 0x0600);}
     bool            IsVistaOrLater() const {return (GetFullVersion() >= 0x0600);}
-    bool            IsWin7() const {return (GetFullVersion() == 0x0601);}
     bool            IsWin7OrLater() const {return (GetFullVersion() >= 0x0601);}
 private:
     OSVERSIONINFOEX         inf;
