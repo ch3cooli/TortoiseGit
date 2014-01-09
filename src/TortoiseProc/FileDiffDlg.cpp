@@ -1,6 +1,6 @@
 // TortoiseGit - a Windows shell extension for easy version control
 
-// Copyright (C) 2008-2013 - TortoiseGit
+// Copyright (C) 2008-2014 - TortoiseGit
 // Copyright (C) 2003-2008 - TortoiseSVN
 
 // This program is free software; you can redistribute it and/or
@@ -1031,6 +1031,7 @@ void CFileDiffDlg::ClickRevButton(CMenuButton *button, GitRev *rev, CACEdit *edi
 	if(entry == 2) /*RefLog*/
 	{
 		CRefLogDlg dlg;
+		dlg.SetSelect(true);
 		if(dlg.DoModal() == IDOK)
 		{
 			if(FillRevFromString(rev,dlg.m_SelectedHash))

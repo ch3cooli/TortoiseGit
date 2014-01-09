@@ -1,6 +1,6 @@
 // TortoiseGit - a Windows shell extension for easy version control
 
-// Copyright (C) 2009-2013 - TortoiseGit
+// Copyright (C) 2009-2014 - TortoiseGit
 
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -37,6 +37,7 @@ CRefLogDlg::CRefLogDlg(CWnd* pParent /*=NULL*/)
 	: CResizableStandAloneDialog(CRefLogDlg::IDD, pParent)
 	, m_pFindDialog(NULL)
 	, m_nSearchLine(0)
+	, m_bSelect(false)
 {
 
 }
@@ -58,6 +59,7 @@ BEGIN_MESSAGE_MAP(CRefLogDlg, CResizableStandAloneDialog)
 	ON_BN_CLICKED(IDC_REFLOG_BUTTONCLEARSTASH, &CRefLogDlg::OnBnClickedClearStash)
 	ON_CBN_SELCHANGE(IDC_COMBOBOXEX_REF,   &CRefLogDlg::OnCbnSelchangeRef)
 	ON_MESSAGE(MSG_REFLOG_CHANGED,OnRefLogChanged)
+	ON_NOTIFY(LVN_ITEMCHANGED, IDC_REFLOG_LIST, OnLvnItemchangedLoglist)
 	ON_REGISTERED_MESSAGE(m_FindDialogMessage, OnFindDialogMessage)
 END_MESSAGE_MAP()
 
@@ -92,6 +94,22 @@ BOOL CRefLogDlg::OnInitDialog()
 	m_RefList.m_hasWC = !g_GitAdminDir.IsBareRepo(g_Git.m_CurrentDir);
 
 	this->m_RefList.InsertRefLogColumn();
+
+	if (m_bSelect)
+	{
+		// the dialog is used to select revisions
+		// enable the OK button if appropriate
+		EnableOKButton();
+	}
+	else
+	{
+		// the dialog is used to just view reflog messages
+		// hide the OK button and set text on Cancel button to OK
+		CString temp;
+		GetDlgItemText(IDOK, temp);
+		SetDlgItemText(IDCANCEL, temp);
+		GetDlgItem(IDOK)->ShowWindow(SW_HIDE);
+	}
 
 	Refresh();
 
@@ -293,6 +311,12 @@ void CRefLogDlg::OnCbnSelchangeRef()
 		GetDlgItem(IDC_REFLOG_BUTTONCLEARSTASH)->ShowWindow(SW_HIDE);
 }
 
+void CRefLogDlg::OnLvnItemchangedLoglist(NMHDR * /*pNMHDR*/, LRESULT *pResult)
+{
+	*pResult = 0;
+	EnableOKButton();
+}
+
 BOOL CRefLogDlg::PreTranslateMessage(MSG* pMsg)
 {
 	if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_F5)
@@ -336,6 +360,7 @@ void CRefLogDlg::Refresh()
 	m_RefList.m_RevCache.clear();
 
 	OnCbnSelchangeRef();
+	EnableOKButton();
 }
 
 void CRefLogDlg::OnFind()
@@ -416,4 +441,15 @@ LRESULT CRefLogDlg::OnFindDialogMessage(WPARAM /*wParam*/, LPARAM /*lParam*/)
 	}
 
 	return 0;
+}
+
+void CRefLogDlg::EnableOKButton()
+{
+	if (m_bSelect)
+	{
+		// enable OK button if only a single revision is selected
+		DialogEnableWindow(IDOK, (m_RefList.GetSelectedCount() == 1));
+	}
+	else
+		DialogEnableWindow(IDOK, TRUE);
 }

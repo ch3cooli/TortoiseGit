@@ -1,6 +1,6 @@
 // TortoiseGit - a Windows shell extension for easy version control
 
-// Copyright (C) 2009-2013 - TortoiseGit
+// Copyright (C) 2009-2014 - TortoiseGit
 
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -39,6 +39,7 @@ protected:
 	BOOL OnInitDialog();
 	afx_msg void OnCbnSelchangeRef();
 	afx_msg LRESULT OnRefLogChanged(WPARAM wParam, LPARAM lParam);
+	afx_msg void OnLvnItemchangedLoglist(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg LRESULT OnFindDialogMessage(WPARAM wParam, LPARAM lParam);
 	afx_msg void OnBnClickedOk();
 	afx_msg void OnBnClickedClearStash();
@@ -46,6 +47,7 @@ protected:
 	DECLARE_MESSAGE_MAP()
 
 	void			Refresh();
+	void			EnableOKButton();
 
 	CHistoryCombo	m_ChooseRef;
 
@@ -55,8 +57,10 @@ protected:
 	CFindReplaceDialog	*m_pFindDialog;
 	static UINT			m_FindDialogMessage;
 	int					m_nSearchLine;
+	bool				m_bSelect;
 
 public:
 	CString			m_CurrentBranch;
 	CString			m_SelectedHash;
+	void SetSelect(bool bSelect) { m_bSelect = bSelect; }
 };
