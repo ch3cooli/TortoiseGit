@@ -23,8 +23,8 @@
 
 bool RequestPullCommand::Execute()
 {
-	CString endrevision = _T("");;
-	CString reposirotyurl = _T("");;
+	CString endrevision;
+	CString reposirotyurl;
 	if (parser.HasVal(_T("endrev")))
 		endrevision = parser.GetVal(_T("endrev"));
 	if (parser.HasVal(_T("url")))
