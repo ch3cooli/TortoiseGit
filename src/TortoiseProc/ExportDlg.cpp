@@ -1,7 +1,7 @@
 // TortoiseGit - a Windows shell extension for easy version control
 
 // Copyright (C) 2003-2008 - TortoiseSVN
-// Copyright (C) 2008-2013 - TortoiseGit
+// Copyright (C) 2008-2014 - TortoiseGit
 
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -34,6 +34,7 @@ CExportDlg::CExportDlg(CWnd* pParent /*=NULL*/)
 	, m_bWholeProject(FALSE)
 	, m_Revision(_T("HEAD"))
 	, m_strFile(_T(""))
+	, m_bFirstTime(true)
 {
 }
 
@@ -68,6 +69,10 @@ BOOL CExportDlg::OnInitDialog()
 		GetDlgItem(IDC_SHOWWHOLEPROJECT)->EnableWindow(FALSE);
 		((CButton *)GetDlgItem(IDC_SHOWWHOLEPROJECT))->SetCheck(TRUE);
 	}
+
+	CString curDir = g_Git.m_CurrentDir;
+	curDir.Replace(_T(':'), _T('_'));
+	m_regLastDir = CRegString(_T("Software\\TortoiseGit\\TortoiseProc\\Export\\" + curDir + _T("\\LastDir")));
 
 	AddAnchor(IDC_REPOGROUP, TOP_LEFT, TOP_RIGHT);
 	AddAnchor(IDC_EXPORTFILE_LABEL, TOP_LEFT);
@@ -143,6 +148,11 @@ void CExportDlg::OnOK()
 		return;
 	}
 
+	CString dir = m_strFile;
+	PathRemoveFileSpec(dir.GetBuffer());
+	dir.ReleaseBuffer();
+	m_regLastDir = dir;
+
 	UpdateData(FALSE);
 	CHorizontalResizableStandAloneDialog::OnOK();
 }
@@ -158,6 +168,13 @@ void CExportDlg::OnBnClickedCheckoutdirectoryBrowse()
 	//
 	this->UpdateRevsionName();
 	CFileDialog dlg(FALSE, _T("zip"), this->m_VersionName, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, _T("*.zip"));
+	if (m_bFirstTime)
+	{
+		m_bFirstTime = false;
+		CString lastDir = m_regLastDir;
+		if (PathIsDirectory(lastDir))
+			dlg.m_ofn.lpstrInitialDir = lastDir;
+	}
 
 	INT_PTR ret = dlg.DoModal();
 	SetCurrentDirectory(g_Git.m_CurrentDir);
