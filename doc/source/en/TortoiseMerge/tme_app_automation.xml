@@ -204,6 +204,34 @@ Don't touch these lines:
                                 disabled.
                             </entry>
                         </row>
+                        <row>
+                            <entry condition="pot">/saverequired</entry>
+                            <entry>
+                                Give warning to save file when reloading file or closing TortoiseGitMerge.
+                            </entry>
+                        </row>
+                        <row>
+                            <entry condition="pot">/saverequiredonconflicts</entry>
+                            <entry>
+                                If the file has merge conflicts,
+                                give warning to save file when reloading file or closing TortoiseGitMerge.
+                            </entry>
+                        </row>
+                        <row>
+                            <entry condition="pot">/wc</entry>
+                            <entry>
+                                <literal>/diff</literal> must be present.
+                                A patchfile was given, but not folder path to apply the patch to
+                                If the patchfile is located inside a working copy, then use the parent directory
+                                of the patchfile as the target directory, otherwise ask the user for a path.
+                            </entry>
+                        </row>
+                        <row>
+                            <entry condition="pot">/blame</entry>
+                            <entry>
+                                Not applicable to TortoiseGit.
+                            </entry>
+                        </row>
                     </tbody>
                 </tgroup>
             </table>
