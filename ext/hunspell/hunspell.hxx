@@ -19,6 +19,10 @@
 
 class LIBHUNSPELL_DLL_EXPORTED Hunspell
 {
+private:
+  Hunspell(const Hunspell&);
+  Hunspell& operator = (const Hunspell&);
+private:
   AffixMgr*       pAMgr;
   HashMgr*        pHMgr[MAXDIC];
   int             maxdic;
@@ -131,6 +135,9 @@ public:
   const char * get_version();
 
   int get_langnum() const;
+
+  /* need for putdic */
+  int input_conv(const char * word, char * dest);
   
   /* experimental and deprecated functions */
 

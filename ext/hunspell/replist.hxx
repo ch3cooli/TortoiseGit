@@ -5,9 +5,12 @@
 #include "hunvisapi.h"
 
 #include "w_char.hxx"
-#undef near // TortoiseSVN custom: this is needed to prevent errors
+
 class LIBHUNSPELL_DLL_EXPORTED RepList
 {
+private:
+    RepList(const RepList&);
+    RepList& operator = (const RepList&);
 protected:
     replentry ** dat;
     int size;
