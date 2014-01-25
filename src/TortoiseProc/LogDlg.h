@@ -173,7 +173,7 @@ private:
 	void EnableOKButton();
 
 	void SaveSplitterPos();
-	bool ValidateRegexp(LPCTSTR regexp_str, std::tr1::wregex& pat, bool bMatchCase);
+	bool ValidateRegexp(LPCTSTR regexp_str, std::wregex& pat, bool bMatchCase);
 	void CheckRegexpTooltip();
 	void GetChangedPaths(std::vector<CString>& changedpaths, std::vector<LogChangedPath*>& changedlogpaths);
 	void SetDlgTitle();

@@ -287,7 +287,7 @@ public:
 	int  BeginFetchLog();
 	int  FillGitLog(CTGitPath *path, CString *range = NULL, int infomask = CGit::LOG_INFO_STAT| CGit::LOG_INFO_FILESTATE | CGit::LOG_INFO_SHOW_MERGEDFILE);
 	int  FillGitLog(std::set<CGitHash>& hashes);
-	BOOL IsMatchFilter(bool bRegex, GitRev *pRev, std::tr1::wregex &pat);
+	BOOL IsMatchFilter(bool bRegex, GitRev *pRev, std::wregex &pat);
 	bool ShouldShowFilter(GitRev *pRev, const std::map<CGitHash, std::set<CGitHash>> &commitChildren);
 	void ShowGraphColumn(bool bShow);
 
@@ -311,7 +311,7 @@ public:
 	CLogDataVector		m_logEntries;
 	void RemoveFilter();
 	void StartFilter();
-	bool ValidateRegexp(LPCTSTR regexp_str, std::tr1::wregex& pat, bool bMatchCase = false );
+	bool ValidateRegexp(LPCTSTR regexp_str, std::wregex& pat, bool bMatchCase = false );
 	CString				m_sFilterText;
 
 	__time64_t			m_From;
