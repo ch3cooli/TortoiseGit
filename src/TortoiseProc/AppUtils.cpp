@@ -1275,6 +1275,7 @@ bool CAppUtils::OpenIgnoreFile(CIgnoreFile &file, const CString& filename)
 bool CAppUtils::IgnoreFile(CTGitPathList &path,bool IsMask)
 {
 	CIgnoreDlg ignoreDlg;
+	ignoreDlg.m_Pattern = _T("");
 	if (ignoreDlg.DoModal() == IDOK)
 	{
 		CString ignorefile;

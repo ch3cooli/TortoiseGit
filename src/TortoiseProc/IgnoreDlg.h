@@ -40,6 +40,7 @@ protected:
 	DECLARE_MESSAGE_MAP()
 
 public:
+	CString m_Pattern;
 	int m_IgnoreType;
 	int m_IgnoreFile;
 };

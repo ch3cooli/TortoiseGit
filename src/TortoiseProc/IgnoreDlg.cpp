@@ -41,6 +41,7 @@ CIgnoreDlg::~CIgnoreDlg()
 
 void CIgnoreDlg::DoDataExchange(CDataExchange* pDX)
 {
+	DDX_Text(pDX, IDC_EDIT_IGNOREPATTERN, m_Pattern);
 	CDialog::DoDataExchange(pDX);
 }
 
