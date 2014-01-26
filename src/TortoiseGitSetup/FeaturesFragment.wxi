@@ -89,7 +89,7 @@
 		</Feature>
 		<?endif ?>
 
-		<Feature Id="UDiffAssoc" Level="1" Title="Register diff/patch files" Description="Associate .diff and .patch files with TortoiseUDiff" TypicalDefault="install" Absent="allow">
+		<Feature Id="UDiffAssoc" Level="1" Title="Register diff/patch files" Description="Associate .diff and .patch files with TortoiseGitUDiff" TypicalDefault="install" Absent="allow">
 			<ComponentRef Id="C__TortoiseUDiffAssoc" />
 		</Feature>
 
