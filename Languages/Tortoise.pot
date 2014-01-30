@@ -3724,10 +3724,6 @@ msgstr ""
 msgid "Done"
 msgstr ""
 
-#. Resource IDs: (1385)
-msgid "Down"
-msgstr ""
-
 #. Resource IDs: (1698)
 msgid "Download"
 msgstr ""
@@ -9312,10 +9308,6 @@ msgstr ""
 #. Resource IDs: (286)
 #, c-format
 msgid "Unversioning %s"
-msgstr ""
-
-#. Resource IDs: (1384)
-msgid "Up"
 msgstr ""
 
 #. Resource IDs: (1710)
