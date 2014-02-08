@@ -34,8 +34,6 @@ public:
 // Dialog Data
 	enum { IDD = IDD_SUBMODULE_UPDATE };
 
-	static bool s_bSortLogical;
-
 protected:
 	virtual BOOL OnInitDialog();
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support

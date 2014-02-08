@@ -34,8 +34,6 @@ BEGIN_MESSAGE_MAP(CGitRefCompareList, CHintListCtrl)
 	ON_WM_CONTEXTMENU()
 END_MESSAGE_MAP()
 
-BOOL CGitRefCompareList::m_bSortLogical = FALSE;
-
 enum IDGITRCL
 {
 	IDGITRCL_DUMMY,
@@ -60,9 +58,6 @@ CGitRefCompareList::CGitRefCompareList()
 	, colNewHash(0)
 	, colNewMessage(0)
 {
-	m_bSortLogical = !CRegDWORD(L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\NoStrCmpLogical", 0, false, HKEY_CURRENT_USER);
-	if (m_bSortLogical)
-		m_bSortLogical = !CRegDWORD(L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\NoStrCmpLogical", 0, false, HKEY_LOCAL_MACHINE);
 	m_bHideUnchanged = CRegDWORD(_T("Software\\TortoiseGit\\RefCompareHideUnchanged"), FALSE);
 }
 
@@ -337,8 +332,6 @@ bool CGitRefCompareList::SortPredicate(const RefEntry &e1, const RefEntry &e2)
 		return true;
 	if (e1.changeType > e2.changeType)
 		return false;
-	if (m_bSortLogical)
-		return StrCmpLogicalW(e1.fullName, e2.fullName) < 0;
-	return e1.fullName.Compare(e2.fullName) < 0;
+	return CGit::LogicalComparePredicate(e1.fullName, e2.fullName);
 }
 

@@ -93,9 +93,6 @@ class CRefLeafListCompareFunc
 {
 public:
 	CRefLeafListCompareFunc(CListCtrl* pList, int col, bool desc):m_col(col),m_desc(desc),m_pList(pList){
-		m_bSortLogical = !CRegDWORD(L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\NoStrCmpLogical", 0, false, HKEY_CURRENT_USER);
-		if (m_bSortLogical)
-			m_bSortLogical = !CRegDWORD(L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\NoStrCmpLogical", 0, false, HKEY_LOCAL_MACHINE);
 	}
 
 	static int CALLBACK StaticCompare(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
@@ -133,15 +130,12 @@ public:
 	}
 	int SortStrCmp(const CString& left, const CString& right)
 	{
-		if (m_bSortLogical)
-			return StrCmpLogicalW(left, right);
-		return StrCmpI(left, right);
+		return CGit::LogicalCompareRawPredicate(left, right);
 	}
 
 	int m_col;
 	bool m_desc;
 	CListCtrl* m_pList;
-	bool m_bSortLogical;
 };
 
 // CBrowseRefsDlg dialog

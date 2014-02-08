@@ -116,9 +116,7 @@ public:
 	}
 	int SortStrCmp(const CString &left, const CString &right)
 	{
-		if (CRepositoryBrowser::s_bSortLogical)
-			return StrCmpLogicalW(left, right);
-		return StrCmpI(left, right);
+		return CGit::LogicalCompareRawPredicate(left, right);
 	}
 
 	int m_col;
@@ -127,8 +125,6 @@ public:
 };
 
 // CRepositoryBrowser dialog
-
-bool CRepositoryBrowser::s_bSortLogical = true;
 
 IMPLEMENT_DYNAMIC(CRepositoryBrowser, CResizableStandAloneDialog)
 
@@ -192,10 +188,6 @@ BOOL CRepositoryBrowser::OnInitDialog()
 	AddAnchor(IDC_INFOLABEL, BOTTOM_LEFT, BOTTOM_RIGHT);
 	AddAnchor(IDOK, BOTTOM_RIGHT);
 	AddAnchor(IDCANCEL, BOTTOM_RIGHT);
-
-	CRepositoryBrowser::s_bSortLogical = !CRegDWORD(L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\NoStrCmpLogical", 0, false, HKEY_CURRENT_USER);
-	if (CRepositoryBrowser::s_bSortLogical)
-		CRepositoryBrowser::s_bSortLogical = !CRegDWORD(L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\NoStrCmpLogical", 0, false, HKEY_LOCAL_MACHINE);
 
 	static UINT columnNames[] = { IDS_STATUSLIST_COLFILENAME, IDS_STATUSLIST_COLEXT, IDS_LOG_SIZE };
 	static int columnWidths[] = { 150, 100, 100 };

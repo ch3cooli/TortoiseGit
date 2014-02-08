@@ -86,6 +86,10 @@ public:
 
 	CEnvironment m_Environment;
 
+	static int LogicalComparePredicate(const CString &left, const CString &right);
+	static int LogicalCompareRawPredicate(const CString &left, const CString &right);
+	static int LogicalCompareBranchesPredicate(const CString &left, const CString &right);
+
 	static BOOL GitPathFileExists(const CString &path)
 	{
 		if(path[0] == _T('\\') && path[1] == _T('\\'))

@@ -31,7 +31,19 @@ const int gPickRef_Remote	= 4;
 const int gPickRef_All		= gPickRef_Head | gPickRef_Tag | gPickRef_Remote;
 const int gPickRef_NoTag	= gPickRef_All & ~gPickRef_Tag;
 
-class CShadowTree
+class CShadowTreeRef
+{
+public:
+	CString			m_csRefName;
+	CString			m_csRefHash;
+	CString			m_csDate;
+	CString			m_csDate_Iso8601;
+	CString			m_csAuthor;
+	CString			m_csSubject;
+	CString			m_csDescription;
+};
+
+class CShadowTree : public CShadowTreeRef
 {
 public:
 	typedef std::map<CString,CShadowTree> TShadowTreeMap;
@@ -53,14 +65,6 @@ public:
 	}
 
 	CShadowTree*	FindLeaf(CString partialRefName);
-
-	CString			m_csRefName;
-	CString			m_csRefHash;
-	CString			m_csDate;
-	CString			m_csDate_Iso8601;
-	CString			m_csAuthor;
-	CString			m_csSubject;
-	CString			m_csDescription;
 
 	HTREEITEM		m_hTree;
 

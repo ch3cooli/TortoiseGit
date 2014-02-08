@@ -122,14 +122,19 @@ static void GetSortOptions()
 		g_bSortLocalBranchesFirst = !CRegDWORD(L"Software\\TortoiseGit\\NoSortLocalBranchesFirst", 0, false, HKEY_LOCAL_MACHINE);
 }
 
-static int LogicalComparePredicate(const CString &left, const CString &right)
+int CGit::LogicalComparePredicate(const CString &left, const CString &right)
 {
-	if (g_bSortLogical)
-		return StrCmpLogicalW(left, right) < 0;
-	return StrCmpI(left, right) < 0;
+	return LogicalCompareRawPredicate(left, right) < 0;
 }
 
-static int LogicalCompareBranchesPredicate(const CString &left, const CString &right)
+int CGit::LogicalCompareRawPredicate(const CString &left, const CString &right)
+{
+	if (g_bSortLogical)
+		return StrCmpLogicalW(left, right);
+	return StrCmpI(left, right);
+}
+
+int CGit::LogicalCompareBranchesPredicate(const CString &left, const CString &right)
 {
 	if (g_bSortLocalBranchesFirst)
 	{

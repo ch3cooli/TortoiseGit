@@ -82,7 +82,6 @@ private:
 	git_repository			*m_Repository;
 	std::vector<RefEntry>	m_RefList;
 	BOOL					m_bHideUnchanged;
-	static BOOL 			m_bSortLogical;
 
 	int colRef;
 	int colChange;

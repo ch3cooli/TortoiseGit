@@ -76,8 +76,6 @@ public:
 	// Dialog Data
 	enum { IDD = IDD_REPOSITORY_BROWSER };
 
-	static bool s_bSortLogical;
-
 	enum eCmd
 	{
 		eCmd_Open = WM_APP,
