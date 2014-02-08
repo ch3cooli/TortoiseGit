@@ -400,6 +400,46 @@ MAP_STRING_STRING GetBranchDescriptions()
 	return descriptions;
 }
 
+static CString GetRelativeDateText(CString singular, CString plural, size_t diff)
+{
+	CString text;
+	text.Format(diff > 1 ? plural : singular, diff);
+	return text;
+}
+
+static CString GetRelativeDate(size_t diff)
+{
+	if (diff < 0)
+		return _T("in the future");
+	if (diff < 90)
+		return GetRelativeDateText(_T("%Iu second ago"), _T("%Iu seconds ago"), diff);
+	diff = (diff + 30) / 60;
+	if (diff < 90)
+		return GetRelativeDateText(_T("%Iu minute ago"), _T("%Iu minutes ago"), diff);
+	diff = (diff + 30) / 60;
+	if (diff < 36)
+		return GetRelativeDateText(_T("%Iu hour ago"), _T("%Iu hours ago"), diff);
+	diff = (diff + 12) / 24;
+	if (diff < 14)
+		return GetRelativeDateText(_T("%Iu day ago"), _T("%Iu days ago"), diff);
+	if (diff < 70)
+		return GetRelativeDateText(_T("%Iu week ago"), _T("%Iu weeks ago"), (diff + 3) / 7);
+	if (diff < 365)
+		return GetRelativeDateText(_T("%Iu month ago"), _T("%Iu months ago"), (diff + 15) / 30);
+	if (diff < 1825)
+	{
+		size_t totalMonths = (diff * 12 * 2 + 365) / (365 * 2);
+		size_t years = totalMonths / 12;
+		size_t months = totalMonths % 12;
+		if (months > 0)
+			return GetRelativeDateText(_T("%Iu year"), _T("%Iu years"), years)
+				+ GetRelativeDateText(_T(", %Iu month ago"), _T(", %Iu months ago"), months);
+		else
+			return GetRelativeDateText(_T("%Iu year ago"), _T("%Iu years ago"), years);
+	}
+	return GetRelativeDateText(_T("%Iu year ago"), _T("%Iu years ago"), (diff + 183) / 365);
+}
+
 void CBrowseRefsDlg::Refresh(CString selectRef)
 {
 //	m_RefMap.clear();
@@ -425,63 +465,127 @@ void CBrowseRefsDlg::Refresh(CString selectRef)
 	m_RefTreeCtrl.SetItemData(m_TreeRoot.m_hTree,(DWORD_PTR)&m_TreeRoot);
 
 	CString allRefs, error;
-	if (g_Git.Run(L"git.exe for-each-ref --format="
-			  L"%(refname)%04"
-			  L"%(objectname)%04"
-			  L"%(authordate:relative)%04"
-			  L"%(subject)%04"
-			  L"%(authorname)%04"
-			  L"%(authordate:iso8601)%03",
-			  &allRefs, &error, CP_UTF8))
+	if (g_Git.m_IsUseLibGit2)
 	{
-		CMessageBox::Show(NULL, CString(_T("Get refs failed\n")) + error, _T("TortoiseGit"), MB_OK | MB_ICONERROR);
+		git_repository *repo = nullptr;
+
+		CStringA gitdir = CUnicodeUtils::GetMulti(CTGitPath(g_Git.m_CurrentDir).GetGitPathString(), CP_UTF8);
+		if (git_repository_open(&repo, gitdir))
+		{
+			return;
+		}
+
+		std::vector<CShadowTreeRef> list;
+		if (git_reference_foreach(repo, [] (git_reference *ref, void *payload)
+			{
+				CShadowTreeRef entry;
+				entry.m_csRefName = CUnicodeUtils::GetUnicode(git_reference_name(ref));
+				git_oid oid;
+				if (!git_reference_name_to_id(&oid, git_reference_owner(ref), git_reference_name(ref)))
+				{
+					CGitHash hash((char*)oid.id);
+					entry.m_csRefHash = hash.ToString();
+					git_object *obj;
+					git_object_lookup(&obj, git_reference_owner(ref), &oid, GIT_OBJ_ANY);
+					if (git_object_type(obj) == GIT_OBJ_COMMIT)
+					{
+						entry.m_csSubject = CUnicodeUtils::GetUnicode(git_commit_message((git_commit*)obj));
+						entry.m_csDate_Iso8601.Format(_T("%d"), git_commit_author((git_commit*)obj)->when.time);
+						entry.m_csDate = GetRelativeDate(time(nullptr) - git_commit_author((git_commit*)obj)->when.time);
+						entry.m_csAuthor = CUnicodeUtils::GetUnicode(git_commit_author((git_commit*)obj)->name);
+					}
+					else if (git_object_type(obj) == GIT_OBJ_COMMIT)
+						entry.m_csSubject = CUnicodeUtils::GetUnicode(git_tag_message((git_tag*)obj));
+				}
+				((std::vector<CShadowTreeRef>*)payload)->push_back(entry);
+				return 0;
+			}, &list))
+		{
+			git_repository_free(repo);
+			return;
+		}
+
+		git_repository_free(repo);
+
+		std::sort(list.begin(), list.end(), [] (const CShadowTreeRef &left, const CShadowTreeRef &right)
+			{
+				return CGit::LogicalComparePredicate(left.m_csRefName, right.m_csRefName);
+			}
+		);
+
+		MAP_STRING_STRING descriptions = GetBranchDescriptions();
+		for (auto entry : list)
+		{
+			CShadowTree& treeLeaf = GetTreeNode(entry.m_csRefName, nullptr, true);
+			treeLeaf.m_csRefHash = entry.m_csRefHash;
+			treeLeaf.m_csDate = entry.m_csDate;
+			treeLeaf.m_csSubject = entry.m_csSubject;
+			treeLeaf.m_csAuthor = entry.m_csAuthor;
+			treeLeaf.m_csDate_Iso8601 = entry.m_csDate_Iso8601;
+			if (wcsncmp(entry.m_csRefName, L"refs/heads/", 11) == 0)
+				treeLeaf.m_csDescription = descriptions[treeLeaf.m_csRefName];
+		}
 	}
-
-	int linePos=0;
-	CString singleRef;
-
-	MAP_STRING_STRING refMap;
-
-	//First sort on ref name
-	while(!(singleRef=allRefs.Tokenize(L"\03",linePos)).IsEmpty())
+	else
 	{
-		singleRef.TrimLeft(L"\r\n");
-		int valuePos=0;
-		CString refName=singleRef.Tokenize(L"\04",valuePos);
-		if(refName.IsEmpty())
-			continue;
-		CString refRest=singleRef.Mid(valuePos);
+		if (g_Git.Run(L"git.exe for-each-ref --format="
+				  L"%(refname)%04"
+				  L"%(objectname)%04"
+				  L"%(authordate:relative)%04"
+				  L"%(subject)%04"
+				  L"%(authorname)%04"
+				  L"%(authordate:iso8601)%03",
+				  &allRefs, &error, CP_UTF8))
+		{
+			CMessageBox::Show(NULL, CString(_T("Get refs failed\n")) + error, _T("TortoiseGit"), MB_OK | MB_ICONERROR);
+		}
+
+		int linePos=0;
+		CString singleRef;
+
+		MAP_STRING_STRING refMap;
+
+		//First sort on ref name
+		while(!(singleRef=allRefs.Tokenize(L"\03",linePos)).IsEmpty())
+		{
+			singleRef.TrimLeft(L"\r\n");
+			int valuePos=0;
+			CString refName=singleRef.Tokenize(L"\04",valuePos);
+			if(refName.IsEmpty())
+				continue;
+			CString refRest=singleRef.Mid(valuePos);
 
 
-		//Use ref based on m_pickRef_Kind
-		if (wcsncmp(refName, L"refs/heads/", 11) == 0 && !(m_pickRef_Kind & gPickRef_Head))
-			continue; //Skip
-		if (wcsncmp(refName, L"refs/tags/", 10) == 0 && !(m_pickRef_Kind & gPickRef_Tag))
-			continue; //Skip
-		if (wcsncmp(refName, L"refs/remotes/", 13) == 0 && !(m_pickRef_Kind & gPickRef_Remote))
-			continue; //Skip
+			//Use ref based on m_pickRef_Kind
+			if (wcsncmp(refName, L"refs/heads/", 11) == 0 && !(m_pickRef_Kind & gPickRef_Head))
+				continue; //Skip
+			if (wcsncmp(refName, L"refs/tags/", 10) == 0 && !(m_pickRef_Kind & gPickRef_Tag))
+				continue; //Skip
+			if (wcsncmp(refName, L"refs/remotes/", 13) == 0 && !(m_pickRef_Kind & gPickRef_Remote))
+				continue; //Skip
 
-		refMap[refName] = refRest; //Use
-	}
+			refMap[refName] = refRest; //Use
+		}
 
-	MAP_STRING_STRING descriptions = GetBranchDescriptions();
+		MAP_STRING_STRING descriptions = GetBranchDescriptions();
 
-	//Populate ref tree
-	for(MAP_STRING_STRING::iterator iterRefMap=refMap.begin();iterRefMap!=refMap.end();++iterRefMap)
-	{
-		CShadowTree& treeLeaf=GetTreeNode(iterRefMap->first,NULL,true);
-		CString values=iterRefMap->second;
-		values.Replace(L"\04" L"\04",L"\04 \04");//Workaround Tokenize problem (treating 2 tokens as one)
+		//Populate ref tree
+		for(MAP_STRING_STRING::iterator iterRefMap=refMap.begin();iterRefMap!=refMap.end();++iterRefMap)
+		{
+			CShadowTree& treeLeaf=GetTreeNode(iterRefMap->first,NULL,true);
+			CString values=iterRefMap->second;
+			values.Replace(L"\04" L"\04",L"\04 \04");//Workaround Tokenize problem (treating 2 tokens as one)
 
-		int valuePos=0;
-		treeLeaf.m_csRefHash=		values.Tokenize(L"\04",valuePos); if(valuePos < 0) continue;
-		treeLeaf.m_csDate=			values.Tokenize(L"\04",valuePos); if(valuePos < 0) continue;
-		treeLeaf.m_csSubject=		values.Tokenize(L"\04",valuePos); if(valuePos < 0) continue;
-		treeLeaf.m_csAuthor=		values.Tokenize(L"\04",valuePos); if(valuePos < 0) continue;
-		treeLeaf.m_csDate_Iso8601=	values.Tokenize(L"\04",valuePos);
+			int valuePos=0;
+			treeLeaf.m_csRefHash=		values.Tokenize(L"\04",valuePos); if(valuePos < 0) continue;
+			treeLeaf.m_csDate=			values.Tokenize(L"\04",valuePos); if(valuePos < 0) continue;
+			treeLeaf.m_csSubject=		values.Tokenize(L"\04",valuePos); if(valuePos < 0) continue;
+			treeLeaf.m_csAuthor=		values.Tokenize(L"\04",valuePos); if(valuePos < 0) continue;
+			treeLeaf.m_csDate_Iso8601=	values.Tokenize(L"\04",valuePos);
 
-		if (wcsncmp(iterRefMap->first, L"refs/heads/", 11) == 0)
-			treeLeaf.m_csDescription = descriptions[treeLeaf.m_csRefName];
+			if (wcsncmp(iterRefMap->first, L"refs/heads/", 11) == 0)
+				treeLeaf.m_csDescription = descriptions[treeLeaf.m_csRefName];
+		}
 	}
 
 	// try exact match first
