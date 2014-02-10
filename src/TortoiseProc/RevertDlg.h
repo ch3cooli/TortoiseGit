@@ -44,6 +44,7 @@ protected:
 	virtual void OnCancel();
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	afx_msg void OnBnClickedSelectall();
+	afx_msg void OnBnClickedWholeProject();
 	afx_msg LRESULT	OnSVNStatusListCtrlNeedsRefresh(WPARAM, LPARAM);
 	afx_msg LRESULT OnFileDropped(WPARAM, LPARAM lParam);
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
@@ -55,6 +56,7 @@ protected:
 private:
 	static UINT RevertThreadEntry(LPVOID pVoid);
 	UINT		RevertThread();
+	void		SetDlgTitle();
 
 public:
 	CTGitPathList 		m_pathList;
@@ -67,5 +69,8 @@ private:
 	CGitStatusListCtrl	m_RevertList;
 	CButton				m_SelectAll;
 	bool				m_bCancelled;
+	CString				m_sTitle;
+	CRegDWORD			m_regShowWholeProject;
+	BOOL				m_bWholeProject;
 };
 

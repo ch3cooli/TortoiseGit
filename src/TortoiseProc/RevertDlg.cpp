@@ -1,6 +1,6 @@
 // TortoiseGit - a Windows shell extension for easy version control
 
-// Copyright (C) 2009-2013 - TortoiseGit
+// Copyright (C) 2009-2014 - TortoiseGit
 // Copyright (C) 2003-2008 - TortoiseSVN
 
 // This program is free software; you can redistribute it and/or
@@ -34,6 +34,7 @@ CRevertDlg::CRevertDlg(CWnd* pParent /*=NULL*/)
 	, m_bThreadRunning(FALSE)
 	, m_bCancelled(false)
 	, m_bRecursive(FALSE)
+	, m_bWholeProject(FALSE)
 {
 }
 
@@ -47,11 +48,13 @@ void CRevertDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_REVERTLIST, m_RevertList);
 	DDX_Check(pDX, IDC_SELECTALL, m_bSelectAll);
 	DDX_Control(pDX, IDC_SELECTALL, m_SelectAll);
+	DDX_Check(pDX, IDC_WHOLE_PROJECT, m_bWholeProject);
 }
 
 
 BEGIN_MESSAGE_MAP(CRevertDlg, CResizableStandAloneDialog)
 	ON_BN_CLICKED(IDC_SELECTALL, OnBnClickedSelectall)
+	ON_BN_CLICKED(IDC_WHOLE_PROJECT, OnBnClickedWholeProject)
 	ON_REGISTERED_MESSAGE(CGitStatusListCtrl::GITSLNM_NEEDSREFRESH, OnSVNStatusListCtrlNeedsRefresh)
 	ON_REGISTERED_MESSAGE(CGitStatusListCtrl::GITSLNM_ADDFILE, OnFileDropped)
 	ON_WM_TIMER()
@@ -71,17 +74,18 @@ BOOL CRevertDlg::OnInitDialog()
 	m_RevertList.SetBackgroundImage(IDI_REVERT_BKG);
 	m_RevertList.EnableFileDrop();
 
-	CString sWindowTitle;
-	GetWindowText(sWindowTitle);
-	if (m_pathList.GetCount() == 1)
-		CAppUtils::SetWindowTitle(m_hWnd, (g_Git.m_CurrentDir + _T("\\") + m_pathList[0].GetUIPathString()).TrimRight('\\'), sWindowTitle);
-	else
-		CAppUtils::SetWindowTitle(m_hWnd, m_pathList.GetCommonRoot().GetUIPathString(), sWindowTitle);
+	CString regPath(g_Git.m_CurrentDir);
+	regPath.Replace(_T(":"), _T("_"));
+	m_regShowWholeProject = CRegDWORD(_T("Software\\TortoiseGit\\TortoiseProc\\ShowWholeProject\\") + regPath, FALSE);
+	m_bWholeProject = m_regShowWholeProject;
+	SetDlgTitle();
 
 	AdjustControlSize(IDC_SELECTALL);
+	AdjustControlSize(IDC_WHOLE_PROJECT);
 
 	AddAnchor(IDC_REVERTLIST, TOP_LEFT, BOTTOM_RIGHT);
 	AddAnchor(IDC_SELECTALL, BOTTOM_LEFT);
+	AddAnchor(IDC_WHOLE_PROJECT, BOTTOM_LEFT);
 	AddAnchor(IDC_UNVERSIONEDITEMS, BOTTOM_RIGHT);
 	AddAnchor(IDOK, BOTTOM_RIGHT);
 	AddAnchor(IDCANCEL, BOTTOM_RIGHT);
@@ -116,7 +120,7 @@ UINT CRevertDlg::RevertThread()
 
 	m_RevertList.Clear();
 
-	if (!m_RevertList.GetStatus(&m_pathList))
+	if (!m_RevertList.GetStatus(m_bWholeProject ? nullptr : &m_pathList))
 	{
 		m_RevertList.SetEmptyString(m_RevertList.GetLastErrorMessage());
 	}
@@ -205,6 +209,35 @@ void CRevertDlg::OnBnClickedSelectall()
 	theApp.DoWaitCursor(1);
 	m_RevertList.SelectAll(state == BST_CHECKED);
 	theApp.DoWaitCursor(-1);
+}
+
+void CRevertDlg::OnBnClickedWholeProject()
+{
+	UpdateData();
+	m_regShowWholeProject = m_bWholeProject;
+	if (!m_bThreadRunning)
+	{
+		if (AfxBeginThread(RevertThreadEntry, this) == 0)
+			CMessageBox::Show(m_hWnd, IDS_ERR_THREADSTARTFAILED, IDS_APPNAME, MB_OK | MB_ICONERROR);
+		else
+			InterlockedExchange(&m_bThreadRunning, TRUE);
+	}
+}
+
+void CRevertDlg::SetDlgTitle()
+{
+	if (m_sTitle.IsEmpty())
+		GetWindowText(m_sTitle);
+
+	if (m_bWholeProject)
+		CAppUtils::SetWindowTitle(m_hWnd, g_Git.m_CurrentDir, m_sTitle);
+	else
+	{
+		if (m_pathList.GetCount() == 1)
+			CAppUtils::SetWindowTitle(m_hWnd, (g_Git.m_CurrentDir + _T("\\") + m_pathList[0].GetUIPathString()).TrimRight('\\'), m_sTitle);
+		else
+			CAppUtils::SetWindowTitle(m_hWnd, g_Git.m_CurrentDir + _T("\\") + m_RevertList.GetCommonDirectory(false), m_sTitle);
+	}
 }
 
 BOOL CRevertDlg::PreTranslateMessage(MSG* pMsg)
