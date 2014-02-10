@@ -52,7 +52,7 @@ protected:
 private:
 	static UINT AddThreadEntry(LPVOID pVoid);
 	UINT AddThread();
-	afx_msg LRESULT	OnSVNStatusListCtrlNeedsRefresh(WPARAM, LPARAM);
+	afx_msg LRESULT	OnGitStatusListCtrlNeedsRefresh(WPARAM, LPARAM);
 
 	DECLARE_MESSAGE_MAP()
 

@@ -51,7 +51,7 @@ void CAddDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CAddDlg, CResizableStandAloneDialog)
 	ON_BN_CLICKED(IDC_SELECTALL, OnBnClickedSelectall)
-	ON_REGISTERED_MESSAGE(CGitStatusListCtrl::GITSLNM_NEEDSREFRESH, OnSVNStatusListCtrlNeedsRefresh)
+	ON_REGISTERED_MESSAGE(CGitStatusListCtrl::GITSLNM_NEEDSREFRESH, OnGitStatusListCtrlNeedsRefresh)
 	ON_REGISTERED_MESSAGE(CGitStatusListCtrl::GITSLNM_ADDFILE, OnFileDropped)
 	ON_WM_TIMER()
 	ON_BN_CLICKED(IDC_INCLUDE_IGNORED, &CAddDlg::OnBnClickedIncludeIgnored)
@@ -191,7 +191,7 @@ BOOL CAddDlg::PreTranslateMessage(MSG* pMsg)
 	return CResizableStandAloneDialog::PreTranslateMessage(pMsg);
 }
 
-LRESULT CAddDlg::OnSVNStatusListCtrlNeedsRefresh(WPARAM, LPARAM)
+LRESULT CAddDlg::OnGitStatusListCtrlNeedsRefresh(WPARAM, LPARAM)
 {
 	if(AfxBeginThread(AddThreadEntry, this) == NULL)
 	{
@@ -280,7 +280,7 @@ void CAddDlg::OnTimer(UINT_PTR nIDEvent)
 		{
 			KillTimer(REFRESHTIMER);
 			CTraceToOutputDebugString::Instance()(__FUNCTION__ ": Refreshing after items dropped\n");
-			OnSVNStatusListCtrlNeedsRefresh(0, 0);
+			OnGitStatusListCtrlNeedsRefresh(0, 0);
 		}
 		break;
 	}

@@ -171,7 +171,7 @@ const FileStatusCacheEntry * GitFolderStatus::GetFullStatus(const CTGitPath& fil
 	//no overlay for unversioned folders
 	if (!bHasAdminDir)
 		return &invalidstatus;
-	//for the SVNStatus column, we have to check the cache to see
+	//for the GitStatus column, we have to check the cache to see
 	//if it's not just unversioned but ignored
 	ret = GetCachedItem(filepath);
 	if ((ret)&&(ret->status == git_wc_status_unversioned)&&(bIsFolder)&&(bHasAdminDir))

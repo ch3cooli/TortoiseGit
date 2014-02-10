@@ -64,8 +64,8 @@ void CChangedDlg::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CChangedDlg, CResizableStandAloneDialog)
 	ON_BN_CLICKED(IDC_SHOWUNVERSIONED, OnBnClickedShowunversioned)
 	ON_BN_CLICKED(IDC_SHOWUNMODIFIED, OnBnClickedShowUnmodified)
-	ON_REGISTERED_MESSAGE(CGitStatusListCtrl::GITSLNM_NEEDSREFRESH, OnSVNStatusListCtrlNeedsRefresh)
-	ON_REGISTERED_MESSAGE(CGitStatusListCtrl::GITSLNM_ITEMCOUNTCHANGED, OnSVNStatusListCtrlItemCountChanged)
+	ON_REGISTERED_MESSAGE(CGitStatusListCtrl::GITSLNM_NEEDSREFRESH, OnGitStatusListCtrlNeedsRefresh)
+	ON_REGISTERED_MESSAGE(CGitStatusListCtrl::GITSLNM_ITEMCOUNTCHANGED, OnGitStatusListCtrlItemCountChanged)
 	ON_BN_CLICKED(IDC_SHOWIGNORED, &CChangedDlg::OnBnClickedShowignored)
 	ON_BN_CLICKED(IDC_REFRESH, &CChangedDlg::OnBnClickedRefresh)
 	ON_BN_CLICKED(IDC_COMMIT, &CChangedDlg::OnBnClickedCommit)
@@ -302,7 +302,7 @@ void CChangedDlg::OnBnClickedShowlocalchangesignored()
 	UpdateStatistics();
 }
 
-LRESULT CChangedDlg::OnSVNStatusListCtrlNeedsRefresh(WPARAM, LPARAM)
+LRESULT CChangedDlg::OnGitStatusListCtrlNeedsRefresh(WPARAM, LPARAM)
 {
 	if (AfxBeginThread(ChangedStatusThreadEntry, this)==NULL)
 	{
@@ -311,7 +311,7 @@ LRESULT CChangedDlg::OnSVNStatusListCtrlNeedsRefresh(WPARAM, LPARAM)
 	return 0;
 }
 
-LRESULT CChangedDlg::OnSVNStatusListCtrlItemCountChanged(WPARAM, LPARAM)
+LRESULT CChangedDlg::OnGitStatusListCtrlItemCountChanged(WPARAM, LPARAM)
 {
 	UpdateStatistics();
 	return 0;

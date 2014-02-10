@@ -49,7 +49,7 @@ protected:
 private:
 	static UINT ResolveThreadEntry(LPVOID pVoid);
 	UINT ResolveThread();
-	afx_msg LRESULT	OnSVNStatusListCtrlNeedsRefresh(WPARAM, LPARAM);
+	afx_msg LRESULT	OnGitStatusListCtrlNeedsRefresh(WPARAM, LPARAM);
 
 	DECLARE_MESSAGE_MAP()
 

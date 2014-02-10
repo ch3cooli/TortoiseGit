@@ -52,7 +52,7 @@ void CRevertDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CRevertDlg, CResizableStandAloneDialog)
 	ON_BN_CLICKED(IDC_SELECTALL, OnBnClickedSelectall)
-	ON_REGISTERED_MESSAGE(CGitStatusListCtrl::GITSLNM_NEEDSREFRESH, OnSVNStatusListCtrlNeedsRefresh)
+	ON_REGISTERED_MESSAGE(CGitStatusListCtrl::GITSLNM_NEEDSREFRESH, OnGitStatusListCtrlNeedsRefresh)
 	ON_REGISTERED_MESSAGE(CGitStatusListCtrl::GITSLNM_ADDFILE, OnFileDropped)
 	ON_WM_TIMER()
 END_MESSAGE_MAP()
@@ -244,7 +244,7 @@ BOOL CRevertDlg::PreTranslateMessage(MSG* pMsg)
 	return CResizableStandAloneDialog::PreTranslateMessage(pMsg);
 }
 
-LRESULT CRevertDlg::OnSVNStatusListCtrlNeedsRefresh(WPARAM, LPARAM)
+LRESULT CRevertDlg::OnGitStatusListCtrlNeedsRefresh(WPARAM, LPARAM)
 {
 	if (AfxBeginThread(RevertThreadEntry, this)==0)
 	{
@@ -320,7 +320,7 @@ void CRevertDlg::OnTimer(UINT_PTR nIDEvent)
 		{
 			KillTimer(REFRESHTIMER);
 			CTraceToOutputDebugString::Instance()(__FUNCTION__ ": Refreshing after items dropped\n");
-			OnSVNStatusListCtrlNeedsRefresh(0, 0);
+			OnGitStatusListCtrlNeedsRefresh(0, 0);
 		}
 		break;
 	}

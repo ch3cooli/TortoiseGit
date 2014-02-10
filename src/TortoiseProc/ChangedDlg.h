@@ -56,8 +56,8 @@ protected:
 	afx_msg void			OnBnClickedShowignored();
 	afx_msg void			OnBnClickedShowlocalchangesignored();
 	afx_msg void			OnBnClickedWholeProject();
-	afx_msg LRESULT			OnSVNStatusListCtrlNeedsRefresh(WPARAM, LPARAM);
-	afx_msg LRESULT			OnSVNStatusListCtrlItemCountChanged(WPARAM, LPARAM);
+	afx_msg LRESULT			OnGitStatusListCtrlNeedsRefresh(WPARAM, LPARAM);
+	afx_msg LRESULT			OnGitStatusListCtrlItemCountChanged(WPARAM, LPARAM);
 
 	DECLARE_MESSAGE_MAP()
 
