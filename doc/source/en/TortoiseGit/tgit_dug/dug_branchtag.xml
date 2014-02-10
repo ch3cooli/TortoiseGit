@@ -69,7 +69,7 @@
 			<xi:include href="./dug_chooseversion.xml"/> 
 		</para>
 		<para>
-			If you want your working tree to be switched to the newly created
+			[Create Branch] If you want your working tree to be switched to the newly created
 			branch automatically, use the
 			<guilabel>Switch to new branch/tag</guilabel> checkbox.
 			But if you do that, first make sure that your working tree does not
@@ -77,7 +77,7 @@
 			the branch working tree when you switch.
 		</para>
 		<para>
-			<guilabel>track</guilabel> is a checkbox with three values. If it is checked
+			[Create Branch] <guilabel>track</guilabel> is a checkbox with three values. If it is checked
 			<literal>--track</literal> is passed to git on <guilabel>OK</guilabel>, if it is
 			unchecked <literal>--no-track</literal> is passed to git on <guilabel>OK</guilabel>.
 			The third state indicates, that neither <literal>--track</literal> nor <literal>--no-track</literal>
@@ -85,7 +85,11 @@
 			(<xref linkend="git-config(1)"/>) and --track parameter documentation for <xref linkend="git-branch(1)"/>.
 		</para>
 		<para>
-			Check <guilabel>Sign</guilabel> to create a signed tag. This requires GPG
+			[Create Tag] Enter <guilabel>Message</guilabel> to create an annotated tag.
+			Leave it empty to create a lightweight tag.
+		</para>
+		<para>
+			[Create Tag] Check <guilabel>Sign</guilabel> to create a signed tag. This requires GPG
 			and a key <emphasis>without</emphasis> a passphrase.
 		</para>
 		<para>
