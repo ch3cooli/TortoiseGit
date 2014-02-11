@@ -76,9 +76,13 @@
 		</para>
 		<para>
 			<guilabel>Always push to the selected remote archive for this local branch</guilabel>
+			This is useful when you need to pull from upstream/official repository but push to your own remote personal repository.
+			This sets local config branch.<option>branch</option>.pushremote.
 		</para>
 		<para>
 			<guilabel>Always push to the selected remote branch for this local branch</guilabel>
+			This is useful when you need to pull from branch A but push to branch B.
+			This sets local config branch.<option>branch</option>.pushbranch (TortoiseGit specific).
 		</para>
 		<para>
 			<guilabel>Recurse submodule</guilabel>
