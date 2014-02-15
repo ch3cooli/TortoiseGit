@@ -1767,14 +1767,6 @@ msgstr ""
 msgid "Already up to date."
 msgstr ""
 
-#. Resource IDs: (1482)
-msgid "Always push to the selected remote archive for this local branch"
-msgstr ""
-
-#. Resource IDs: (1485)
-msgid "Always push to the selected remote branch for this local branch"
-msgstr ""
-
 #. Resource IDs: (197)
 msgid "Always use the system locale settings to show times and dates"
 msgstr ""
@@ -1862,6 +1854,10 @@ msgstr ""
 
 #. Resource IDs: (1495)
 msgid "Arbitrary &URL:"
+msgstr ""
+
+#. Resource IDs: (1482)
+msgid "Archive"
 msgstr ""
 
 #. Resource IDs: (68)
@@ -8959,6 +8955,10 @@ msgstr ""
 
 #. Resource IDs: (82)
 msgid "This is not a valid path!\nA valid path must not contain '<<>|\"?*:' or one of the following device names:\ncom1-com9, lpt1-lpt9, prn, aux, con, nul, clock$"
+msgstr ""
+
+#. Resource IDs: (65535)
+msgid "This local branch: always push to selected remote"
 msgstr ""
 
 #. Resource IDs: (3857)

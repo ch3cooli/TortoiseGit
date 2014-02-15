@@ -1133,10 +1133,9 @@ BEGIN
     CONTROL         "&Autoload Putty Key",IDC_PUTTYKEY_AUTOLOAD,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,190,279,10
     CONTROL         "&Set upstream/track remote branch",IDC_PROC_PUSH_SET_UPSTREAM,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,201,279,10
-    CONTROL         "Always push to the selected remote archive for this local branch",IDC_PROC_PUSH_SET_PUSHREMOTE,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,212,279,10
-    CONTROL         "Always push to the selected remote branch for this local branch",IDC_PROC_PUSH_SET_PUSHBRANCH,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,223,279,10
+    LTEXT           "This local branch: always push to selected remote",IDC_STATIC,15,213,184,8
+    CONTROL         "Archive",IDC_PROC_PUSH_SET_PUSHREMOTE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,205,212,47,10
+    CONTROL         "Branch",IDC_PROC_PUSH_SET_PUSHBRANCH,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,260,212,47,10
     LTEXT           "Recurse submodule",IDC_STATIC_RECURSE_SUBMODULES,15,234,100,10
     COMBOBOX        IDC_COMBOBOX_RECURSE_SUBMODULES,125,234,100,65,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
     DEFPUSHBUTTON   "OK",IDOK,143,259,50,14
@@ -4389,7 +4388,7 @@ BEGIN
     IDS_REFCOMPAREHIDEUNCHANGED_TT "Hide unchanged refs in Ref Compare List"
 END
 
-#endif    // English (U.S.) resources
+#endif    // English (United States) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
