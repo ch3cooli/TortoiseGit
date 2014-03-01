@@ -22,8 +22,6 @@
 #include "BrowseRefsDlg.h"
 #include "MessageBox.h"
 
-static UINT WM_GUIUPDATES = RegisterWindowMessage(_T("TORTOISEGIT_CHOOSEVERSION_GUIUPDATES"));
-
 class CChooseVersion
 {
 public:
@@ -210,7 +208,7 @@ protected:
 			m_ChooseVersioinTags.SetCurSel(0);
 		});
 
-		m_pWin->SendMessage(WM_GUIUPDATES);
+		m_pWin->SendFunc([this] () { UpdateGUI(); });
 
 		InterlockedExchange(&m_bLoadingThreadRunning, FALSE);
 		return 0;
@@ -286,7 +284,6 @@ public:
 	DDX_Control(pDX, IDC_RADIO_TAGS, m_RadioTag);
 
 #define CHOOSE_VERSION_EVENT\
-	ON_REGISTERED_MESSAGE(WM_GUIUPDATES,	OnUpdateGUIHost)\
 	ON_BN_CLICKED(IDC_RADIO_HEAD,			OnBnClickedChooseRadioHost)\
 	ON_BN_CLICKED(IDC_RADIO_BRANCH,			OnBnClickedChooseRadioHost)\
 	ON_BN_CLICKED(IDC_RADIO_TAGS,			OnBnClickedChooseRadioHost)\
@@ -305,7 +302,6 @@ public:
 	}
 
 #define CHOOSE_EVENT_RADIO() \
-	LRESULT OnUpdateGUIHost(WPARAM, LPARAM) { UpdateGUI(); return 0; } \
 	afx_msg void OnBnClickedChooseRadioHost(){OnBnClickedChooseRadio();}\
 	afx_msg void OnBnClickedShow(){OnBnClickedChooseVersion();}\
 	afx_msg void OnBnClickedButtonBrowseRefHost(){OnBnClickedButtonBrowseRef();}

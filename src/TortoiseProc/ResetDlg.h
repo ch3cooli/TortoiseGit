@@ -39,7 +39,6 @@ protected:
 	afx_msg void OnBnClickedChooseRadioHost();
 	afx_msg void OnBnClickedShow();
 	afx_msg void OnBnClickedButtonBrowseRefHost(){OnBnClickedButtonBrowseRef();}
-	LRESULT OnUpdateGUIHost(WPARAM, LPARAM) { UpdateGUI(); return 0; }
 	virtual void OnVersionChanged();
 	virtual void OnOK();
 	afx_msg void OnBnClickedShowModifiedFiles();
