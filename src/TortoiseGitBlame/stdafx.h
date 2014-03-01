@@ -53,6 +53,7 @@
 #include <fstream>
 #include <set>
 #include <algorithm>
+#include <functional>
 
 
 

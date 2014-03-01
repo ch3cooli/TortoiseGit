@@ -1,6 +1,7 @@
 // TortoiseGit - a Windows shell extension for easy version control
 
 // Copyright (C) 2003-2013 - TortoiseSVN
+// Copyright (C) 2014 - TortoiseGit
 
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -22,6 +23,8 @@
 #include "TaskbarUUID.h"
 
 #pragma comment(lib, "htmlhelp.lib")
+
+const UINT WM_INVOKEFUNC = ::RegisterWindowMessage(_T("TORTOISEGIT_INVOKEFUNC"));
 
 /**
  * \ingroup TortoiseProc
@@ -237,6 +240,13 @@ protected:
 		SetCursorPos(pt.x, pt.y);
 	}
 
+public:
+	void SendFunc(std::function<void()> fn)
+	{
+		auto pfn = new std::function<void()>(fn);
+		SendMessage(WM_INVOKEFUNC, (WPARAM)nullptr, (LPARAM)pfn);
+	}
+
 protected:
 	DECLARE_MESSAGE_MAP()
 
@@ -268,6 +278,13 @@ private:
 	afx_msg LRESULT OnTaskbarButtonCreated(WPARAM /*wParam*/, LPARAM /*lParam*/)
 	{
 		SetUUIDOverlayIcon(m_hWnd);
+		return 0;
+	}
+
+	afx_msg LRESULT OnInvokeFunc(WPARAM, LPARAM lParam)
+	{
+		auto pfn = (std::function<void()> *)lParam;
+		(*pfn)();
 		return 0;
 	}
 

@@ -44,6 +44,7 @@
 #include <map>
 #include <vector>
 #include <algorithm>
+#include <functional>
 
 #pragma warning(push)
 #include "apr_general.h"
