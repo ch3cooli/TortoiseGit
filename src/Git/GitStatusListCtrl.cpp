@@ -1540,7 +1540,7 @@ void CGitStatusListCtrl::OnContextMenuList(CWnd * pWnd, CPoint point)
 
 				if (!g_Git.IsInitRepos() && (m_dwContextMenus & GITSLC_POPGNUDIFF))
 				{
-					popup.AppendMenuIcon(IDGITLC_GNUDIFF1, IDS_LOG_POPUP_GNUDIFF, IDI_DIFF);
+					popup.AppendMenuIcon(IDGITLC_GNUDIFF1, IDS_LOG_POPUP_GNUDIFF, IDI_TORTOISEUDIFF);
 					bEntryAdded = true;
 				}
 
@@ -1568,7 +1568,7 @@ void CGitStatusListCtrl::OnContextMenuList(CWnd * pWnd, CPoint point)
 					}
 					if (m_dwContextMenus & this->GetContextMenuBit(IDGITLC_GNUDIFF2))
 					{
-						popup.AppendMenuIcon(IDGITLC_GNUDIFF2, IDS_LOG_POPUP_GNUDIFF, IDI_DIFF);
+						popup.AppendMenuIcon(IDGITLC_GNUDIFF2, IDS_LOG_POPUP_GNUDIFF, IDI_TORTOISEUDIFF);
 					}
 				}
 			}

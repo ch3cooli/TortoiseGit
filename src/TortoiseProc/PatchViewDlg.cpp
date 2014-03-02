@@ -63,6 +63,8 @@ BOOL CPatchViewDlg::OnInitDialog()
 
 	m_ctrlPatchView.SetUDiffStyle();
 
+	SetIcon(AfxGetApp()->LoadIcon(IDI_TORTOISEUDIFF), TRUE);		// Set big icon
+	SetIcon(AfxGetApp()->LoadIcon(IDI_TORTOISEUDIFF), FALSE);		// Set small icon
 	return TRUE;  // return TRUE unless you set the focus to a control
 	// EXCEPTION: OCX Property Pages should return FALSE
 }
