@@ -50,7 +50,7 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDI_TORTOISEUDIFF       ICON                    "TortoiseUDiff.ico"
+IDI_TORTOISEUDIFF       ICON                    "..\\Resources\\TortoiseUDiff.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //

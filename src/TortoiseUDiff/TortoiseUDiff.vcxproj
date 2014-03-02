@@ -80,7 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Resources\cancel-normal.ico" />
-    <None Include="TortoiseUDiff.ico" />
+    <None Include="..\Resources\TortoiseUDiff.ico" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="TortoiseUDiff.rc" />

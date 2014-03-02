@@ -103,7 +103,7 @@
     <None Include="..\Resources\cancel-normal.ico">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="TortoiseUDiff.ico">
+    <None Include="..\Resources\TortoiseUDiff.ico">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
