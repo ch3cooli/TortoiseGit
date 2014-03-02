@@ -1535,12 +1535,16 @@ void CPicWindow::BuildInfoString(TCHAR * buf, int size, bool bTooltip)
     if (pSecondPic && pTheOtherPic)
     {
         _stprintf_s(buf, size,
-            (TCHAR const *)ResString(hResource, bTooltip ? IDS_DUALIMAGEINFOTT : IDS_DUALIMAGEINFO),
+            (TCHAR const *)ResString(hResource, bTooltip ? IDS_IMAGEINFOTT : IDS_IMAGEINFO),
             picture.GetFileSizeAsText().c_str(), picture.GetFileSizeAsText(false).c_str(),
             picture.m_Width, picture.m_Height,
             picture.GetHorizontalResolution(), picture.GetVerticalResolution(),
             picture.m_ColorDepth,
-            (UINT)GetZoom(),
+            (UINT)GetZoom());
+        _tcscat_s(buf, size, _T("\n\n"));
+        size_t len = _tcsnlen(buf, size);
+        _stprintf_s(buf + len, size - len,
+            (TCHAR const *)ResString(hResource, bTooltip ? IDS_IMAGEINFOTT : IDS_IMAGEINFO),
             pSecondPic->GetFileSizeAsText().c_str(), pSecondPic->GetFileSizeAsText(false).c_str(),
             pSecondPic->m_Width, pSecondPic->m_Height,
             pSecondPic->GetHorizontalResolution(), pSecondPic->GetVerticalResolution(),

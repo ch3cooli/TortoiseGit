@@ -13,11 +13,9 @@
 #define IDS_INVALIDIMAGEINFO            106
 #define IDI_TORTOISEIDIFF               107
 #define IDS_IMAGEINFO                   107
-#define IDS_DUALIMAGEINFO               108
 #define IDC_TORTOISEIDIFF               109
 #define IDS_DIMENSIONSANDFRAMES         110
 #define IDS_IMAGEINFOTT                 111
-#define IDS_DUALIMAGEINFOTT             112
 #define IDS_ALPHABUTTONTT               113
 #define IDS_SELECT                      114
 #define IDD_OPEN                        130
