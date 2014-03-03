@@ -58,6 +58,8 @@ BOOL CPatchViewDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
+	SetWindowLongPtr(m_hWnd, GWL_EXSTYLE, ::GetWindowLongPtr(m_hWnd, GWL_EXSTYLE) | 0x00080000);
+	SetLayeredWindowAttributes(0, 127, 0x00000002); 
 	m_ctrlPatchView.Init(*m_pProjectProperties);
 	m_ctrlPatchView.SetFont((CString)CRegString(_T("Software\\TortoiseGit\\LogFontName"), _T("Courier New")), (DWORD)CRegDWORD(_T("Software\\TortoiseGit\\LogFontSize"), 8));
 

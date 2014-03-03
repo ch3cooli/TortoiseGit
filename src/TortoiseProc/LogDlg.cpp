@@ -63,7 +63,7 @@ CLogDlg::CLogDlg(CWnd* pParent /*=NULL*/)
 	, m_pNotifyWindow(NULL)
 
 	, m_bAscending(FALSE)
-
+	, m_LastWindowSizeType((UINT)-1)
 	, m_limit(0)
 	, m_hAccel(NULL)
 {
@@ -2406,6 +2406,24 @@ void CLogDlg::OnSize(UINT nType, int cx, int cy)
 	__super::OnSize(nType, cx, cy);
 	//set range
 	SetSplitterRange();
+
+	int oType = m_LastWindowSizeType;
+	m_LastWindowSizeType = nType;
+	if (oType == SIZE_MAXIMIZED && nType == SIZE_RESTORED)
+	{
+		if (!::IsWindow(this->m_patchViewdlg.m_hWnd))
+			return;
+
+		CRect thisrect, patchrect;
+		this->GetWindowRect(thisrect);
+		this->m_patchViewdlg.GetWindowRect(patchrect);
+
+		patchrect.left = thisrect.right;
+		patchrect.top = thisrect.top;
+		patchrect.right = patchrect.left + thisrect.Width();
+		patchrect.bottom = thisrect.bottom;
+		m_patchViewdlg.MoveWindow(patchrect);
+	}
 }
 
 void CLogDlg::OnRefresh()

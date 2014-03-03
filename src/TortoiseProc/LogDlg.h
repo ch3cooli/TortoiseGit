@@ -237,6 +237,7 @@ private:
 	CRect				m_MsgViewOrigRect;
 	CRect				m_LogListOrigRect;
 	CRect				m_ChgOrigRect;
+	UINT				m_LastWindowSizeType;
 
 	//volatile LONG		m_bNoDispUpdates;
 	CDateTimeCtrl		m_DateFrom;
