@@ -94,8 +94,10 @@ void CPatchViewDlg::OnSize(UINT nType, int cx, int cy)
 	{
 		CRect rect;
 		GetClientRect(rect);
-		GetDlgItem(IDC_PATCH)->MoveWindow(0, 0, cx, cy);
 		CRect rect2;
+		m_ctrlPatchView.GetWindowRect(rect2);
+		ScreenToClient(rect2);
+		GetDlgItem(IDC_PATCH)->MoveWindow(rect2.left, rect2.top, cx - rect2.left, cy - rect2.top);
 		m_ctrlPatchView.GetClientRect(rect);
 		m_ctrlPatchView.Call(SCI_SETSCROLLWIDTH, rect.Width() - 4);
 	}
