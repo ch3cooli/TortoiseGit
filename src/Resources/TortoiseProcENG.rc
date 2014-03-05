@@ -1650,7 +1650,10 @@ STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_THICKFR
 CAPTION "View Patch"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
-    CONTROL         "Scintilla",IDC_PATCH,"Scintilla",WS_TABSTOP,0,0,248,195,WS_EX_STATICEDGE
+    CONTROL         "Transparent on losing focus",IDC_TRANSPARENTLOSTFOCUS,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,3,2,129,10
+    CONTROL         "",IDC_SLIDER_ALPHA,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | TBS_TOOLTIPS | WS_TABSTOP,134,0,52,15
+    CONTROL         "Scintilla",IDC_PATCH,"Scintilla",WS_TABSTOP,0,15,248,180,WS_EX_STATICEDGE
 END
 
 IDD_SVNIGNORE DIALOGEX 0, 0, 289, 86
@@ -4424,7 +4427,7 @@ BEGIN
     IDS_REFCOMPAREHIDEUNCHANGED_TT "Hide unchanged refs in Ref Compare List"
 END
 
-#endif    // English (U.S.) resources
+#endif    // English (United States) resources
 /////////////////////////////////////////////////////////////////////////////
 
 

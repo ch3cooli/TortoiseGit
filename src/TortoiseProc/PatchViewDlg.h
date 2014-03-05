@@ -51,8 +51,16 @@ public:
 protected:
 	DECLARE_MESSAGE_MAP()
 
+	CSliderCtrl			m_SliderAlpha;
+	BOOL				m_bTransparentLoseFocus;
+
 	virtual BOOL OnInitDialog();
+	afx_msg void OnHScroll(UINT, UINT, CScrollBar *);
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg void OnMoving(UINT fwSide, LPRECT pRect);
 	afx_msg void OnClose();
+	afx_msg void OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized);
+	afx_msg void OnBnClickedTransparentLostFocus();
+
+	void ApplyTransparent(bool active = true);
 };

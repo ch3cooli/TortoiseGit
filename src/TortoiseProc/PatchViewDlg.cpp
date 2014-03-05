@@ -32,6 +32,7 @@ CPatchViewDlg::CPatchViewDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CPatchViewDlg::IDD, pParent)
 	, m_ParentDlg(nullptr)
 	, m_pProjectProperties(nullptr)
+	, m_bTransparentLoseFocus(false)
 {
 
 }
@@ -44,12 +45,17 @@ void CPatchViewDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_PATCH, m_ctrlPatchView);
+	DDX_Check(pDX, IDC_TRANSPARENTLOSTFOCUS, m_bTransparentLoseFocus);
+	DDX_Control(pDX, IDC_SLIDER_ALPHA, m_SliderAlpha);
 }
 
 BEGIN_MESSAGE_MAP(CPatchViewDlg, CDialog)
 	ON_WM_SIZE()
 	ON_WM_MOVING()
 	ON_WM_CLOSE()
+	ON_WM_ACTIVATE()
+	ON_WM_HSCROLL()
+	ON_BN_CLICKED(IDC_TRANSPARENTLOSTFOCUS, OnBnClickedTransparentLostFocus)
 END_MESSAGE_MAP()
 
 // CPatchViewDlg message handlers
@@ -62,9 +68,31 @@ BOOL CPatchViewDlg::OnInitDialog()
 	m_ctrlPatchView.SetFont((CString)CRegString(_T("Software\\TortoiseGit\\LogFontName"), _T("Courier New")), (DWORD)CRegDWORD(_T("Software\\TortoiseGit\\LogFontSize"), 8));
 
 	m_ctrlPatchView.SetUDiffStyle();
+	m_SliderAlpha.SetRange(1, 255, TRUE);
+	m_SliderAlpha.SetPos(255);
+
+	UpdateData(FALSE);
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 	// EXCEPTION: OCX Property Pages should return FALSE
+}
+
+void CPatchViewDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
+{
+	if (pScrollBar == (void *)&m_SliderAlpha)
+	{
+		switch (nSBCode)
+		{
+		case SB_THUMBPOSITION:
+		case SB_THUMBTRACK:
+			{
+				ApplyTransparent();
+				break;
+			}
+		}
+	}
+
+	CDialog::OnHScroll(nSBCode, nPos, pScrollBar);
 }
 
 void CPatchViewDlg::SetText(const CString& text)
@@ -121,4 +149,33 @@ void CPatchViewDlg::OnClose()
 {
 	CDialog::OnClose();
 	m_ParentDlg->TogglePatchView();
+}
+
+void CPatchViewDlg::OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized)
+{
+	CDialog::OnActivate(nState, pWndOther, bMinimized);
+	if (nState == WA_INACTIVE)
+		ApplyTransparent(false);
+	else
+		ApplyTransparent();
+}
+
+void CPatchViewDlg::OnBnClickedTransparentLostFocus()
+{
+	UpdateData();
+	ApplyTransparent();
+}
+
+void CPatchViewDlg::ApplyTransparent(bool active)
+{
+	BYTE curpos = (BYTE)m_SliderAlpha.GetPos();
+	if ((m_bTransparentLoseFocus && !active || !m_bTransparentLoseFocus) && curpos < 255)
+	{
+		SetWindowLongPtr(m_hWnd, GWL_EXSTYLE, ::GetWindowLongPtr(m_hWnd, GWL_EXSTYLE) | 0x00080000);
+		SetLayeredWindowAttributes(0, curpos, 0x00000002);
+	}
+	else
+	{
+		SetWindowLongPtr(m_hWnd, GWL_EXSTYLE, ::GetWindowLongPtr(m_hWnd, GWL_EXSTYLE) & ~0x00080000);
+	}
 }
