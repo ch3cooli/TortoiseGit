@@ -3821,7 +3821,7 @@ LRESULT CGitLogListBase::OnScrollToMessage(WPARAM itemToSelect, LPARAM /*lParam*
 }
 LRESULT CGitLogListBase::OnFindDialogMessage(WPARAM /*wParam*/, LPARAM /*lParam*/)
 {
-
+	CWaitCursor waitCursor;
 	ASSERT(m_pFindDialog != NULL);
 	bool bFound = false;
 	int i=0;
