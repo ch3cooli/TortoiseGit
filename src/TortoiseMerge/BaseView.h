@@ -187,7 +187,7 @@ public: // methods
 	virtual void	UseLeftFile() {return UseViewFile(m_pwndLeft); }
 	virtual void	UseRightBlock() {return UseViewBlock(m_pwndRight); }
 	virtual void	UseRightFile() {return UseViewFile(m_pwndRight); }
-	virtual void	UseLeftFileExceptMarked() { return UseViewFileExceptMarked(m_pwndLeft); }
+	virtual void	LeaveOnlyMarkedBlocks() { return LeaveOnlyMarkedBlocks(m_pwndLeft); }
 
 	// ViewData methods
 	void			InsertViewData(int index, const CString& sLine, DiffStates state, int linenumber, EOL ending, HIDESTATE hide, int movedline);
@@ -436,7 +436,7 @@ protected:  // methods
 	virtual void	UseViewFile(CBaseView * /*pwndView*/) {}
 	virtual void	MarkBlock(bool /*marked*/) {}
 	void			MarkBlock(bool marked, int nFirstViewLine, int nLastViewLine);
-	void			UseViewFileExceptMarked(CBaseView *pwndView);
+	void			LeaveOnlyMarkedBlocks(CBaseView *pwndView);
 
 	virtual void	AddContextItems(CIconMenu& popup, DiffStates state);
 	void			AddCutCopyAndPaste(CIconMenu& popup);
@@ -607,7 +607,7 @@ protected:  // variables
 		POPUPCOMMAND_USEBOTHRIGHTFIRST,
 		POPUPCOMMAND_MARKBLOCK,
 		POPUPCOMMAND_UNMARKBLOCK,
-		POPUPCOMMAND_USELEFTFILEEXCEPTMARKED,
+		POPUPCOMMAND_LEAVEONLYMARKEDBLOCKS,
 		// multiple writable views
 		POPUPCOMMAND_PREPENDFROMRIGHT,
 		POPUPCOMMAND_REPLACEBYRIGHT,
