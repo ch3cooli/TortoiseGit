@@ -503,6 +503,7 @@ void CRebaseDlg::OnCbnSelchangeUpstream()
 
 void CRebaseDlg::FetchLogList()
 {
+	CWaitCursor waitCursor;
 	CGitHash base,hash,upstream;
 	m_IsFastForward=FALSE;
 
