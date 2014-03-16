@@ -343,7 +343,11 @@ void CPullFetchDlg::OnBnClickedOk()
 
 	m_RemoteBranch.SaveHistory();
 	this->m_regRebase=this->m_bRebase;
-	m_regFFonly = m_bFFonly;
+	CString pullFFconfig;
+	if (CAppUtils::GetMsysgitVersion() >= 0x02000000)
+		pullFFconfig = g_Git.GetConfigValue(_T("pull.ff"));
+	if (pullFFconfig.IsEmpty())
+		m_regFFonly = m_bFFonly;
 
 	m_regAutoLoadPutty = m_bAutoLoad;
 
@@ -381,6 +385,14 @@ void CPullFetchDlg::OnBnClickedButtonBrowseRef()
 void CPullFetchDlg::OnBnClickedCheckFfonly()
 {
 	UpdateData();
+	if (CAppUtils::GetMsysgitVersion() >= 0x02000000)
+	{
+		CString pullFFconfig = g_Git.GetConfigValue(_T("pull.ff"));
+		if (pullFFconfig == _T("only"))
+			m_bFFonly = TRUE;
+		else if (pullFFconfig == _T("false"))
+			m_bNoFF = TRUE;
+	}
 	if (m_bNoFF)
 	{
 		m_bFFonly = FALSE;
