@@ -59,6 +59,7 @@ BEGIN_MESSAGE_MAP(CTortoiseGitBlameView, CView)
 	ON_COMMAND(ID_FILE_PRINT_DIRECT, &CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CTortoiseGitBlameView::OnFilePrintPreview)
 	ON_COMMAND(ID_EDIT_FIND,OnEditFind)
+	ON_COMMAND(ID_EDIT_FINDNEXT, OnEditFindNext)
 	ON_COMMAND(ID_EDIT_GOTO,OnEditGoto)
 	ON_COMMAND(ID_EDIT_COPY, CopyToClipboard)
 	ON_UPDATE_COMMAND_UI(ID_EDIT_COPY, OnUpdateViewCopyToClipboard)
@@ -115,6 +116,8 @@ CTortoiseGitBlameView::CTortoiseGitBlameView()
 	, bIgnoreSpaces(false)
 	, bIgnoreAllSpaces(false)
 	, m_MouseLine(-1)
+	, m_dwFindFlags(0)
+	, m_hAccel(nullptr)
 {
 	hInstance = 0;
 	hResource = 0;
@@ -180,6 +183,8 @@ CTortoiseGitBlameView::CTortoiseGitBlameView()
 	m_sAuthor.LoadString(IDS_LOG_AUTHOR);
 	m_sDate.LoadString(IDS_LOG_DATE);
 	m_sMessage.LoadString(IDS_LOG_MESSAGE);
+
+	m_hAccel = LoadAccelerators(AfxGetResourceHandle(), MAKEINTRESOURCE(IDR_TORTOISE_GIT_BLAME_MAINFRAME));
 
 #ifdef USE_TEMPFILENAME
 	m_Buffer = NULL;
@@ -1855,6 +1860,14 @@ void CTortoiseGitBlameView::OnMouseMove(UINT /*nFlags*/, CPoint /*point*/)
 BOOL CTortoiseGitBlameView::PreTranslateMessage(MSG* pMsg)
 {
 	m_ToolTip.RelayEvent(pMsg);
+
+	if (m_hAccel)
+	{
+		int ret = TranslateAccelerator(m_hWnd, m_hAccel, pMsg);
+		if (ret)
+			return TRUE;
+	}
+
 	return CView::PreTranslateMessage(pMsg);
 }
 
@@ -1881,6 +1894,14 @@ void CTortoiseGitBlameView::OnEditFind()
 		flags |= FR_MATCHCASE;
 
 	m_pFindDialog->Create(TRUE, oneline, NULL, flags, this);
+}
+
+void CTortoiseGitBlameView::OnEditFindNext()
+{
+	if (m_sFindText.IsEmpty())
+		OnEditFind();
+	else
+		DoSearch(m_sFindText, m_dwFindFlags);
 }
 
 void CTortoiseGitBlameView::OnEditGoto()
@@ -1914,7 +1935,8 @@ LRESULT CTortoiseGitBlameView::OnFindDialogMessage(WPARAM /*wParam*/, LPARAM /*l
 	{
 		//read data from dialog
 		CString FindName = m_pFindDialog->GetFindString();
-
+		m_sFindText = FindName;
+		m_dwFindFlags = m_pFindDialog->m_fr.Flags;
 		DoSearch(FindName,m_pFindDialog->m_fr.Flags);
 	}
 

@@ -1,6 +1,6 @@
 // TortoiseGit - a Windows shell extension for easy version control
 
-// Copyright (C) 2008-2013 - TortoiseGit
+// Copyright (C) 2008-2014 - TortoiseGit
 // Copyright (C) 2003-2008, 2014 - TortoiseSVN
 
 // This program is free software; you can redistribute it and/or
@@ -126,6 +126,7 @@ protected:
 	BOOL PreTranslateMessage(MSG* pMsg);
 	afx_msg void OnChangeEncode(UINT nID);
 	afx_msg void OnEditFind();
+	afx_msg void OnEditFindNext();
 	afx_msg void OnEditGoto();
 	afx_msg void OnFilePrintPreview();
 	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
@@ -276,6 +277,9 @@ protected:
 	CGitBlameLogList * GetLogList();
 
 	CFindReplaceDialog		*m_pFindDialog;
+	CString					m_sFindText;
+	DWORD					m_dwFindFlags;
+	HACCEL					m_hAccel;
 
 #ifdef USE_TEMPFILENAME
 	char					*m_Buffer;
