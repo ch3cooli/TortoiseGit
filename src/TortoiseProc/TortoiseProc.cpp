@@ -87,6 +87,9 @@ CString g_sGroupingUUID;
 CString g_sGroupingIcon;
 bool g_bGroupingRemoveIcon = false;
 HWND hWndExplorer;
+bool g_bPipeCaller = false;
+bool g_bPipeCallee = false;
+bool LaunchApplicationFromPipe();
 
 #if ENABLE_CRASHHANLDER
 CCrashReportTGit crasher(L"TortoiseGit " _T(APP_X64_STRING), TGIT_VERMAJOR, TGIT_VERMINOR, TGIT_VERMICRO, TGIT_VERBUILD, TGIT_VERDATE);
@@ -251,6 +254,20 @@ BOOL CTortoiseProcApp::InitInstance()
 	AfxGetApp()->m_pszProfileName = _tcsdup(_T("TortoiseProc")); // w/o this ResizableLib will store data under TortoiseGitProc which is not compatible with older versions
 
 	CCmdLineParser parser(AfxGetApp()->m_lpCmdLine);
+	if (parser.HasKey(_T("pipe")))
+	{
+		CString pipeOption = parser.GetVal(_T("pipe"));
+		if (pipeOption == _T("caller"))
+			g_bPipeCaller = true;
+		else if (pipeOption == _T("callee"))
+			g_bPipeCallee = true;
+		else if (pipeOption == _T("both"))
+			g_bPipeCaller = g_bPipeCallee = true;
+		if (g_bPipeCallee)
+		{
+			LaunchApplicationFromPipe();
+		}
+	}
 
 	hWndExplorer = NULL;
 	CString sVal = parser.GetVal(_T("hwnd"));

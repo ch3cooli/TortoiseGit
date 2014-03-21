@@ -26,12 +26,154 @@
 #include "FormatMessageWrapper.h"
 #include "registry.h"
 #include "SelectFileFilter.h"
+#include "DirFileEnum.h"
 
 extern CString sOrigCWD;
 extern CString g_sGroupingUUID;
+extern bool g_bPipeCaller;
+
+#define PIPEBUFSIZE 32768
+#define PIPEPREFIX _T("\\\\.\\pipe\\TGitPipe")
+
+static CString GetLaunchApplicationPipePrefix(const CString &exe)
+{
+	CString file = exe;
+	PathFindFileName(file.GetBuffer(MAX_PATH));
+	file.ReleaseBuffer();
+	CString pipeID;
+	pipeID.Format(_T("%s\\%s"), PIPEPREFIX, file);
+	return pipeID;
+}
+
+static CString GetLaunchApplicationPipeID(const CString &exe)
+{
+	CString pipeID;
+	pipeID.Format(_T("%s\\%u"), GetLaunchApplicationPipePrefix(exe), GetProcessId(GetCurrentProcess()));
+	return pipeID;
+}
+
+static bool LaunchApplicationToPipe(const CString& sCommandLine, UINT idErrMessageFormat, bool bWaitForStartup, CString *cwd)
+{
+	CString theCWD = sOrigCWD;
+	if (cwd != nullptr)
+		theCWD = *cwd;
+
+	CString file;
+	CString param;
+	int pos = sCommandLine.Find('"');
+	if (pos == 0)
+	{
+		pos = sCommandLine.Find('"', 2);
+		if (pos > 1)
+		{
+			file = sCommandLine.Mid(1, pos - 1);
+			param = sCommandLine.Mid(pos + 1);
+		}
+		else
+		{
+			if (idErrMessageFormat != 0)
+			{
+				CString temp;
+				temp.Format(idErrMessageFormat, CFormatMessageWrapper());
+				MessageBox(NULL, temp, _T("TortoiseGit"), MB_OK | MB_ICONINFORMATION);
+			}
+			return false;
+		}
+	}
+	else
+	{
+		pos = sCommandLine.Find(' ', 1);
+		if (pos > 0)
+		{
+			file = sCommandLine.Mid(0, pos);
+			param = sCommandLine.Mid(pos + 1);
+		}
+		else
+			file = sCommandLine;
+	}
+	file.Replace(_T(":"), _T(""));
+
+	HANDLE hPipe = CreateNamedPipe(
+		GetLaunchApplicationPipeID(file),
+		PIPE_ACCESS_DUPLEX,       // read/write access
+		PIPE_TYPE_MESSAGE |       // message type pipe
+		PIPE_READMODE_MESSAGE |   // message-read mode
+		PIPE_WAIT,                // blocking mode
+		PIPE_UNLIMITED_INSTANCES, // max. instances
+		PIPEBUFSIZE,                  // output buffer size
+		PIPEBUFSIZE,                  // input buffer size
+		NMPWAIT_USE_DEFAULT_WAIT, // client time-out
+		NULL);                // NULL DACL
+
+	if (!hPipe)
+		return false;
+
+	// Wait for the client to connect; if it succeeds,
+	// the function returns a nonzero value. If the function returns
+	// zero, GetLastError returns ERROR_PIPE_CONNECTED.
+	BOOL fConnected = ConnectNamedPipe(hPipe, NULL) ? TRUE : (GetLastError() == ERROR_PIPE_CONNECTED);
+	if (fConnected)
+	{
+		DWORD num = 0;
+		WriteFile(hPipe, (LPCTSTR)theCWD, theCWD.GetLength() + 1, &num, nullptr);
+		WriteFile(hPipe, (LPCTSTR)param, param.GetLength() + 1, &num, nullptr);
+		CloseHandle(hPipe);
+		return true;
+	}
+	else
+	{
+		// The client could not connect, so close the pipe.
+		CloseHandle(hPipe);
+		return false;
+	}
+}
+
+bool LaunchApplicationFromPipe()
+{
+	CString exe;
+	GetModuleFileName(nullptr, exe.GetBuffer(MAX_PATH), MAX_PATH);
+	exe.ReleaseBuffer();
+	CString prefix;
+	prefix.Format(_T("%s\\*"), GetLaunchApplicationPipePrefix(exe));
+	CStringArray arr;
+	CSimpleFileFind files(prefix);
+	while (files.FindNextFileNoDirectories())
+		arr.Add(files.GetFileName());
+	if (arr.GetCount() == 1)
+	{
+		CString pipeName;
+		pipeName.Format(_T("%s\\%s"), prefix, arr[0]);
+		HANDLE hPipe = CreateFile(
+						arr[0],                       // pipe name
+						GENERIC_READ |                  // read and write access
+						GENERIC_WRITE,
+						0,                              // no sharing
+						NULL,                           // default security attributes
+						OPEN_EXISTING,                  // opens existing pipe
+						FILE_FLAG_OVERLAPPED,           // default attributes
+						NULL);                          // no template file
+		if (!hPipe)
+		{
+			return false;
+		}
+
+		DWORD dwMode = PIPE_READMODE_MESSAGE;
+		if (SetNamedPipeHandleState(
+			hPipe,		// pipe handle
+			&dwMode,	// new pipe mode
+			NULL,		// don't set maximum bytes
+			NULL))		// don't set maximum time
+		{
+			
+		}
+	}
+}
 
 bool CCommonAppUtils::LaunchApplication(const CString& sCommandLine, UINT idErrMessageFormat, bool bWaitForStartup, CString *cwd, bool uac)
 {
+	if (g_bPipeCaller)
+		return LaunchApplicationToPipe(sCommandLine, idErrMessageFormat, bWaitForStartup, cwd);
+
 	CString theCWD = sOrigCWD;
 	if (cwd != NULL)
 		theCWD = *cwd;

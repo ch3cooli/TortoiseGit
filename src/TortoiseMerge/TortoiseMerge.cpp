@@ -1,6 +1,6 @@
 // TortoiseGitMerge - a Diff/Patch program
 
-// Copyright (C) 2013 - TortoiseGit
+// Copyright (C) 2013-2014 - TortoiseGit
 // Copyright (C) 2006-2014 - TortoiseSVN
 
 // This program is free software; you can redistribute it and/or
@@ -81,6 +81,8 @@ CCrashReportTGit g_crasher(L"TortoiseGitMerge " _T(APP_X64_STRING), TGIT_VERMAJO
 CString g_sGroupingUUID;
 CString g_sGroupingIcon;
 bool g_bGroupingRemoveIcon = false;
+bool g_bPipeCaller = false;
+bool g_bPipeCallee = false;
 
 // CTortoiseMergeApp initialization
 BOOL CTortoiseMergeApp::InitInstance()
@@ -203,6 +205,16 @@ BOOL CTortoiseMergeApp::InitInstance()
 		&params);
 
 	CCmdLineParser parser = CCmdLineParser(this->m_lpCmdLine);
+	if (parser.HasKey(_T("pipe")))
+	{
+		CString pipeOption = parser.GetVal(_T("pipe"));
+		if (pipeOption == _T("caller"))
+			g_bPipeCaller = true;
+		else if (pipeOption == _T("callee"))
+			g_bPipeCallee = true;
+		else if (pipeOption == _T("both"))
+			g_bPipeCaller = g_bPipeCallee = true;
+	}
 
 	g_sGroupingUUID = parser.GetVal(L"groupuuid");
 

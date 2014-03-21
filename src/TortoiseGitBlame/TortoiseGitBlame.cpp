@@ -77,6 +77,8 @@ CString sOrigCWD;
 CString g_sGroupingUUID;
 CString g_sGroupingIcon;
 bool g_bGroupingRemoveIcon = false;
+bool g_bPipeCaller = false;
+bool g_bPipeCallee = false;
 
 // CTortoiseGitBlameApp initialization
 
@@ -230,6 +232,16 @@ BOOL CTortoiseGitBlameApp::InitInstance()
 	AddDocTemplate(pDocTemplate);
 
 	CCmdLineParser parser = CCmdLineParser(this->m_lpCmdLine);
+	if (parser.HasKey(_T("pipe")))
+	{
+		CString pipeOption = parser.GetVal(_T("pipe"));
+		if (pipeOption == _T("caller"))
+			g_bPipeCaller = true;
+		else if (pipeOption == _T("callee"))
+			g_bPipeCallee = true;
+		else if (pipeOption == _T("both"))
+			g_bPipeCaller = g_bPipeCallee = true;
+	}
 	g_sGroupingUUID = parser.GetVal(L"groupuuid");
 
 	// Parse command line for standard shell commands, DDE, file open
