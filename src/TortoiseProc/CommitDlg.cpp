@@ -1494,18 +1494,16 @@ void CCommitDlg::OnEnChangeLogmessage()
 
 LRESULT CCommitDlg::OnGitStatusListCtrlItemCountChanged(WPARAM, LPARAM)
 {
-#if 0
-	if ((m_ListCtrl.GetItemCount() == 0)&&(m_ListCtrl.HasUnversionedItems())&&(!m_bShowUnversioned))
+	if (m_ListCtrl.GetItemCount() == 0 && m_ListCtrl.HasUnversionedItems() && !m_bShowUnversioned)
 	{
-		if (CMessageBox::Show(*this, IDS_COMMITDLG_NOTHINGTOCOMMITUNVERSIONED, IDS_APPNAME, MB_ICONINFORMATION | MB_YESNO)==IDYES)
-		{
-			m_bShowUnversioned = TRUE;
-			DWORD dwShow = GitSLC_SHOWVERSIONEDBUTNORMALANDEXTERNALSFROMDIFFERENTREPOS | GitSLC_SHOWUNVERSIONED | GitSLC_SHOWLOCKS;
-			m_ListCtrl.Show(dwShow);
-			UpdateData(FALSE);
-		}
+		m_ListCtrl.SetEmptyString(IDS_COMMITDLG_NOTHINGTOCOMMITUNVERSIONED);
+		m_ListCtrl.Invalidate();
 	}
-#endif
+	else
+	{
+		m_ListCtrl.SetEmptyString(IDS_COMMITDLG_NOTHINGTOCOMMIT);
+		m_ListCtrl.Invalidate();
+	}
 	return 0;
 }
 
