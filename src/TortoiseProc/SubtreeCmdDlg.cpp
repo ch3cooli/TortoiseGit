@@ -256,7 +256,7 @@ void CSubtreeCmdDlg::OnOK()
 	}
 	else if( choice == IDC_REMOTE_RD)
 	{
-		m_Remote.GetWindowTextW(m_URL);
+		m_URL = m_Remote.GetString();
 		m_RemoteBranch.GetWindowTextW(m_BranchName);
 	}
 
