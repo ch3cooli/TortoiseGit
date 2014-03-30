@@ -125,6 +125,9 @@ BOOL CSubtreeCmdDlg::OnInitDialog()
 		sWindowTitle = CString(MAKEINTRESOURCE(IDS_SUBTREE_TITLE_PUSH));
 		GetDlgItem(IDC_STATIC_REMOTE)->SetWindowText(CString(MAKEINTRESOURCE(IDS_SUBTREE_PUSH_GRP_REMOTE)));
 		GetDlgItem(IDC_STATIC_LOCAL)->SetWindowText(CString(MAKEINTRESOURCE(IDS_SUBTREE_PUSH_GRP_LOCAL)));
+		GetDlgItem(IDC_CHECK_SQUASH)->EnableWindow(FALSE);
+		m_bSquash = FALSE;
+		UpdateData(FALSE);
 		break;
 	}
 
