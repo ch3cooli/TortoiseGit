@@ -3848,7 +3848,8 @@ LRESULT CGitLogListBase::OnFindDialogMessage(WPARAM /*wParam*/, LPARAM /*lParam*
 
 		std::tr1::regex_constants::match_flag_type flags = std::tr1::regex_constants::match_not_null;
 
-		for (i = m_nSearchIndex + 1; ; ++i)
+		DWORD startTick = GetTickCount();
+		for (i = m_nSearchIndex + 1; !bFound ; ++i)
 		{
 			if (i >= cnt)
 			{
@@ -3867,93 +3868,107 @@ LRESULT CGitLogListBase::OnFindDialogMessage(WPARAM /*wParam*/, LPARAM /*lParam*
 
 			GitRev* pLogEntry = (GitRev*)m_arShownList.SafeGetAt(i);
 
-			CString str;
-			str+=pLogEntry->m_CommitHash.ToString();
-			str+=_T("\n");
-
-			for (size_t j = 0; j < this->m_HashMap[pLogEntry->m_CommitHash].size(); ++j)
+			const int maxType = 9;
+			for (int t = 0; t < maxType; t++)
 			{
-				str+=m_HashMap[pLogEntry->m_CommitHash][j];
-				str+=_T("\n");
-			}
-
-			str+=pLogEntry->GetAuthorEmail();
-			str+=_T("\n");
-			str+=pLogEntry->GetAuthorName();
-			str+=_T("\n");
-			str+=pLogEntry->GetBody();
-			str+=_T("\n");
-			str+=pLogEntry->GetCommitterEmail();
-			str+=_T("\n");
-			str+=pLogEntry->GetCommitterName();
-			str+=_T("\n");
-			str+=pLogEntry->GetSubject();
-			str+=_T("\n");
-
-
-			/*Because changed files list is loaded on demand when gui show,
-			  files will empty when files have not fetched.
-
-			  we can add it back by using one-way diff(with outnumber changed and rename detect.
-			  here just need changed filename list. one-way is much quicker.
-			*/
-			if(pLogEntry->m_IsFull)
-			{
-				for (int i = 0; i < pLogEntry->GetFiles(this).GetCount(); ++i)
+				CString str;
+				switch (t)
 				{
-					str+=pLogEntry->GetFiles(this)[i].GetWinPath();
-					str+=_T("\n");
-					str+=pLogEntry->GetFiles(this)[i].GetGitOldPathString();
-					str+=_T("\n");
-				}
-			}
-			else
-			{
-				if(!pLogEntry->m_IsSimpleListReady)
-					pLogEntry->SafeGetSimpleList(&g_Git);
+				case 0:
+					str = pLogEntry->m_CommitHash.ToString();
+					break;
+				case 1:
+					for (size_t j = 0; j < this->m_HashMap[pLogEntry->m_CommitHash].size(); ++j)
+					{
+						str += m_HashMap[pLogEntry->m_CommitHash][j];
+						str += _T("\n");
+					}
+				case 2:
+					str = pLogEntry->GetAuthorEmail();
+					break;
+				case 3:
+					str = pLogEntry->GetAuthorName();
+					break;
+				case 4:
+					str = pLogEntry->GetBody();
+					break;
+				case 5:
+					str = pLogEntry->GetCommitterEmail();
+					break;
+				case 6:
+					str = pLogEntry->GetCommitterName();
+					break;
+				case 7:
+					str = pLogEntry->GetSubject();
+					break;
+				case 8:
+					/*Because changed files list is loaded on demand when gui show,
+					  files will empty when files have not fetched.
 
-				for (size_t i = 0; i < pLogEntry->m_SimpleFileList.size(); ++i)
-				{
-					str+=pLogEntry->m_SimpleFileList[i];
-					str+=_T("\n");
-				}
+					  we can add it back by using one-way diff(with outnumber changed and rename detect.
+					  here just need changed filename list. one-way is much quicker.
+					*/
+					if (pLogEntry->m_IsFull)
+					{
+						for (int i = 0; i < pLogEntry->GetFiles(this).GetCount(); ++i)
+						{
+							str += pLogEntry->GetFiles(this)[i].GetWinPath();
+							str += _T("\n");
+							str += pLogEntry->GetFiles(this)[i].GetGitOldPathString();
+							str += _T("\n");
+						}
+					}
+					else
+					{
+						if(!pLogEntry->m_IsSimpleListReady)
+							pLogEntry->SafeGetSimpleList(&g_Git);
 
-			}
-
-
-			if (bRegex)
-			{
-				if (std::regex_search(std::wstring(str), pat, flags))
-				{
-					bFound = true;
+						for (size_t i = 0; i < pLogEntry->m_SimpleFileList.size(); ++i)
+						{
+							str += pLogEntry->m_SimpleFileList[i];
+							str += _T("\n");
+						}
+					}
+					break;
+				default:
 					break;
 				}
-			}
-			else
-			{
-				if (bMatchCase)
+
+				if (bRegex)
 				{
-					if (str.Find(FindText) >= 0)
+					if (std::regex_search(std::wstring(str), pat, flags))
 					{
 						bFound = true;
-						break;
+						t = maxType;
 					}
-
 				}
 				else
 				{
-					CString msg = str;
-					msg = msg.MakeLower();
-					CString find = FindText.MakeLower();
-					if (msg.Find(find) >= 0)
+					if (bMatchCase)
 					{
-						bFound = TRUE;
-						break;
+						if (str.Find(FindText) >= 0)
+						{
+							bFound = true;
+							t = maxType;
+						}
+
+					}
+					else
+					{
+						CString msg = str;
+						msg = msg.MakeLower();
+						CString find = FindText.MakeLower();
+						if (msg.Find(find) >= 0)
+						{
+							bFound = TRUE;
+							t = maxType;
+						}
 					}
 				}
 			}
 		} // for (i = this->m_nSearchIndex; i<m_arShownList.GetItemCount()&&!bFound; ++i)
-
+		DWORD endTick = GetTickCount();
+		MessageBox(std::to_wstring(endTick - startTick).c_str());
 	} // if(m_pFindDialog->FindNext())
 	//UpdateLogInfoLabel();
 
