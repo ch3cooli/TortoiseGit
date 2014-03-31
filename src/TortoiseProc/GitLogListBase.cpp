@@ -3868,27 +3868,27 @@ LRESULT CGitLogListBase::OnFindDialogMessage(WPARAM /*wParam*/, LPARAM /*lParam*
 			GitRev* pLogEntry = (GitRev*)m_arShownList.SafeGetAt(i);
 
 			CString str;
-			str+=pLogEntry->m_CommitHash.ToString();
-			str+=_T("\n");
+			str.Append(pLogEntry->m_CommitHash.ToString());
+			str.AppendChar(_T('\n'));
 
 			for (size_t j = 0; j < this->m_HashMap[pLogEntry->m_CommitHash].size(); ++j)
 			{
-				str+=m_HashMap[pLogEntry->m_CommitHash][j];
-				str+=_T("\n");
+				str.Append(m_HashMap[pLogEntry->m_CommitHash][j]);
+				str.AppendChar(_T('\n'));
 			}
 
-			str+=pLogEntry->GetAuthorEmail();
-			str+=_T("\n");
-			str+=pLogEntry->GetAuthorName();
-			str+=_T("\n");
-			str+=pLogEntry->GetBody();
-			str+=_T("\n");
-			str+=pLogEntry->GetCommitterEmail();
-			str+=_T("\n");
-			str+=pLogEntry->GetCommitterName();
-			str+=_T("\n");
-			str+=pLogEntry->GetSubject();
-			str+=_T("\n");
+			str.Append(pLogEntry->GetAuthorEmail());
+			str.AppendChar(_T('\n'));
+			str.Append(pLogEntry->GetAuthorName());
+			str.AppendChar(_T('\n'));
+			str.Append(pLogEntry->GetBody());
+			str.AppendChar(_T('\n'));
+			str.Append(pLogEntry->GetCommitterEmail());
+			str.AppendChar(_T('\n'));
+			str.Append(pLogEntry->GetCommitterName());
+			str.AppendChar(_T('\n'));
+			str.Append(pLogEntry->GetSubject());
+			str.AppendChar(_T('\n'));
 
 
 			/*Because changed files list is loaded on demand when gui show,
@@ -3901,10 +3901,10 @@ LRESULT CGitLogListBase::OnFindDialogMessage(WPARAM /*wParam*/, LPARAM /*lParam*
 			{
 				for (int i = 0; i < pLogEntry->GetFiles(this).GetCount(); ++i)
 				{
-					str+=pLogEntry->GetFiles(this)[i].GetWinPath();
-					str+=_T("\n");
-					str+=pLogEntry->GetFiles(this)[i].GetGitOldPathString();
-					str+=_T("\n");
+					str.Append(pLogEntry->GetFiles(this)[i].GetWinPath());
+					str.AppendChar(_T('\n'));
+					str.Append(pLogEntry->GetFiles(this)[i].GetGitOldPathString());
+					str.AppendChar(_T('\n'));
 				}
 			}
 			else
@@ -3914,8 +3914,8 @@ LRESULT CGitLogListBase::OnFindDialogMessage(WPARAM /*wParam*/, LPARAM /*lParam*
 
 				for (size_t i = 0; i < pLogEntry->m_SimpleFileList.size(); ++i)
 				{
-					str+=pLogEntry->m_SimpleFileList[i];
-					str+=_T("\n");
+					str.Append(pLogEntry->m_SimpleFileList[i]);
+					str.AppendChar(_T('\n'));
 				}
 
 			}
