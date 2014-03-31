@@ -2283,14 +2283,17 @@ void CGitLogListBase::CopySelectionToClipBoard(int toCopy)
 				CString from(MAKEINTRESOURCE(IDS_STATUSLIST_FROM));
 				for (int cpPathIndex = 0; cpPathIndex<pLogEntry->GetFiles(this).GetCount(); ++cpPathIndex)
 				{
-					sPaths += ((CTGitPath&)pLogEntry->GetFiles(this)[cpPathIndex]).GetActionName() + _T(": ") + pLogEntry->GetFiles(this)[cpPathIndex].GetGitPathString();
+					sPaths.Append(((CTGitPath&)pLogEntry->GetFiles(this)[cpPathIndex]).GetActionName());
+					sPaths.Append(_T(": "));
+					sPaths.Append(pLogEntry->GetFiles(this)[cpPathIndex].GetGitPathString());
 					if (((CTGitPath&)pLogEntry->GetFiles(this)[cpPathIndex]).m_Action & (CTGitPath::LOGACTIONS_REPLACED|CTGitPath::LOGACTIONS_COPY) && !((CTGitPath&)pLogEntry->GetFiles(this)[cpPathIndex]).GetGitOldPathString().IsEmpty())
 					{
 						CString rename;
 						rename.Format(from, ((CTGitPath&)pLogEntry->GetFiles(this)[cpPathIndex]).GetGitOldPathString());
-						sPaths += _T(" ") + rename;
+						sPaths.AppendChar(_T(' '));
+						sPaths.Append(rename);
 					}
-					sPaths += _T("\r\n");
+					sPaths.Append(_T("\r\n"));
 				}
 				sPaths.Trim();
 				CString body = pLogEntry->GetBody();
@@ -2302,23 +2305,35 @@ void CGitLogListBase::CopySelectionToClipBoard(int toCopy)
 					(LPCTSTR)CLoglistUtils::FormatDateAndTime(pLogEntry->GetAuthorDate(), m_DateFormat, true, m_bRelativeTimes),
 					(LPCTSTR)sMessage, (pLogEntry->GetSubject().Trim() + _T("\r\n\r\n") + body.Trim()).Trim(),
 					(LPCTSTR)sPaths);
-				sClipdata +=  sLogCopyText;
+				sClipdata.Append(sLogCopyText);
 			}
 			else if (toCopy == ID_COPY_MESSAGE)
 			{
 				CString body = pLogEntry->GetBody();
 				body.Replace(_T("\n"), _T("\r\n"));
-				sClipdata += _T("* ") + (pLogEntry->GetSubject().Trim() + _T("\r\n\r\n") + body.Trim()).Trim() + _T("\r\n\r\n");
+				body.Trim();
+				sClipdata.Append(_T("* "));
+				CString subject = pLogEntry->GetSubject().Trim();
+				if (!subject.IsEmpty())
+				{
+					sClipdata.Append(subject);
+					if (!body.IsEmpty())
+						sClipdata.Append(_T("\r\n\r\n"));
+				}
+				sClipdata.Append(body);
+				sClipdata.Append(_T("\r\n\r\n"));
 			}
 			else if (toCopy == ID_COPY_SUBJECT)
 			{
-				sClipdata += _T("* ") + pLogEntry->GetSubject().Trim() + _T("\r\n\r\n");
+				sClipdata.Append(_T("* "));
+				sClipdata.Append(pLogEntry->GetSubject().Trim());
+				sClipdata.Append(_T("\r\n\r\n"));
 			}
 			else
 			{
 				if (!first)
-					sClipdata += _T("\r\n");
-				sClipdata += pLogEntry->m_CommitHash;
+					sClipdata.Append(_T("\r\n"));
+				sClipdata.Append(pLogEntry->m_CommitHash);
 			}
 
 			first = false;
