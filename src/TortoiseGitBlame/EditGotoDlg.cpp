@@ -45,6 +45,11 @@ void CEditGotoDlg::DoDataExchange(CDataExchange* pDX)
 	CDialog::DoDataExchange(pDX);
 	DDX_Text(pDX, IDC_LINENUMBER, m_LineNumber);
 	DDV_MinMaxUInt(pDX, m_LineNumber, 0, 40000000);
+	if (m_LineNumber == 0)
+	{
+		CString str;
+		DDX_Text(pDX, IDC_LINENUMBER, str);
+	}
 }
 
 
