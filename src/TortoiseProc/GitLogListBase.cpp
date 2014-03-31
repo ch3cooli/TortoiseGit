@@ -3935,6 +3935,8 @@ LRESULT CGitLogListBase::OnFindDialogMessage(WPARAM /*wParam*/, LPARAM /*lParam*
 			str.AppendChar(_T('\n'));
 			str.Append(pLogEntry->m_Notes);
 			str.AppendChar(_T('\n'));
+			str.Append(GetTagInfo(pLogEntry));
+			str.AppendChar(_T('\n'));
 
 
 			/*Because changed files list is loaded on demand when gui show,
