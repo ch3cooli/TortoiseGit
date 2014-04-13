@@ -1639,16 +1639,12 @@ void CLogDlg::OnBnClickedStatbutton()
 		return;
 	if (m_LogList.m_arShownList.IsEmpty() || m_LogList.m_arShownList.GetCount() == 1 && m_LogList.m_bShowWC)
 		return;		// nothing or just the working copy changes are shown, so no statistics.
-	// the statistics dialog expects the log entries to be sorted by date
-	SortByColumn(3, false);
 
 	CStatGraphDlg dlg;
 	m_LogList.RecalculateShownList(&dlg.m_ShowList);
 
 	dlg.m_path = m_orgPath;
 	dlg.DoModal();
-	// restore the previous sorting
-	SortByColumn(m_nSortColumn, m_bAscending);
 	OnTimer(LOGFILTER_TIMER);
 }
 
@@ -2351,85 +2347,12 @@ CTGitPathList CLogDlg::GetChangedPathsFromSelectedRevisions(bool /*bRelativePath
 	return pathList;
 }
 
-void CLogDlg::SortByColumn(int /*nSortColumn*/, bool /*bAscending*/)
-{
-#if 0
-	switch(nSortColumn)
-	{
-	case 0: // Revision
-		{
-			if(bAscending)
-				std::sort(m_logEntries.begin(), m_logEntries.end(), CLogDataVector::AscRevSort());
-			else
-				std::sort(m_logEntries.begin(), m_logEntries.end(), CLogDataVector::DescRevSort());
-		}
-		break;
-	case 1: // action
-		{
-			if(bAscending)
-				std::sort(m_logEntries.begin(), m_logEntries.end(), CLogDataVector::AscActionSort());
-			else
-				std::sort(m_logEntries.begin(), m_logEntries.end(), CLogDataVector::DescActionSort());
-		}
-		break;
-	case 2: // Author
-		{
-			if(bAscending)
-				std::sort(m_logEntries.begin(), m_logEntries.end(), CLogDataVector::AscAuthorSort());
-			else
-				std::sort(m_logEntries.begin(), m_logEntries.end(), CLogDataVector::DescAuthorSort());
-		}
-		break;
-	case 3: // Date
-		{
-			if(bAscending)
-				std::sort(m_logEntries.begin(), m_logEntries.end(), CLogDataVector::AscDateSort());
-			else
-				std::sort(m_logEntries.begin(), m_logEntries.end(), CLogDataVector::DescDateSort());
-		}
-		break;
-	case 4: // Message or bug id
-		if (m_bShowBugtraqColumn)
-		{
-			if(bAscending)
-				std::sort(m_logEntries.begin(), m_logEntries.end(), CLogDataVector::AscBugIDSort());
-			else
-				std::sort(m_logEntries.begin(), m_logEntries.end(), CLogDataVector::DescBugIDSort());
-			break;
-		}
-		// fall through here
-	case 5: // Message
-		{
-			if(bAscending)
-				std::sort(m_logEntries.begin(), m_logEntries.end(), CLogDataVector::AscMessageSort());
-			else
-				std::sort(m_logEntries.begin(), m_logEntries.end(), CLogDataVector::DescMessageSort());
-		}
-		break;
-	default:
-		ATLASSERT(0);
-		break;
-	}
-#endif
-}
-
 void CLogDlg::OnLvnColumnclick(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	if (this->IsThreadRunning())
 		return;		//no sorting while the arrays are filled
-#if 0
-	LPNMLISTVIEW pNMLV = reinterpret_cast<LPNMLISTVIEW>(pNMHDR);
-	const int nColumn = pNMLV->iSubItem;
-	m_bAscending = nColumn == m_nSortColumn ? !m_bAscending : TRUE;
-	m_nSortColumn = nColumn;
-	SortByColumn(m_nSortColumn, m_bAscending);
-	SetSortArrow(&m_LogList, m_nSortColumn, !!m_bAscending);
-	SortShownListArray();
-	m_LogList.Invalidate();
-	UpdateLogInfoLabel();
-#else
+
 	UNREFERENCED_PARAMETER(pNMHDR);
-#endif
 	*pResult = 0;
 
 	SetTimer(LOG_HEADER_ORDER_TIMER, 10, nullptr);

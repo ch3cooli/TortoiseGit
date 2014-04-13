@@ -173,7 +173,6 @@ private:
 	void SortShownListArray();
 
 	void SetSortArrow(CListCtrl * control, int nColumn, bool bAscending);
-	void SortByColumn(int nSortColumn, bool bAscending);
 
 	void EnableOKButton();
 
