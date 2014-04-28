@@ -1460,6 +1460,7 @@
 #define IDC_CHECK_INHERIT_BTPARAMS      1793
 #define IDC_SLIDER_ALPHA                1794
 #define IDC_TRANSPARENTLOSTFOCUS        1795
+#define IDC_CHECK_STICKY                1796
 #define IDS_LOG_FILTER_BY               1850
 #define IDS_LOG_FILTER_PATHS            1851
 #define IDS_LOG_FILTER_AUTHORS          1852
@@ -1907,7 +1908,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        351
 #define _APS_NEXT_COMMAND_VALUE         32867
-#define _APS_NEXT_CONTROL_VALUE         1796
+#define _APS_NEXT_CONTROL_VALUE         1797
 #define _APS_NEXT_SYMED_VALUE           201
 #endif
 #endif
