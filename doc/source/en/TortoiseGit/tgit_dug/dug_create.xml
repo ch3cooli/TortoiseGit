@@ -10,19 +10,20 @@
   </indexterm>
   <para>
     This section talks about how to create a git repository.
-    Creating an empty git repository is very simple. At an empty directory, 
+    Creating an empty git repository is very simple. At an empty directory,
     just use the explorer context menu and select
     <menuchoice>
-      <guimenu>Git Create Repository here
+      <guimenu>
+        Git Create Repository here
       </guimenu>
-    </menuchoice>. 
+    </menuchoice>.
     <graphic fileref="../images/GitCreate.png"/>
   </para>
   <para>
     After (non bare) repository is created, ".git" directory will be created. And a messagebox will be shown:
     <graphic fileref="../images/GitCreateMsg.png"/>
   </para>
-	<para>
-		You can find more information at <xref linkend="git-init(1)"/>
-	</para>
+  <para>
+    You can find more information at <xref linkend="git-init(1)"/>
+  </para>
 </sect1>

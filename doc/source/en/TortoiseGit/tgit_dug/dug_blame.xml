@@ -1,81 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sect1 SYSTEM "../../../dtd/dblite.dtd">
 <sect1 id="tgit-dug-blame">
-	<title>Who Changed Which Line?</title>
-	<indexterm>
-		<primary>blame</primary>
-	</indexterm>
-	<indexterm>
-		<primary>annotate</primary>
-	</indexterm>
-	<indexterm>
-		<primary>praise</primary>
-	</indexterm>
-	<?dbhh topicname="HIDD_BLAME"?>
-	<para>
-		Sometimes you need to know not only what lines have changed, but also
-		who exactly changed specific lines in a file. That's when the
-		<menuchoice>
-			<guimenu>TortoiseGit</guimenu>
-			<guimenuitem>Blame...</guimenuitem>
-		</menuchoice>
-		command, sometimes also referred to as <firstterm>annotate</firstterm>
-		command comes in handy.
-	</para>
-	<para>
-		This command lists, for every line in a file, the author and the revision
-		the line was changed.
-	</para>
-	<sect2 id="tgit-dug-blame-simple">
-		<title>Blame for Files</title>
-		<para>
-			By default the blame file is viewed using <firstterm>TortoiseGitBlame</firstterm>,
-			which highlights the different revisions to make it easier to read.
-		</para>
-		<para>
-			<figure id="tgit-dug-blame-dia-2">
-				<title>TortoiseGitBlame</title>
-				<graphic fileref="../images/TortoiseBlame.png"/>
-			</figure>
-			TortoiseGitBlame, which is included with TortoiseGit. 
-			When you hover the mouse over a line in the blame info
-			column, all lines with the same revision are shown with a darker
-			background. Lines from other revisions which were changed by the same author
-			are shown with a light background.
-			The colouring may not work as clearly if you have your display set to
-			256 colour mode.
-		</para>
-		<para>
-			If you <action>left click</action>
-			on a line, all lines with the same revision are highlighted, and lines from
-			other revisions by the same author are highlighted in a lighter colour.
-			This highlighting is sticky, allowing you to move the mouse without losing
-			the highlights. Click on that revision again to turn off highlighting.
-		</para>
-		<para>
-			The revision comments (log message) are shown in a hint box whenever
-			the mouse hovers over the blame info column. If you want to copy the
-			log message for that revision, use the context menu which appears when
-			you right click on the blame info column.
-		</para>
-		<para>
-			You can search within the Blame report using
-			<menuchoice>
-				<guimenu>Edit</guimenu>
-				<guimenuitem>Find...</guimenuitem>
-			</menuchoice>.
-			This allows you to search for revision numbers, authors and the content of
-			the file itself. Log messages are not included in the search - you should
-			use the Log Dialog to search those.
-		</para>
-		<para>
-			You can also jump to a specific line number using
-			<menuchoice>
-				<guimenu>Edit</guimenu>
-				<guimenuitem>Go To Line...</guimenuitem>
-			</menuchoice>.
-		</para>
-		<!--
+  <title>Who Changed Which Line?</title>
+  <indexterm>
+    <primary>blame</primary>
+  </indexterm>
+  <indexterm>
+    <primary>annotate</primary>
+  </indexterm>
+  <indexterm>
+    <primary>praise</primary>
+  </indexterm>
+  <?dbhh topicname="HIDD_BLAME"?>
+  <para>
+    Sometimes you need to know not only what lines have changed, but also
+    who exactly changed specific lines in a file. That's when the
+    <menuchoice>
+      <guimenu>TortoiseGit</guimenu>
+      <guimenuitem>Blame...</guimenuitem>
+    </menuchoice>
+    command, sometimes also referred to as <firstterm>annotate</firstterm>
+    command comes in handy.
+  </para>
+  <para>
+    This command lists, for every line in a file, the author and the revision
+    the line was changed.
+  </para>
+  <sect2 id="tgit-dug-blame-simple">
+    <title>Blame for Files</title>
+    <para>
+      By default the blame file is viewed using <firstterm>TortoiseGitBlame</firstterm>,
+      which highlights the different revisions to make it easier to read.
+    </para>
+    <para>
+      <figure id="tgit-dug-blame-dia-2">
+        <title>TortoiseGitBlame</title>
+        <graphic fileref="../images/TortoiseBlame.png"/>
+      </figure>
+      TortoiseGitBlame, which is included with TortoiseGit.
+      When you hover the mouse over a line in the blame info
+      column, all lines with the same revision are shown with a darker
+      background. Lines from other revisions which were changed by the same author
+      are shown with a light background.
+      The colouring may not work as clearly if you have your display set to
+      256 colour mode.
+    </para>
+    <para>
+      If you <action>left click</action>
+      on a line, all lines with the same revision are highlighted, and lines from
+      other revisions by the same author are highlighted in a lighter colour.
+      This highlighting is sticky, allowing you to move the mouse without losing
+      the highlights. Click on that revision again to turn off highlighting.
+    </para>
+    <para>
+      The revision comments (log message) are shown in a hint box whenever
+      the mouse hovers over the blame info column. If you want to copy the
+      log message for that revision, use the context menu which appears when
+      you right click on the blame info column.
+    </para>
+    <para>
+      You can search within the Blame report using
+      <menuchoice>
+        <guimenu>Edit</guimenu>
+        <guimenuitem>Find...</guimenuitem>
+      </menuchoice>.
+      This allows you to search for revision numbers, authors and the content of
+      the file itself. Log messages are not included in the search - you should
+      use the Log Dialog to search those.
+    </para>
+    <para>
+      You can also jump to a specific line number using
+      <menuchoice>
+        <guimenu>Edit</guimenu>
+        <guimenuitem>Go To Line...</guimenuitem>
+      </menuchoice>.
+    </para>
+    <!--
 		<para>
 			When the mouse is over the blame info columns, a context menu is
 			available which helps with comparing revisions and examining history,
@@ -135,8 +135,8 @@
 			<xref linkend="tgit-dug-settings-tortoiseblame"/>.
 		</para>
 		-->
-	</sect2>
-	<!--
+  </sect2>
+  <!--
 	<sect2 id="tgit-dug-blame-diffs">
 		<title>Blame Differences</title>
 		<para>

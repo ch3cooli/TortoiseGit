@@ -15,7 +15,8 @@
   <para>
     This section talks about browse all refs(tag, branch, remote branch, stash and so on)
     <menuchoice>
-      <guimenu>Browse Reference...
+      <guimenu>
+        Browse Reference...
       </guimenu>
     </menuchoice>
   </para>
@@ -29,34 +30,34 @@
     Right panel is refs list.
   </para>
   <para>
-	<menuchoice>
-		<guimenu>Context menu</guimenu>
-		<guimenuitem>Show log</guimenuitem>
-	</menuchoice>
+    <menuchoice>
+      <guimenu>Context menu</guimenu>
+      <guimenuitem>Show log</guimenuitem>
+    </menuchoice>
   </para>
   <para>
-	<menuchoice>
-		<guimenu>Context menu</guimenu>
-		<guimenuitem>Show reflog</guimenuitem>
-	</menuchoice>
+    <menuchoice>
+      <guimenu>Context menu</guimenu>
+      <guimenuitem>Show reflog</guimenuitem>
+    </menuchoice>
   </para>
   <para>
-	<menuchoice>
-		<guimenu>Context menu</guimenu>
-		<guimenuitem>Switch to this ref</guimenuitem>
-	</menuchoice>
+    <menuchoice>
+      <guimenu>Context menu</guimenu>
+      <guimenuitem>Switch to this ref</guimenuitem>
+    </menuchoice>
   </para>
   <para>
-	<menuchoice>
-		<guimenu>Context menu</guimenu>
-		<guimenuitem>Delete branch</guimenuitem>
-	</menuchoice>
+    <menuchoice>
+      <guimenu>Context menu</guimenu>
+      <guimenuitem>Delete branch</guimenuitem>
+    </menuchoice>
   </para>
   <para>
-	<menuchoice>
-		<guimenu>Context menu</guimenu>
-		<guimenuitem>Create branch</guimenuitem>
-	</menuchoice>
+    <menuchoice>
+      <guimenu>Context menu</guimenu>
+      <guimenuitem>Create branch</guimenuitem>
+    </menuchoice>
   </para>
   <para>
     In order to delete remote tags, use the context menu on a remote on he left and select <guimenuitem>Delete remote tags...</guimenuitem>. Then the following dialog will come up: <graphic fileref="../images/DeleteRemoteTag.png"/> There you can delete multiple remote tags at once.

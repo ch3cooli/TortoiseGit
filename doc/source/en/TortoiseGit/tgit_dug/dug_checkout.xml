@@ -1,38 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sect1 SYSTEM "../../../dtd/dblite.dtd">
 <sect1 id="tgit-dug-checkout">
-	<title>Checking Out A Working Tree (Switch to commit)</title>
-	<indexterm>
-		<primary>checkout</primary>
-	</indexterm>
-	<indexterm>
-		<primary>Switch</primary>
-	</indexterm>
-	<indexterm>
-		<primary>create working tree</primary>
-	</indexterm>
-	<?dbhh topicname="HIDD_GITSWITCH"?>
-	<para>
-		To obtain a special version working tree you need to do a <firstterm>checkout</firstterm>
-		from a local repository.
-	</para>
-	<para>
-		Select a git repository directory in windows explorer
-		<action>Right click</action> to pop up the
-		context menu and select the command
-		<menuchoice>
-			<guimenu>TortoiseGit</guimenu>
-			<guimenuitem>Switch\Checkout...</guimenuitem>
-		</menuchoice>,
-		which brings up the following dialog box:
-		<figure id="tgit-dug-checkout-dia-1">
-			<title>The Checkout dialog</title>
-			<graphic fileref="../images/SwitchCheckOut.png"/>
-		</figure>
-		If you enter a branch name at <guilabel>Create New Branch</guilabel>, new branch created and switch to new branches.
-	</para>
+  <title>Checking Out A Working Tree (Switch to commit)</title>
+  <indexterm>
+    <primary>checkout</primary>
+  </indexterm>
+  <indexterm>
+    <primary>Switch</primary>
+  </indexterm>
+  <indexterm>
+    <primary>create working tree</primary>
+  </indexterm>
+  <?dbhh topicname="HIDD_GITSWITCH"?>
   <para>
-    You can click <guibutton>...</guibutton> to browse git log and choose special version. 
+    To obtain a special version working tree you need to do a <firstterm>checkout</firstterm>
+    from a local repository.
+  </para>
+  <para>
+    Select a git repository directory in windows explorer
+    <action>Right click</action> to pop up the
+    context menu and select the command
+    <menuchoice>
+      <guimenu>TortoiseGit</guimenu>
+      <guimenuitem>Switch\Checkout...</guimenuitem>
+    </menuchoice>,
+    which brings up the following dialog box:
+    <figure id="tgit-dug-checkout-dia-1">
+      <title>The Checkout dialog</title>
+      <graphic fileref="../images/SwitchCheckOut.png"/>
+    </figure>
+    If you enter a branch name at <guilabel>Create New Branch</guilabel>, new branch created and switch to new branches.
+  </para>
+  <para>
+    You can click <guibutton>...</guibutton> to browse git log and choose special version.
   </para>
   <para>
     Check <guilabel>Force</guilabel> will overwrite working tree with repository version.
@@ -41,7 +41,7 @@
     Check <guilabel>Track</guilabel> will track remote branch with local branch. When you pull change from remote
     repository, tracked local branch will merged remote branch change.
   </para>
-	<!--
+  <!--
 	<sect2 id="tgit-dug-checkout-depth">
 		<title>Checkout Depth</title>
 		<para>
@@ -210,28 +210,28 @@
 		</tip>
 	</sect2>
 	-->
-	<!--
+  <!--
 	<para>
 		If the project contains references to external projects which you do
 		<emphasis>not</emphasis> want checked out at the same time, use the
 		<guilabel>Omit externals</guilabel> checkbox.
 	</para>
 	-->
-	<important>
-		<para>
-			If you checkout/switch to <guilabel>Tag</guilabel> or <guilabel>Commit</guilabel>,
-			it is preferred that you create a new branch for it, otherwise you will
-			work at "no branch" (detached HEAD state).
-		</para>
-	</important>
-	
-	<tip>
-		<title>Exporting</title>
-		<para>
-			Sometimes you may want to create a local copy without any of those
-			<filename>.git</filename> directories, e.g. to create a zipped
-			tarball of your source.
-			Read <xref linkend="tgit-dug-export"/> to find out how to do that.
-		</para>
-	</tip>
+  <important>
+    <para>
+      If you checkout/switch to <guilabel>Tag</guilabel> or <guilabel>Commit</guilabel>,
+      it is preferred that you create a new branch for it, otherwise you will
+      work at "no branch" (detached HEAD state).
+    </para>
+  </important>
+
+  <tip>
+    <title>Exporting</title>
+    <para>
+      Sometimes you may want to create a local copy without any of those
+      <filename>.git</filename> directories, e.g. to create a zipped
+      tarball of your source.
+      Read <xref linkend="tgit-dug-export"/> to find out how to do that.
+    </para>
+  </tip>
 </sect1>

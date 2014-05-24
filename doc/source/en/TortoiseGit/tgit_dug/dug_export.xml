@@ -1,38 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sect1 SYSTEM "../../../dtd/dblite.dtd">
 <sect1 id="tgit-dug-export" xmlns:xi="http://www.w3.org/2001/XInclude">
-	<title>Exporting a Git Working Tree</title>
-	<?dbhh topicname="HIDD_EXPORT"?>
-	<indexterm>
-		<primary>export</primary>
-	</indexterm>
-	<indexterm>
-		<primary>unversioned 'working tree'</primary>
-	</indexterm>
-	<para>
-		Sometimes you may want a copy of your working tree without any of
-		those <filename>.git</filename> directories, e.g. to create a zipped
-		tarball of your source, or to export to a web server. Instead of
-		making a copy and then deleting all those <filename>.git</filename>
-		directories manually, TortoiseGit offers the command
-		<menuchoice>
-			<guimenu>TortoiseGit</guimenu>
-			<guimenuitem>Export...</guimenuitem>
-		</menuchoice>.
-	</para>
-	<para>
-		<figure id="tgit-dug-export-dia-1">
-			<title>The Export Dialog</title>
-			<graphic fileref="../images/ExportURL.png"/>
-		</figure>
-	</para>
-	<para>
-		<guilabel>Zip File</guilabel> zip file of export
-	</para>
-	<para>
-		<xi:include href="./dug_chooseversion.xml"/>
-	</para>
-<!--
+  <title>Exporting a Git Working Tree</title>
+  <?dbhh topicname="HIDD_EXPORT"?>
+  <indexterm>
+    <primary>export</primary>
+  </indexterm>
+  <indexterm>
+    <primary>unversioned 'working tree'</primary>
+  </indexterm>
+  <para>
+    Sometimes you may want a copy of your working tree without any of
+    those <filename>.git</filename> directories, e.g. to create a zipped
+    tarball of your source, or to export to a web server. Instead of
+    making a copy and then deleting all those <filename>.git</filename>
+    directories manually, TortoiseGit offers the command
+    <menuchoice>
+      <guimenu>TortoiseGit</guimenu>
+      <guimenuitem>Export...</guimenuitem>
+    </menuchoice>.
+  </para>
+  <para>
+    <figure id="tgit-dug-export-dia-1">
+      <title>The Export Dialog</title>
+      <graphic fileref="../images/ExportURL.png"/>
+    </figure>
+  </para>
+  <para>
+    <guilabel>Zip File</guilabel> zip file of export
+  </para>
+  <para>
+    <xi:include href="./dug_chooseversion.xml"/>
+  </para>
+  <!--
 	<para>
 		Another way to export from a working tree is to <action>right drag</action>
 		the working tree folder to another location and choose
@@ -55,7 +55,7 @@
 		an automatically generated name, eg. <literal>Target (1)</literal>.
 	</para>
 -->
-	<!--
+  <!--
 	<tip>
 		<title>Exporting single files</title>
 		<para>
@@ -71,7 +71,7 @@
 		</para>
 	</tip>
 	-->
-	<!--
+  <!--
 	<tip>
 		<title>Exporting a Change Tree</title>
 		<para>
