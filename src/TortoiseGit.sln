@@ -238,6 +238,98 @@ Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "Lang_id", "..\Languages\Lan
 		{EC88E7EC-3074-4841-BA45-B938D098EFF6} = {EC88E7EC-3074-4841-BA45-B938D098EFF6}
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D14CFB8E-9840-4D8C-B3CA-31DBB6C9DBDD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{BEB44518-CD0F-462D-B4E5-9F50E8761AF0}"
+	ProjectSection(SolutionItems) = preProject
+		..\doc\source\en\glossary.xml = ..\doc\source\en\glossary.xml
+		..\doc\source\en\Version.in = ..\doc\source\en\Version.in
+		..\doc\source\en\wishlist.xml = ..\doc\source\en\wishlist.xml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TortoiseGit", "TortoiseGit", "{52597295-2AA0-4424-ABD0-F0365B18CD56}"
+	ProjectSection(SolutionItems) = preProject
+		..\doc\source\en\TortoiseGit\tgit_app_admins.xml = ..\doc\source\en\TortoiseGit\tgit_app_admins.xml
+		..\doc\source\en\TortoiseGit\tgit_app_automation.xml = ..\doc\source\en\TortoiseGit\tgit_app_automation.xml
+		..\doc\source\en\TortoiseGit\tgit_app_faq.xml = ..\doc\source\en\TortoiseGit\tgit_app_faq.xml
+		..\doc\source\en\TortoiseGit\tgit_app_internals.xml = ..\doc\source\en\TortoiseGit\tgit_app_internals.xml
+		..\doc\source\en\TortoiseGit\tgit_app_ssh.xml = ..\doc\source\en\TortoiseGit\tgit_app_ssh.xml
+		..\doc\source\en\TortoiseGit\tgit_bugtraqprovider.xml = ..\doc\source\en\TortoiseGit\tgit_bugtraqprovider.xml
+		..\doc\source\en\TortoiseGit\tgit_introduction.xml = ..\doc\source\en\TortoiseGit\tgit_introduction.xml
+		..\doc\source\en\TortoiseGit\tgit_preface.xml = ..\doc\source\en\TortoiseGit\tgit_preface.xml
+		..\doc\source\en\TortoiseGit\tortoisegit.xml = ..\doc\source\en\TortoiseGit\tortoisegit.xml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TortoiseMerge", "TortoiseMerge", "{63E1C904-A9A8-4361-969F-849AD98CA493}"
+	ProjectSection(SolutionItems) = preProject
+		..\doc\source\en\TortoiseMerge\tme_app_automation.xml = ..\doc\source\en\TortoiseMerge\tme_app_automation.xml
+		..\doc\source\en\TortoiseMerge\tme_app_shortcuts.xml = ..\doc\source\en\TortoiseMerge\tme_app_shortcuts.xml
+		..\doc\source\en\TortoiseMerge\tme_basics.xml = ..\doc\source\en\TortoiseMerge\tme_basics.xml
+		..\doc\source\en\TortoiseMerge\tme_dug.xml = ..\doc\source\en\TortoiseMerge\tme_dug.xml
+		..\doc\source\en\TortoiseMerge\tme_dug_conflicts.xml = ..\doc\source\en\TortoiseMerge\tme_dug_conflicts.xml
+		..\doc\source\en\TortoiseMerge\tme_dug_controls.xml = ..\doc\source\en\TortoiseMerge\tme_dug_controls.xml
+		..\doc\source\en\TortoiseMerge\tme_dug_icons.xml = ..\doc\source\en\TortoiseMerge\tme_dug_icons.xml
+		..\doc\source\en\TortoiseMerge\tme_dug_open.xml = ..\doc\source\en\TortoiseMerge\tme_dug_open.xml
+		..\doc\source\en\TortoiseMerge\tme_dug_settings.xml = ..\doc\source\en\TortoiseMerge\tme_dug_settings.xml
+		..\doc\source\en\TortoiseMerge\tme_dug_views.xml = ..\doc\source\en\TortoiseMerge\tme_dug_views.xml
+		..\doc\source\en\TortoiseMerge\tme_introduction.xml = ..\doc\source\en\TortoiseMerge\tme_introduction.xml
+		..\doc\source\en\TortoiseMerge\tme_preface.xml = ..\doc\source\en\TortoiseMerge\tme_preface.xml
+		..\doc\source\en\TortoiseMerge\tortoisemerge.xml = ..\doc\source\en\TortoiseMerge\tortoisemerge.xml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tgit_dug", "tgit_dug", "{7D07C653-ECC6-4D39-8F62-22A45A640783}"
+	ProjectSection(SolutionItems) = preProject
+		..\doc\source\en\TortoiseGit\tgit_dug\dug.xml = ..\doc\source\en\TortoiseGit\tgit_dug\dug.xml
+		..\doc\source\en\TortoiseGit\tgit_dug\dug_add.xml = ..\doc\source\en\TortoiseGit\tgit_dug\dug_add.xml
+		..\doc\source\en\TortoiseGit\tgit_dug\dug_bisect.xml = ..\doc\source\en\TortoiseGit\tgit_dug\dug_bisect.xml
+		..\doc\source\en\TortoiseGit\tgit_dug\dug_blame.xml = ..\doc\source\en\TortoiseGit\tgit_dug\dug_blame.xml
+		..\doc\source\en\TortoiseGit\tgit_dug\dug_branchtag.xml = ..\doc\source\en\TortoiseGit\tgit_dug\dug_branchtag.xml
+		..\doc\source\en\TortoiseGit\tgit_dug\dug_browseref.xml = ..\doc\source\en\TortoiseGit\tgit_dug\dug_browseref.xml
+		..\doc\source\en\TortoiseGit\tgit_dug\dug_bugtracker.xml = ..\doc\source\en\TortoiseGit\tgit_dug\dug_bugtracker.xml
+		..\doc\source\en\TortoiseGit\tgit_dug\dug_changelist.xml = ..\doc\source\en\TortoiseGit\tgit_dug\dug_changelist.xml
+		..\doc\source\en\TortoiseGit\tgit_dug\dug_checkout.xml = ..\doc\source\en\TortoiseGit\tgit_dug\dug_checkout.xml
+		..\doc\source\en\TortoiseGit\tgit_dug\dug_chooseversion.xml = ..\doc\source\en\TortoiseGit\tgit_dug\dug_chooseversion.xml
+		..\doc\source\en\TortoiseGit\tgit_dug\dug_cleanup.xml = ..\doc\source\en\TortoiseGit\tgit_dug\dug_cleanup.xml
+		..\doc\source\en\TortoiseGit\tgit_dug\dug_clone.xml = ..\doc\source\en\TortoiseGit\tgit_dug\dug_clone.xml
+		..\doc\source\en\TortoiseGit\tgit_dug\dug_commit.xml = ..\doc\source\en\TortoiseGit\tgit_dug\dug_commit.xml
+		..\doc\source\en\TortoiseGit\tgit_dug\dug_conflicts.xml = ..\doc\source\en\TortoiseGit\tgit_dug\dug_conflicts.xml
+		..\doc\source\en\TortoiseGit\tgit_dug\dug_copy.xml = ..\doc\source\en\TortoiseGit\tgit_dug\dug_copy.xml
+		..\doc\source\en\TortoiseGit\tgit_dug\dug_create.xml = ..\doc\source\en\TortoiseGit\tgit_dug\dug_create.xml
+		..\doc\source\en\TortoiseGit\tgit_dug\dug_daemon.xml = ..\doc\source\en\TortoiseGit\tgit_dug\dug_daemon.xml
+		..\doc\source\en\TortoiseGit\tgit_dug\dug_diff.xml = ..\doc\source\en\TortoiseGit\tgit_dug\dug_diff.xml
+		..\doc\source\en\TortoiseGit\tgit_dug\dug_export.xml = ..\doc\source\en\TortoiseGit\tgit_dug\dug_export.xml
+		..\doc\source\en\TortoiseGit\tgit_dug\dug_general.xml = ..\doc\source\en\TortoiseGit\tgit_dug\dug_general.xml
+		..\doc\source\en\TortoiseGit\tgit_dug\dug_gitsvn.xml = ..\doc\source\en\TortoiseGit\tgit_dug\dug_gitsvn.xml
+		..\doc\source\en\TortoiseGit\tgit_dug\dug_ignore.xml = ..\doc\source\en\TortoiseGit\tgit_dug\dug_ignore.xml
+		..\doc\source\en\TortoiseGit\tgit_dug\dug_log.xml = ..\doc\source\en\TortoiseGit\tgit_dug\dug_log.xml
+		..\doc\source\en\TortoiseGit\tgit_dug\dug_merge.xml = ..\doc\source\en\TortoiseGit\tgit_dug\dug_merge.xml
+		..\doc\source\en\TortoiseGit\tgit_dug\dug_patch.xml = ..\doc\source\en\TortoiseGit\tgit_dug\dug_patch.xml
+		..\doc\source\en\TortoiseGit\tgit_dug\dug_pullfetch.xml = ..\doc\source\en\TortoiseGit\tgit_dug\dug_pullfetch.xml
+		..\doc\source\en\TortoiseGit\tgit_dug\dug_push.xml = ..\doc\source\en\TortoiseGit\tgit_dug\dug_push.xml
+		..\doc\source\en\TortoiseGit\tgit_dug\dug_rebase.xml = ..\doc\source\en\TortoiseGit\tgit_dug\dug_rebase.xml
+		..\doc\source\en\TortoiseGit\tgit_dug\dug_reflog.xml = ..\doc\source\en\TortoiseGit\tgit_dug\dug_reflog.xml
+		..\doc\source\en\TortoiseGit\tgit_dug\dug_rename.xml = ..\doc\source\en\TortoiseGit\tgit_dug\dug_rename.xml
+		..\doc\source\en\TortoiseGit\tgit_dug\dug_repobrowser.xml = ..\doc\source\en\TortoiseGit\tgit_dug\dug_repobrowser.xml
+		..\doc\source\en\TortoiseGit\tgit_dug\dug_reset.xml = ..\doc\source\en\TortoiseGit\tgit_dug\dug_reset.xml
+		..\doc\source\en\TortoiseGit\tgit_dug\dug_revert.xml = ..\doc\source\en\TortoiseGit\tgit_dug\dug_revert.xml
+		..\doc\source\en\TortoiseGit\tgit_dug\dug_revgraph.xml = ..\doc\source\en\TortoiseGit\tgit_dug\dug_revgraph.xml
+		..\doc\source\en\TortoiseGit\tgit_dug\dug_settings.xml = ..\doc\source\en\TortoiseGit\tgit_dug\dug_settings.xml
+		..\doc\source\en\TortoiseGit\tgit_dug\dug_settings_advanced.xml = ..\doc\source\en\TortoiseGit\tgit_dug\dug_settings_advanced.xml
+		..\doc\source\en\TortoiseGit\tgit_dug\dug_settings_blame.xml = ..\doc\source\en\TortoiseGit\tgit_dug\dug_settings_blame.xml
+		..\doc\source\en\TortoiseGit\tgit_dug\dug_settings_export.xml = ..\doc\source\en\TortoiseGit\tgit_dug\dug_settings_export.xml
+		..\doc\source\en\TortoiseGit\tgit_dug\dug_settings_general.xml = ..\doc\source\en\TortoiseGit\tgit_dug\dug_settings_general.xml
+		..\doc\source\en\TortoiseGit\tgit_dug\dug_settings_git.xml = ..\doc\source\en\TortoiseGit\tgit_dug\dug_settings_git.xml
+		..\doc\source\en\TortoiseGit\tgit_dug\dug_settings_hooks.xml = ..\doc\source\en\TortoiseGit\tgit_dug\dug_settings_hooks.xml
+		..\doc\source\en\TortoiseGit\tgit_dug\dug_settings_network.xml = ..\doc\source\en\TortoiseGit\tgit_dug\dug_settings_network.xml
+		..\doc\source\en\TortoiseGit\tgit_dug\dug_settings_overlays.xml = ..\doc\source\en\TortoiseGit\tgit_dug\dug_settings_overlays.xml
+		..\doc\source\en\TortoiseGit\tgit_dug\dug_settings_progs.xml = ..\doc\source\en\TortoiseGit\tgit_dug\dug_settings_progs.xml
+		..\doc\source\en\TortoiseGit\tgit_dug\dug_settings_saved.xml = ..\doc\source\en\TortoiseGit\tgit_dug\dug_settings_saved.xml
+		..\doc\source\en\TortoiseGit\tgit_dug\dug_stash.xml = ..\doc\source\en\TortoiseGit\tgit_dug\dug_stash.xml
+		..\doc\source\en\TortoiseGit\tgit_dug\dug_submodules.xml = ..\doc\source\en\TortoiseGit\tgit_dug\dug_submodules.xml
+		..\doc\source\en\TortoiseGit\tgit_dug\dug_sync.xml = ..\doc\source\en\TortoiseGit\tgit_dug\dug_sync.xml
+		..\doc\source\en\TortoiseGit\tgit_dug\dug_wcstatus.xml = ..\doc\source\en\TortoiseGit\tgit_dug\dug_wcstatus.xml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -739,5 +831,9 @@ Global
 		{8E943F8F-ED43-42DB-A25B-C6356F01AAC7} = {C8F4D789-D86F-4B0C-8C47-4B263027B1A6}
 		{6BD19BAE-4041-4E85-B576-AAC9D54CAAB9} = {F9816C29-582C-4C99-B892-1900DB2C4064}
 		{AE6AAFBA-9992-452A-9EB8-DD69402A4ACE} = {F9816C29-582C-4C99-B892-1900DB2C4064}
+		{BEB44518-CD0F-462D-B4E5-9F50E8761AF0} = {D14CFB8E-9840-4D8C-B3CA-31DBB6C9DBDD}
+		{52597295-2AA0-4424-ABD0-F0365B18CD56} = {BEB44518-CD0F-462D-B4E5-9F50E8761AF0}
+		{63E1C904-A9A8-4361-969F-849AD98CA493} = {BEB44518-CD0F-462D-B4E5-9F50E8761AF0}
+		{7D07C653-ECC6-4D39-8F62-22A45A640783} = {52597295-2AA0-4424-ABD0-F0365B18CD56}
 	EndGlobalSection
 EndGlobal
