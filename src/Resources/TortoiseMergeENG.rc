@@ -693,6 +693,7 @@ BEGIN
     IDR_MAINFRAME           "TortoiseGitMerge"
     IDS_TITLE_REJECTEDHUNKS "Rejected patch hunks for '%s'"
     IDS_CONFIGUREREGEXES    "Configure Filter Regexes"
+    ID_INDICATOR_INS        "INS"
 END
 
 STRINGTABLE
@@ -728,6 +729,7 @@ STRINGTABLE
 BEGIN
     ID_INDICATOR_CAPS       "CAP"
     ID_INDICATOR_NUM        "NUM"
+    ID_INDICATOR_OVR        "OVR"
 END
 
 STRINGTABLE

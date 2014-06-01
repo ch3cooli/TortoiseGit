@@ -174,6 +174,7 @@ protected:
 	afx_msg void	OnUpdateEOLLeft(CCmdUI *pCmdUI);
 	afx_msg void	OnUpdateEOLRight(CCmdUI *pCmdUI);
 	afx_msg void	OnUpdateEOLBottom(CCmdUI *pCmdUI);
+	afx_msg void	OnUpdateInsMode(CCmdUI *pCmdUI);
 
 	DECLARE_MESSAGE_MAP()
 protected:
@@ -268,6 +269,7 @@ public:
 	BOOL			m_bReversedPatch;
 	CDiffData		m_Data;
 	bool			m_bReadOnly;
+	bool			m_bInsMode;
 	bool			m_bBlame;
 	int				m_nMoveMovesToIgnore;
 	bool			m_bCollapsed;

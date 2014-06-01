@@ -5100,6 +5100,10 @@ msgstr ""
 msgid "ID:57665:V C +W"
 msgstr ""
 
+#. Resource IDs: (7)
+msgid "INS"
+msgstr ""
+
 #. Resource IDs: (5029)
 msgid "ISO 8859-1"
 msgstr ""
@@ -6384,6 +6388,10 @@ msgstr ""
 
 #. Resource IDs: (7)
 msgid "OLE initialization failed.  Make sure that the OLE libraries are the correct version."
+msgstr ""
+
+#. Resource IDs: (3697)
+msgid "OVR"
 msgstr ""
 
 #. Resource IDs: (156, 626)

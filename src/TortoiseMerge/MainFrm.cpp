@@ -169,6 +169,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWndEx)
 	ON_UPDATE_COMMAND_UI_RANGE(ID_INDICATOR_LEFTEOLSTART, ID_INDICATOR_LEFTEOLSTART+19, &CMainFrame::OnUpdateEOLLeft)
 	ON_UPDATE_COMMAND_UI_RANGE(ID_INDICATOR_RIGHTEOLSTART, ID_INDICATOR_RIGHTEOLSTART+19, &CMainFrame::OnUpdateEOLRight)
 	ON_UPDATE_COMMAND_UI_RANGE(ID_INDICATOR_BOTTOMEOLSTART, ID_INDICATOR_BOTTOMEOLSTART+19, &CMainFrame::OnUpdateEOLBottom)
+	ON_UPDATE_COMMAND_UI(ID_INDICATOR_OVR, &CMainFrame::OnUpdateInsMode)
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -179,6 +180,7 @@ static UINT indicators[] =
 	ID_INDICATOR_BOTTOMVIEW,
 	ID_INDICATOR_CAPS,
 	ID_INDICATOR_NUM,
+	ID_INDICATOR_OVR,
 };
 
 
@@ -196,6 +198,7 @@ CMainFrame::CMainFrame()
 	, m_pwndRightView(NULL)
 	, m_pwndBottomView(NULL)
 	, m_bReadOnly(false)
+	, m_bInsMode(true)
 	, m_bBlame(false)
 	, m_bCheckReload(false)
 	, m_bSaveRequired(false)
@@ -313,6 +316,8 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		apBtnGroupRight->AddButton(pButton);
 		apBtnGroupRight->AddButton(new CMFCRibbonStatusBarPane(ID_INDICATOR_RIGHTVIEW,  L"", TRUE));
 		m_wndRibbonStatusBar.AddExtendedElement(apBtnGroupRight.release(), L"");
+
+		m_wndRibbonStatusBar.AddExtendedElement(new CMFCRibbonStatusBarPane(ID_INDICATOR_OVR, CString(MAKEINTRESOURCE(ID_INDICATOR_OVR)), TRUE), L"");
 	}
 	else
 	{
@@ -3465,4 +3470,10 @@ void CMainFrame::OnUpdateEOLBottom( CCmdUI *pCmdUI )
 	}
 	else
 		pCmdUI->Enable(FALSE);
+}
+
+void CMainFrame::OnUpdateInsMode(CCmdUI *pCmdUI)
+{
+	pCmdUI->Enable(TRUE);
+	pCmdUI->SetText(CString(m_bInsMode ? MAKEINTRESOURCE(ID_INDICATOR_INS) : MAKEINTRESOURCE(ID_INDICATOR_OVR)));
 }

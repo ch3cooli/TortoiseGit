@@ -3008,6 +3008,9 @@ void CBaseView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 			RemoveSelectedText();
 		}
 		break;
+	case VK_INSERT:
+		m_pMainFrame->m_bInsMode = !m_pMainFrame->m_bInsMode;
+		break;
 	case VK_DELETE:
 		if (IsWritable())
 		{
@@ -3656,8 +3659,13 @@ void CBaseView::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
 			else
 				lineData.sLine.Insert(ptCaretViewPos.x, _T('\t'));
 		}
-		else
+		else if (m_pMainFrame->m_bInsMode || ptCaretViewPos.x == lineData.sLine.GetLength())
 			lineData.sLine.Insert(ptCaretViewPos.x, (wchar_t)nChar);
+		else
+		{
+			lineData.sLine.GetBuffer()[ptCaretViewPos.x] = (wchar_t)nChar;
+			lineData.sLine.ReleaseBuffer();
+		}
 		if (IsStateEmpty(lineData.state))
 		{
 			// if not last line set EOL
