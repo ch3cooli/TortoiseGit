@@ -63,7 +63,7 @@
     <sect1 id="tmerge-intro-history">
         <title>TortoiseGitMerge's History</title>
         <para>
-			TortoiseGitMerge is based on TortoiseMerge as TortoiseGit is based on TortoiseSVN. TortoiseSVN ships TortoiseMerge so we do with TortoiseGit (with a Git enhanced version).
+            TortoiseGitMerge is based on TortoiseMerge as TortoiseGit is based on TortoiseSVN. TortoiseSVN ships TortoiseMerge so we do with TortoiseGit (with a Git enhanced version).
         </para>
     </sect1>
 </chapter>

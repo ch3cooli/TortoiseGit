@@ -51,10 +51,10 @@ const int blockSize = 128 * 1024;
 
 
 #ifndef GET_X_LPARAM
-#define GET_X_LPARAM(lp)                        ((int)(short)LOWORD(lp))
+#define GET_X_LPARAM(lp)						((int)(short)LOWORD(lp))
 #endif
 #ifndef GET_Y_LPARAM
-#define GET_Y_LPARAM(lp)                        ((int)(short)HIWORD(lp))
+#define GET_Y_LPARAM(lp)						((int)(short)HIWORD(lp))
 #endif
 
 class CSciEditBlame: public CSciEdit
@@ -104,7 +104,7 @@ public:
 
 // Overrides
 public:
-	virtual void OnDraw(CDC* pDC);  // overridden to draw this view
+	virtual void OnDraw(CDC* pDC);	// overridden to draw this view
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 protected:
 	virtual BOOL OnPreparePrinting(CPrintInfo* pInfo);
@@ -291,8 +291,8 @@ protected:
 	CString					m_sMessage;
 };
 
-#ifndef _DEBUG  // debug version in TortoiseGitBlameView.cpp
+#ifndef _DEBUG	// debug version in TortoiseGitBlameView.cpp
 inline CTortoiseGitBlameDoc* CTortoiseGitBlameView::GetDocument() const
-   { return reinterpret_cast<CTortoiseGitBlameDoc*>(m_pDocument); }
+	{ return reinterpret_cast<CTortoiseGitBlameDoc*>(m_pDocument); }
 #endif
 

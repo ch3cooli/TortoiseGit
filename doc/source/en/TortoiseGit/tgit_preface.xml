@@ -86,13 +86,13 @@ and
 			explain the different approaches to version
 			control, and how Git works (with a bunch of examples).
 		</para>
-    <!--
+		<!--
 		<para>
 			Even most Git users will never have to set up a server themselves.
 			The next chapter deals with how to set up such a server, and is useful
 			for administrators.
 		</para>
-    -->
+		-->
 		<para>
 			The <xref linkend="tgit-dug"/> is the most important section as
 			it explains all the main features of TortoiseGit and how to use them.

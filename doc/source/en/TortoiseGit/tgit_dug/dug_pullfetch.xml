@@ -11,26 +11,26 @@
   </indexterm>
   <para>
     This section talks about how to fetch or pull change from the other
-	repository. The difference between pull and fetch is:
+    repository. The difference between pull and fetch is:
   </para>
   <para>
-	Pull will merge remote branch change to local branch which tracked with 
-	remote branch. Fetch just get change from remote branch and never merge.
+    Pull will merge remote branch change to local branch which tracked with 
+    remote branch. Fetch just get change from remote branch and never merge.
   </para>
   <para>
     <menuchoice>
       <guimenu>TortoiseGit
       </guimenu>
-	  <guimenuitem>Pull...
-	  </guimenuitem>
+      <guimenuitem>Pull...
+      </guimenuitem>
     </menuchoice>. 
   </para>
   <para>
     <menuchoice>
       <guimenu>TortoiseGit
       </guimenu>
-	  <guimenuitem>Fetch...
-	  </guimenuitem>
+      <guimenuitem>Fetch...
+      </guimenuitem>
     </menuchoice>. 
   </para>
   <para>
@@ -45,7 +45,7 @@
   </para>
   <para>
     If you check the <guilabel>Autoload Putty Key</guilabel> checkbox, Putty key
-	will auto load by Pageant.
+    will auto load by Pageant.
   </para>
   <para>
     <guilabel>Manage Remotes</guilabel> to add or modify remote configuration.

@@ -45,14 +45,14 @@ CSize CHTMLFormatter::DrawHTML(CDC * pDC, CRect rect, CString str, LOGFONT font,
 		return sz;
 
 	CPoint	pt = rect.TopLeft();
-	CPoint  ptCur = pt;
+	CPoint	ptCur = pt;
 
 
 	COLORREF crText = pDC->GetTextColor();
 	COLORREF crBg = pDC->GetBkColor();
 
 	LOGFONT lf;
-    memcpy(&lf, &font, sizeof(LOGFONT));
+	memcpy(&lf, &font, sizeof(LOGFONT));
 
 	CFont tempFont;
 	tempFont.CreateFontIndirect(&lf);

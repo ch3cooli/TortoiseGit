@@ -39,19 +39,19 @@ CProvider::parameters_t CProvider::ParseParameters(BSTR parameters) const
 }
 
 HRESULT STDMETHODCALLTYPE CProvider::ValidateParameters( 
-    /* [in] */ HWND hParentWnd,
-    /* [in] */ BSTR parameters,
-    /* [retval][out] */ VARIANT_BOOL *valid)
+	/* [in] */ HWND hParentWnd,
+	/* [in] */ BSTR parameters,
+	/* [retval][out] */ VARIANT_BOOL *valid)
 {
 	// Don't bother validating the parameters yet.
 	*valid = VARIANT_TRUE;
 	return S_OK;
 }
-    
+
 HRESULT STDMETHODCALLTYPE CProvider::GetLinkText( 
-    /* [in] */ HWND hParentWnd,
-    /* [in] */ BSTR parameters,
-    /* [retval][out] */ BSTR *linkText)
+	/* [in] */ HWND hParentWnd,
+	/* [in] */ BSTR parameters,
+	/* [retval][out] */ BSTR *linkText)
 {
 	parameters_t params = ParseParameters(parameters);
 	CString prompt = params[CString("Prompt")];
@@ -62,14 +62,14 @@ HRESULT STDMETHODCALLTYPE CProvider::GetLinkText(
 
 	return S_OK;
 }
-    
+
 HRESULT STDMETHODCALLTYPE CProvider::GetCommitMessage( 
-    /* [in] */ HWND hParentWnd,
-    /* [in] */ BSTR parameters,
-    /* [in] */ BSTR commonRoot,
-    /* [in] */ SAFEARRAY * pathList,
-    /* [in] */ BSTR originalMessage,
-    /* [retval][out] */ BSTR *newMessage)
+	/* [in] */ HWND hParentWnd,
+	/* [in] */ BSTR parameters,
+	/* [in] */ BSTR commonRoot,
+	/* [in] */ SAFEARRAY * pathList,
+	/* [in] */ BSTR originalMessage,
+	/* [retval][out] */ BSTR *newMessage)
 {
 	return GetCommitMessage2(hParentWnd, parameters, NULL, commonRoot, pathList, originalMessage, newMessage);
 }
@@ -175,7 +175,7 @@ HRESULT STDMETHODCALLTYPE CProvider::OnCommitFinished (
 }
 
 HRESULT STDMETHODCALLTYPE CProvider::HasOptions(
-				   /* [out, retval] */ VARIANT_BOOL *ret)
+					/* [out, retval] */ VARIANT_BOOL *ret)
 {
 	MessageBox(NULL, _T("test"), _T("test"), MB_ICONERROR);
 	*ret = VARIANT_FALSE;
@@ -187,10 +187,10 @@ HRESULT STDMETHODCALLTYPE CProvider::HasOptions(
 // Use this to show a custom dialog so the user doesn't have to
 // create the parameters string manually
 HRESULT STDMETHODCALLTYPE CProvider::ShowOptionsDialog(
-						  /* [in] */ HWND hParentWnd,
-						  /* [in] */ BSTR parameters,
-						  /* [out, retval] */ BSTR * newparameters
-						  )
+						/* [in] */ HWND hParentWnd,
+						/* [in] */ BSTR parameters,
+						/* [out, retval] */ BSTR * newparameters
+						)
 {
 	// we don't show an options dialog
 	return E_NOTIMPL;

@@ -396,7 +396,7 @@
                 </varlistentry>
             </variablelist>
         </para>
-	</sect2>
+    </sect2>
 -->
     <sect2 id="tgit-dug-revgraph-use">
         <title>Using the Graph</title>
@@ -470,7 +470,7 @@
             </para>
         </tip>
 -->
-	</sect2>
+    </sect2>
     <sect2 id="tgit-dug-revgraph-refresh">
         <title>Refreshing the View</title>
         <para>

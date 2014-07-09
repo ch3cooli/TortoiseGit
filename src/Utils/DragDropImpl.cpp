@@ -57,10 +57,10 @@ STDMETHODIMP_(ULONG) CIDataObject::AddRef( void)
 
 STDMETHODIMP_(ULONG) CIDataObject::Release( void)
 {
-   long nTemp = --m_cRefCount;
-   if(nTemp==0)
-	  delete this;
-   return nTemp;
+	long nTemp = --m_cRefCount;
+	if(nTemp==0)
+		delete this;
+	return nTemp;
 }
 
 STDMETHODIMP CIDataObject::GetData(
@@ -481,7 +481,7 @@ STDMETHODIMP CEnumFormatEtc::Clone(IEnumFORMATETC FAR * FAR*ppCloneEnumFormatEtc
 	CEnumFormatEtc *newEnum = new (std::nothrow) CEnumFormatEtc(m_pFmtEtc);
 	if(newEnum ==NULL)
 		return E_OUTOFMEMORY;
-  newEnum->AddRef();
+	newEnum->AddRef();
 	newEnum->m_iCur = m_iCur;
 	*ppCloneEnumFormatEtc = newEnum;
 	return S_OK;

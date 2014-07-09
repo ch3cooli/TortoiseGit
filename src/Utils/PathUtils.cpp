@@ -325,27 +325,27 @@ CString CPathUtils::ParsePathInString(const CString& Str)
 
 CString CPathUtils::GetAppDirectory(HMODULE hMod /* = NULL */)
 {
-    CString path;
-    DWORD len = 0;
-    DWORD bufferlen = MAX_PATH;     // MAX_PATH is not the limit here!
-    path.GetBuffer(bufferlen);
-    do
-    {
-        bufferlen += MAX_PATH;      // MAX_PATH is not the limit here!
-        path.ReleaseBuffer(0);
-        len = GetModuleFileName(hMod, path.GetBuffer(bufferlen+1), bufferlen);
-    } while(len == bufferlen);
-    path.ReleaseBuffer();
-    path = path.Left(path.ReverseFind('\\')+1);
-    return GetLongPathname(path);
+	CString path;
+	DWORD len = 0;
+	DWORD bufferlen = MAX_PATH;		// MAX_PATH is not the limit here!
+	path.GetBuffer(bufferlen);
+	do
+	{
+		bufferlen += MAX_PATH;		// MAX_PATH is not the limit here!
+		path.ReleaseBuffer(0);
+		len = GetModuleFileName(hMod, path.GetBuffer(bufferlen+1), bufferlen);
+	} while(len == bufferlen);
+	path.ReleaseBuffer();
+	path = path.Left(path.ReverseFind('\\')+1);
+	return GetLongPathname(path);
 }
 
 CString CPathUtils::GetAppParentDirectory(HMODULE hMod /* = NULL */)
 {
-    CString path = GetAppDirectory(hMod);
-    path = path.Left(path.ReverseFind('\\'));
-    path = path.Left(path.ReverseFind('\\')+1);
-    return path;
+	CString path = GetAppDirectory(hMod);
+	path = path.Left(path.ReverseFind('\\'));
+	path = path.Left(path.ReverseFind('\\')+1);
+	return path;
 }
 
 CString CPathUtils::GetAppDataDirectory()
@@ -413,12 +413,12 @@ CString CPathUtils::GetVersionFromFile(const CString & p_strFilename)
 
 		if (pBuffer != (void*) NULL)
 		{
-			UINT        nInfoSize = 0,
+			UINT		nInfoSize = 0,
 						nFixedLength = 0;
-			LPSTR       lpVersion = NULL;
-			VOID*       lpFixedPointer;
-			TRANSARRAY* lpTransArray;
-			CString     strLangProductVersion;
+			LPSTR		lpVersion = NULL;
+			VOID*		lpFixedPointer;
+			TRANSARRAY*	lpTransArray;
+			CString		strLangProductVersion;
 
 			GetFileVersionInfo((LPTSTR)(LPCTSTR)p_strFilename,
 				dwReserved,

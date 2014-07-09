@@ -1541,8 +1541,8 @@ Released: 2009-01-04
  * push fetch and pull don't support password mode. Just support public key problem.
  * Just fetch first 100 log item.
  * If install TortoiseGit before MsysGit, you need modify register
-	    HKEY_LOCAL_MACHINE\Software\TortoiseGit\\MsysGit\
-	   Let it point to correct msysgit install path.
+        HKEY_LOCAL_MACHINE\Software\TortoiseGit\\MsysGit\
+   Let it point to correct msysgit install path.
  * Add File, please commit and show unversion file, the choose add file, then right clict, Choose Add file
  * To new initial repository, You will not see add file again in commit dialog box if give up commit when choose add
 

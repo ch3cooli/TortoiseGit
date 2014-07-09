@@ -22,7 +22,7 @@
 
 namespace HighColorTab
 {
-  /*! \brief Policy class for creating image list.
+	/*! \brief Policy class for creating image list.
 
 	Policy for creating a high color (32 bits) image list. The policy
 	ensure that there is a Win32 image list associated with the CImageList.
@@ -58,7 +58,7 @@ namespace HighColorTab
 
 
 
-  /*! \brief Change the image list of the provided control (property sheet interface)
+	/*! \brief Change the image list of the provided control (property sheet interface)
 
 	This method provides full customization via policy over image list creation. The policy
 	must have a method with the signature:

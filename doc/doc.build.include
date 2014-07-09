@@ -21,12 +21,12 @@ This will only build the english HTML help file for TortoiseGit
 -->
 
 <project name="customize">
-  <description>Customization layer for build file</description>
+	<description>Customization layer for build file</description>
 
-  <include buildfile="doc.build.user" if="${file::exists('doc.build.user')}"/>
+	<include buildfile="doc.build.user" if="${file::exists('doc.build.user')}"/>
 
-  <!-- ============================================================ -->
-  <!-- List of applications, languages and output formats in which  -->
+	<!-- ============================================================ -->
+	<!-- List of applications, languages and output formats in which  -->
 	<!-- the documentation will be created by default                 -->
 
 	<property name="applications" 

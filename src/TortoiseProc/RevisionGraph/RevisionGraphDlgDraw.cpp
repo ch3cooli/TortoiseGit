@@ -398,7 +398,7 @@ isionGraphWnd::GetBranchCover
 #if 0
 void CRevisionGraphWnd::DrawShadows (GraphicsDevice& graphics, const CRect& logRect, const CSize& offset)
 {
-  // shadow color to use
+	// shadow color to use
 
 	Color background;
 	background.SetFromCOLORREF (GetSysColor(COLOR_WINDOW));

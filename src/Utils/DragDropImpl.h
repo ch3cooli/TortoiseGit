@@ -84,24 +84,24 @@ public:
 ///////////////////////////////////////////////////////////////////////////////////////////////
 class CEnumFormatEtc : public IEnumFORMATETC
 {
-   private:
-	 ULONG           m_cRefCount;
-	 CSimpleArray<FORMATETC>  m_pFmtEtc;
-	 int           m_iCur;
+private:
+	ULONG           m_cRefCount;
+	CSimpleArray<FORMATETC>  m_pFmtEtc;
+	int           m_iCur;
 
-   public:
-	 CEnumFormatEtc(const CSimpleArray<FORMATETC>& ArrFE);
-	 CEnumFormatEtc(const CSimpleArray<FORMATETC*>& ArrFE);
-	 //IUnknown members
-	 STDMETHOD(QueryInterface)(REFIID, void FAR* FAR*);
-	 STDMETHOD_(ULONG, AddRef)(void);
-	 STDMETHOD_(ULONG, Release)(void);
+public:
+	CEnumFormatEtc(const CSimpleArray<FORMATETC>& ArrFE);
+	CEnumFormatEtc(const CSimpleArray<FORMATETC*>& ArrFE);
+	//IUnknown members
+	STDMETHOD(QueryInterface)(REFIID, void FAR* FAR*);
+	STDMETHOD_(ULONG, AddRef)(void);
+	STDMETHOD_(ULONG, Release)(void);
 
-	 //IEnumFORMATETC members
-	 STDMETHOD(Next)(ULONG, LPFORMATETC, ULONG FAR *);
-	 STDMETHOD(Skip)(ULONG);
-	 STDMETHOD(Reset)(void);
-	 STDMETHOD(Clone)(IEnumFORMATETC FAR * FAR*);
+	//IEnumFORMATETC members
+	STDMETHOD(Next)(ULONG, LPFORMATETC, ULONG FAR *);
+	STDMETHOD(Skip)(ULONG);
+	STDMETHOD(Reset)(void);
+	STDMETHOD(Clone)(IEnumFORMATETC FAR * FAR*);
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////

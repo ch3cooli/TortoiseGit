@@ -129,12 +129,12 @@ typedef struct public_key_t public_key_t;
 
 typedef struct _DSAKEY
 {
-  BLOBHEADER blobheader;
-  DSSPUBKEY_VER3 dsspubkeyver3;
-  BYTE p[128]; // prime modulus
-  BYTE q[20]; // large factor of P-1
-  BYTE g[128]; // the generator parameter
-  BYTE y[128]; // (G^X) mod P
+	BLOBHEADER blobheader;
+	DSSPUBKEY_VER3 dsspubkeyver3;
+	BYTE p[128]; // prime modulus
+	BYTE q[20]; // large factor of P-1
+	BYTE g[128]; // the generator parameter
+	BYTE y[128]; // (G^X) mod P
 } DSAKEY;
 
 int VerifyIntegrity(const CString &filename, const CString &signatureFilename, CUpdateDownloader *updateDownloader);

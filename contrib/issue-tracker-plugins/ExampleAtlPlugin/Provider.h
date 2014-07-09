@@ -27,23 +27,23 @@ END_COM_MAP()
 
 // IBugTraqProvider
 public:
-    virtual HRESULT STDMETHODCALLTYPE ValidateParameters( 
-        /* [in] */ HWND hParentWnd,
-        /* [in] */ BSTR parameters,
-        /* [retval][out] */ VARIANT_BOOL *valid);
-    
-    virtual HRESULT STDMETHODCALLTYPE GetLinkText( 
-        /* [in] */ HWND hParentWnd,
-        /* [in] */ BSTR parameters,
-        /* [retval][out] */ BSTR *linkText);
-    
-    virtual HRESULT STDMETHODCALLTYPE GetCommitMessage( 
-        /* [in] */ HWND hParentWnd,
-        /* [in] */ BSTR parameters,
-        /* [in] */ BSTR commonRoot,
-        /* [in] */ SAFEARRAY * pathList,
-        /* [in] */ BSTR originalMessage,
-        /* [retval][out] */ BSTR *newMessage);
+	virtual HRESULT STDMETHODCALLTYPE ValidateParameters( 
+		/* [in] */ HWND hParentWnd,
+		/* [in] */ BSTR parameters,
+		/* [retval][out] */ VARIANT_BOOL *valid);
+
+	virtual HRESULT STDMETHODCALLTYPE GetLinkText( 
+		/* [in] */ HWND hParentWnd,
+		/* [in] */ BSTR parameters,
+		/* [retval][out] */ BSTR *linkText);
+
+	virtual HRESULT STDMETHODCALLTYPE GetCommitMessage( 
+		/* [in] */ HWND hParentWnd,
+		/* [in] */ BSTR parameters,
+		/* [in] */ BSTR commonRoot,
+		/* [in] */ SAFEARRAY * pathList,
+		/* [in] */ BSTR originalMessage,
+		/* [retval][out] */ BSTR *newMessage);
 
 	virtual HRESULT STDMETHODCALLTYPE GetCommitMessage2( 
 		/* [in] */ HWND hParentWnd,

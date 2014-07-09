@@ -7,28 +7,28 @@ using Microsoft.Win32;
 
 namespace ExampleCsPlugin
 {
-    [ComVisible(true),
-        Guid("5870B3F1-8393-4c83-ACED-1D5E803A4F2B"),
-        ClassInterface(ClassInterfaceType.None)]
-    public class MyPlugin : Interop.BugTraqProvider.IBugTraqProvider2, Interop.BugTraqProvider.IBugTraqProvider
-    {
+	[ComVisible(true),
+		Guid("5870B3F1-8393-4c83-ACED-1D5E803A4F2B"),
+		ClassInterface(ClassInterfaceType.None)]
+	public class MyPlugin : Interop.BugTraqProvider.IBugTraqProvider2, Interop.BugTraqProvider.IBugTraqProvider
+	{
 		private List<TicketItem> selectedTickets = new List<TicketItem>();
 
-        public bool ValidateParameters(IntPtr hParentWnd, string parameters)
-        {
-            return true;
-        }
+		public bool ValidateParameters(IntPtr hParentWnd, string parameters)
+		{
+			return true;
+		}
 
-        public string GetLinkText(IntPtr hParentWnd, string parameters)
-        {
-            return "Choose Issue";
-        }
+		public string GetLinkText(IntPtr hParentWnd, string parameters)
+		{
+			return "Choose Issue";
+		}
 
-        public string GetCommitMessage(IntPtr hParentWnd, string parameters, string commonRoot, string[] pathList,
-                                       string originalMessage)
-        {
+		public string GetCommitMessage(IntPtr hParentWnd, string parameters, string commonRoot, string[] pathList,
+									   string originalMessage)
+		{
 			return GetCommitMessage2( hParentWnd, parameters, "", commonRoot, pathList, originalMessage );
-        }
+		}
 
 		public string GetCommitMessage2( IntPtr hParentWnd, string parameters, string commonURL, string commonRoot, string[] pathList,
 							   string originalMessage )
