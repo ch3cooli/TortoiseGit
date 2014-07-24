@@ -1383,7 +1383,7 @@
 #define IDC_COMBO_TAGOPT                1728
 #define IDC_REV1BTN1                    1729
 #define IDC_CHECK_NORECYCLEBIN          1730
-#define IDC_CHECK_DRYRUN                1731
+#define IDC_DRY_RUN                     1731
 #define IDC_LOG_SHOWTAGS                1732
 #define IDC_SYMBOLIZEREFNAMES           1733
 #define IDC_CHECK_SUBMODULE_NOFETCH     1734

@@ -46,6 +46,7 @@ protected:
 	virtual	BOOL OnInitDialog();
 	virtual	void OnOK();
 	afx_msg void OnBnClickedCheckNoRecycleBin();
+	afx_msg void OnBnClickedDryRun();
 
 public:
 	BOOL	m_bDir;

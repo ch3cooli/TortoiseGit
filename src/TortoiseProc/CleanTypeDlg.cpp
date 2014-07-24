@@ -54,13 +54,13 @@ void CCleanTypeDlg::DoDataExchange(CDataExchange* pDX)
 	CDialog::DoDataExchange(pDX);
 	DDX_Check(pDX, IDC_CHECK_DIR, m_bDir);
 	DDX_Check(pDX, IDC_CHECK_NORECYCLEBIN, m_bNoRecycleBin);
-	DDX_Check(pDX, IDC_CHECK_DRYRUN, m_bDryRun);
 	DDX_Check(pDX, IDC_CHECKSUBMODULES, m_bSubmodules);
 	DDX_Radio(pDX, IDC_RADIO_CLEAN_ALL,m_CleanType);
 }
 
 
 BEGIN_MESSAGE_MAP(CCleanTypeDlg, CStateStandAloneDialog)
+	ON_BN_CLICKED(IDC_DRY_RUN, &CCleanTypeDlg::OnBnClickedDryRun)
 END_MESSAGE_MAP()
 
 
@@ -76,7 +76,6 @@ BOOL CCleanTypeDlg::OnInitDialog()
 	AdjustControlSize(IDC_RADIO_CLEAN_IGNORE);
 	AdjustControlSize(IDC_CHECK_DIR);
 	AdjustControlSize(IDC_CHECK_NORECYCLEBIN);
-	AdjustControlSize(IDC_CHECK_DRYRUN);
 	AdjustControlSize(IDC_CHECKSUBMODULES);
 
 	EnableSaveRestore(_T("CleanTypeDlg"));
@@ -93,8 +92,20 @@ void CCleanTypeDlg::OnOK()
 {
 	this->UpdateData();
 
+	m_bDryRun = FALSE;
 	this->m_regDir = this->m_bDir;
 	this->m_regType = this->m_CleanType ;
+
+	CStateStandAloneDialog::OnOK();
+}
+
+void CCleanTypeDlg::OnBnClickedDryRun()
+{
+	UpdateData();
+
+	m_bDryRun = TRUE;
+	m_regDir = m_bDir;
+	m_regType = m_CleanType;
 
 	CStateStandAloneDialog::OnOK();
 }
