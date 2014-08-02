@@ -76,7 +76,6 @@ private:
 
 private:
 	CComAutoCriticalSection m_critSec;
-	CComAutoCriticalSection m_critSecPath;
 
 	CTGitPath	m_currentStatusFetchingPath;
 	// The cache of files and directories within this directory
