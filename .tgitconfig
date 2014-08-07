@@ -7,3 +7,6 @@
 	warnnosignedoffby = true
 	projectlanguage = 1033
 	icon = src/Resources/Tortoise.ico
+
+[tgit "snippet"]
+	tortoisegit = "Prepare release and bump version numbers to "

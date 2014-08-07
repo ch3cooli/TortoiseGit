@@ -195,6 +195,8 @@ public:
 	CString		sProviderUuid;
 	CString		sProviderUuid64;
 
+	std::map<CString, CString> snippets;
+
 private:
 	/**
 	 * Constructing regex objects is expensive. Therefore, cache them here.

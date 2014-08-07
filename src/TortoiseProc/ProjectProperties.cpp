@@ -127,6 +127,16 @@ int ProjectProperties::ReadProps()
 			nMinLogSize = _ttoi(val);
 	}
 
+	snippets.clear();
+	git_config_foreach_match(*gitconfig.GetPointer(), "tgit\\.snippet\\..*", 
+		[](const git_config_entry *entry, void *payload) -> int
+		{
+			auto list = (std::map<CString, CString>*)payload;
+			CString name = CUnicodeUtils::GetUnicode(entry->name).Mid(sizeof("tgit.snippet.") - 1);
+			(*list)[name] = CUnicodeUtils::GetUnicode(entry->value);
+			return 0;
+		}, &snippets);
+
 	return 0;
 }
 

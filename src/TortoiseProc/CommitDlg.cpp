@@ -1583,36 +1583,6 @@ void CCommitDlg::ParseRegexFile(const CString& sFile, std::map<CString, CString>
 	}
 }
 
-void CCommitDlg::ParseSnippetFile(const CString& sFile, std::map<CString, CString>& mapSnippet)
-{
-	CString strLine;
-	try
-	{
-		CStdioFile file(sFile, CFile::typeText | CFile::modeRead | CFile::shareDenyWrite);
-		while (m_bRunThread && file.ReadString(strLine))
-		{
-			if (strLine.IsEmpty())
-				continue;
-			if (strLine.Left(1) == _T('#')) // comment char
-				continue;
-			int eqpos = strLine.Find('=');
-			CString key = strLine.Left(eqpos);
-			CString value = strLine.Mid(eqpos + 1);
-			value.Replace(_T("\\\t"), _T("\t"));
-			value.Replace(_T("\\\r"), _T("\r"));
-			value.Replace(_T("\\\n"), _T("\n"));
-			value.Replace(_T("\\\\"), _T("\\"));
-			mapSnippet[key] = value;
-		}
-		file.Close();
-	}
-	catch (CFileException* pE)
-	{
-		CTraceToOutputDebugString::Instance()(__FUNCTION__ ": CFileException loading auto list regex file\n");
-		pE->Delete();
-	}
-}
-
 void CCommitDlg::GetAutocompletionList()
 {
 	// the auto completion list is made of strings from each selected files.
@@ -1640,16 +1610,7 @@ void CCommitDlg::GetAutocompletionList()
 		ParseRegexFile(sRegexFile, mapRegex);
 	}
 
-	m_snippet.clear();
-	CString sSnippetFile = CPathUtils::GetAppDirectory();
-	sSnippetFile += _T("snippet.txt");
-	ParseSnippetFile(sSnippetFile, m_snippet);
-	SHGetFolderPath(NULL, CSIDL_APPDATA, NULL, SHGFP_TYPE_CURRENT, sSnippetFile.GetBuffer(MAX_PATH+1));
-	sSnippetFile.ReleaseBuffer();
-	sSnippetFile += _T("\\TortoiseGit\\snippet.txt");
-	if (PathFileExists(sSnippetFile))
-		ParseSnippetFile(sSnippetFile, m_snippet);
-	for (auto snip : m_snippet)
+	for (auto snip : m_ProjectProperties.snippets)
 		m_autolist.insert(std::make_pair(snip.first, AUTOCOMPLETE_SNIPPET));
 
 	DWORD starttime = GetTickCount();
@@ -1899,7 +1860,7 @@ void CCommitDlg::HandleSnippet(int type, const CString &text, CSciEdit *pSciEdit
 {
 	if (type == AUTOCOMPLETE_SNIPPET)
 	{
-		CString target = m_snippet[text];
+		CString target = m_ProjectProperties.snippets[text];
 		pSciEdit->GetWordUnderCursor(true);
 		pSciEdit->InsertText(target, false);
 	}

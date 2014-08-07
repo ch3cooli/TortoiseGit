@@ -127,7 +127,6 @@ protected:
 	void SaveSplitterPos();
 	void UpdateCheckLinks();
 	void ParseRegexFile(const CString& sFile, std::map<CString, CString>& mapRegex);
-	void ParseSnippetFile(const CString& sFile, std::map<CString, CString>& mapSnippet);
 	void RunStartCommitHook();
 
 	DECLARE_MESSAGE_MAP()
@@ -168,7 +167,6 @@ protected:
 private:
 	CWinThread*			m_pThread;
 	std::map<CString, int>	m_autolist;
-	std::map<CString, CString>	m_snippet;
 	CGitStatusListCtrl	m_ListCtrl;
 	BOOL				m_bShowUnversioned;
 	volatile LONG		m_bBlock;
