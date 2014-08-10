@@ -2036,12 +2036,13 @@ void CGitLogListBase::OnContextMenu(CWnd* pWnd, CPoint point)
 				if (m_ContextMenuMask&GetContextMenuBit(ID_CREATE_TAG) && !isStash)
 					popup.AppendMenuIcon(ID_CREATE_TAG,IDS_CREATE_TAG_AT_THIS , IDI_TAG);
 
-				format.LoadString(IDS_REBASE_THIS_FORMAT);
+				bool reverseRebase = !!(GetAsyncKeyState(VK_SHIFT) & 0x8000);
+				format.LoadString(reverseRebase ? IDS_REBASE_THIS_ONTO_FORMAT : IDS_REBASE_THIS_FORMAT);
 				str.Format(format,g_Git.GetCurrentBranch());
 
 				if (pSelLogEntry->m_CommitHash != m_HeadHash && m_hasWC && !isMergeActive && !isStash)
 					if(m_ContextMenuMask&GetContextMenuBit(ID_REBASE_TO_VERSION))
-						popup.AppendMenuIcon(ID_REBASE_TO_VERSION, str , IDI_REBASE);
+						popup.AppendMenuIcon(reverseRebase ? ID_REBASE_VERSION_ONTO : ID_REBASE_TO_VERSION, str , IDI_REBASE);
 
 				if(m_ContextMenuMask&GetContextMenuBit(ID_EXPORT))
 					popup.AppendMenuIcon(ID_EXPORT,IDS_EXPORT_TO_THIS, IDI_EXPORT);

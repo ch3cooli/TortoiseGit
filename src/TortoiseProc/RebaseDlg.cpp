@@ -45,6 +45,7 @@ CRebaseDlg::CRebaseDlg(CWnd* pParent /*=NULL*/)
 	, m_bAutoSkipFailedCommit(FALSE)
 	, m_bFinishedRebase(false)
 	, m_bStashed(false)
+	, m_bReverseUpstream(FALSE)
 {
 	m_RebaseStage=CHOOSE_BRANCH;
 	m_CurrentRebaseIndex=-1;
@@ -448,6 +449,13 @@ void CRebaseDlg::LoadBranchInfo()
 			m_UpstreamCtrl.SetCurSel(found);
 		else
 			m_UpstreamCtrl.SetCurSel(-1);
+	}
+
+	if (m_bReverseUpstream)
+	{
+		CString temp = m_BranchCtrl.GetString();
+		m_BranchCtrl.AddString(m_UpstreamCtrl.GetString());
+		m_UpstreamCtrl.AddString(temp);
 	}
 }
 

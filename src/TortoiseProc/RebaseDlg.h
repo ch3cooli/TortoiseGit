@@ -152,6 +152,7 @@ public:
 
 	CString				m_Upstream;
 	CString				m_Branch;
+	BOOL				m_bReverseUpstream;
 
 	BOOL				m_IsCherryPick;
 

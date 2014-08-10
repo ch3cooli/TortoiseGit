@@ -659,6 +659,7 @@ void CGitLogList::ContextMenuAction(int cmd,int FirstSelect, int LastSelect, CMe
 			}
 			break;
 		case ID_REBASE_TO_VERSION:
+		case ID_REBASE_VERSION_ONTO:
 			{
 				if (m_bThreadRunning)
 				{
@@ -666,6 +667,7 @@ void CGitLogList::ContextMenuAction(int cmd,int FirstSelect, int LastSelect, CMe
 					break;
 				}
 				CRebaseDlg dlg;
+				dlg.m_bReverseUpstream = (cmd & 0xFFFF) == ID_REBASE_VERSION_ONTO;
 				auto refList = m_HashMap[pSelLogEntry->m_CommitHash];
 				dlg.m_Upstream = refList.empty() ? pSelLogEntry->m_CommitHash.ToString() : refList.front();
 				for (auto ref : refList)
