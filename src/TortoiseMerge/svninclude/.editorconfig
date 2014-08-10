@@ -1,0 +1,9 @@
+; See http://editorconfig.org/ for more informations
+
+[*.h]
+indent_style = space
+indent_size = 2
+
+[*.c]
+indent_style = space
+indent_size = 2

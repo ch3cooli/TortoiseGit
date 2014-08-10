@@ -1,0 +1,27 @@
+; See http://editorconfig.org/ for more informations
+; Top-most EditorConfig file
+root = true
+
+[*.vcxproj]
+indent_style = space
+indent_size = 2
+
+[*.vcxproj.filters]
+indent_style = space
+indent_size = 2
+
+[*.vcxproj.user]
+indent_style = space
+indent_size = 2
+
+[*.props]
+indent_style = space
+indent_size = 2
+
+[*.rc*]
+indent_style = space
+indent_size = 4
+
+[resource.h]
+indent_style = space
+indent_size = 4

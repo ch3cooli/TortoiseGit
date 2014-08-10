@@ -1,0 +1,7 @@
+; See http://editorconfig.org/ for more informations
+; Top-most EditorConfig file
+root = true
+
+[*]
+indent_style = space
+indent_size = 4

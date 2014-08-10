@@ -1,0 +1,5 @@
+; See http://editorconfig.org/ for more informations
+
+[*.xml]
+indent_style = tab
+indent_size = 4
