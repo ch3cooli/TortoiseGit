@@ -882,6 +882,10 @@ void CRevisionGraphWnd::DrawConnections (GraphicsDevice& graphics, const CRect& 
 	float penwidth = 2*m_fZoomFactor<1? 1:2*m_fZoomFactor;
 	Gdiplus::Pen pen(Color(0,0,0),penwidth);
 
+	CString fontname = CRegString(_T("Software\\TortoiseGit\\LogFontName"), _T("Courier New"));
+	Gdiplus::Font font(fontname.GetBuffer(), (REAL)m_nFontSize, FontStyleRegular);
+	SolidBrush blackbrush((ARGB)Color::Black);
+	CAutoRepository repo(g_Git.GetGitRepository());
 	// iterate over all visible lines
 	edge e;
 	forall_edges(e, m_Graph)
@@ -923,9 +927,16 @@ void CRevisionGraphWnd::DrawConnections (GraphicsDevice& graphics, const CRect& 
 			//pts.Add(pt);
 		}
 
+		CGitHash target = m_logEntries[e->target()->index()];
+		CGitHash source = m_logEntries[e->source()->index()];
+		size_t ahead = 0, behind = 0;
+		git_graph_ahead_behind(&ahead, &behind, repo, (const git_oid *)target.m_hash, (const git_oid *)source.m_hash);
 		if (graphics.graphics)
 		{
 			graphics.graphics->DrawLines(&pen, points.GetData(), (INT)points.GetCount());
+			bool isleft = points.GetAt(0).X < points.GetAt(1).X;
+			std::wstring strAhead = std::to_wstring(ahead);
+			graphics.graphics->DrawString(strAhead.c_str(), (INT)strAhead.size(), &font, points.GetAt(0) + PointF((isleft ? 20 : 5) * m_fZoomFactor, 0), &blackbrush);
 
 		}
 		else if (graphics.pSVG)
@@ -933,6 +944,9 @@ void CRevisionGraphWnd::DrawConnections (GraphicsDevice& graphics, const CRect& 
 			Color color;
 			color.SetFromCOLORREF(GetSysColor(COLOR_WINDOWTEXT));
 			graphics.pSVG->Polyline(points.GetData(), (int)points.GetCount(), Color(0,0,0), (int)penwidth);
+			bool isleft = points.GetAt(0).X < points.GetAt(1).X;
+			std::string strAhead = std::to_string(ahead);
+			graphics.pSVG->Text(points.GetAt(0).X + (isleft ? 20 : 5), points.GetAt(0).Y + m_nFontSize, CUnicodeUtils::GetUTF8(fontname), m_nFontSize, false, false, Color::Black, strAhead.c_str());
 		}
 		else if (graphics.pGraphviz)
 		{
