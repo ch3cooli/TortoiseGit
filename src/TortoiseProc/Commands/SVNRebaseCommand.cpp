@@ -106,10 +106,10 @@ bool SVNRebaseCommand::Execute()
 
 	if(progress.DoModal()!=IDOK)
 	{
-		::DeleteFile(g_Git.m_CurrentDir + _T("\\sys$command"));
+		::DeleteFile(g_Git.CombinePath(_T("sys$command")));
 		return false;
 	}
-	::DeleteFile(g_Git.m_CurrentDir + _T("\\sys$command"));
+	::DeleteFile(g_Git.CombinePath(_T("sys$command")));
 
 	if(progress.m_GitStatus)
 		return false;

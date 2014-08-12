@@ -251,7 +251,7 @@ bool CloneCommand::Execute()
 		INT_PTR ret = progress.DoModal();
 
 		if (dlg.m_bSVN)
-			::DeleteFile(g_Git.m_CurrentDir + _T("\\sys$command"));
+			::DeleteFile(g_Git.CombinePath(_T("sys$command")));
 
 		return ret == IDOK;
 	}

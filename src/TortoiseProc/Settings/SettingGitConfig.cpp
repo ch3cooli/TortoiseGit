@@ -287,7 +287,7 @@ void CSettingGitConfig::OnBnClickedEdittgitconfig()
 	}
 	else
 	{
-		CAppUtils::LaunchAlternativeEditor(g_Git.m_CurrentDir + _T("\\.tgitconfig"));
+		CAppUtils::LaunchAlternativeEditor(g_Git.CombinePath(_T(".tgitconfig")));
 	}
 }
 

@@ -89,7 +89,7 @@ bool SVNFetchCommand::Execute()
 	};
 
 	INT_PTR userResponse = progress.DoModal();
-	::DeleteFile(g_Git.m_CurrentDir + _T("\\sys$command"));
+	::DeleteFile(g_Git.CombinePath(_T("sys$command")));
 
 	return userResponse == IDOK;
 }
