@@ -1292,6 +1292,12 @@ int addto_list_each_ref_fn(const char *refname, const unsigned char * /*sha1*/, 
 	return 0;
 }
 
+bool CGit::IsGitSortTagReversed()
+{
+	CString tagSort = GetConfigValue(_T("tag.sort"));
+	return tagSort.Left(1) == _T("-");
+}
+
 int CGit::GetTagList(STRING_VECTOR &list)
 {
 	if (this->m_IsUseLibGit2)
@@ -1311,7 +1317,7 @@ int CGit::GetTagList(STRING_VECTOR &list)
 			list.push_back(CUnicodeUtils::GetUnicode(tagName));
 		}
 
-		std::sort(list.begin(), list.end(), g_bSortTagsReversed ? LogicalCompareReversedPredicate : LogicalComparePredicate);
+		std::sort(list.begin(), list.end(), g_bSortTagsReversed || IsGitSortTagReversed() ? LogicalCompareReversedPredicate : LogicalComparePredicate);
 
 		return 0;
 	}
@@ -1330,7 +1336,7 @@ int CGit::GetTagList(STRING_VECTOR &list)
 				if (!one.IsEmpty())
 					list.push_back(one);
 			}
-			std::sort(list.begin(), list.end(), g_bSortTagsReversed ? LogicalCompareReversedPredicate : LogicalComparePredicate);
+			std::sort(list.begin(), list.end(), g_bSortTagsReversed || IsGitSortTagReversed() ? LogicalCompareReversedPredicate : LogicalComparePredicate);
 		}
 		return ret;
 	}
@@ -1676,7 +1682,7 @@ int CGit::GetRemoteTags(const CString& remote, STRING_VECTOR &list)
 		if (!one.IsEmpty())
 			list.push_back(one);
 	}
-	std::sort(list.begin(), list.end(), g_bSortTagsReversed ? LogicalCompareReversedPredicate : LogicalComparePredicate);
+	std::sort(list.begin(), list.end(), g_bSortTagsReversed || IsGitSortTagReversed() ? LogicalCompareReversedPredicate : LogicalComparePredicate);
 	return 0;
 }
 

@@ -206,6 +206,7 @@ private:
 		CGitCall* pcall;
 	} ASYNCREADSTDERRTHREADARGS, *PASYNCREADSTDERRTHREADARGS;
 	CString GetUnifiedDiffCmd(const CTGitPath& path, const git_revnum_t& rev1, const git_revnum_t& rev2, bool bMerge, bool bCombine, int diffContext);
+	bool IsGitSortTagReversed();
 
 public:
 	int RunAsync(CString cmd, PROCESS_INFORMATION *pi, HANDLE* hRead, HANDLE *hErrReadOut, CString *StdioFile = NULL);
