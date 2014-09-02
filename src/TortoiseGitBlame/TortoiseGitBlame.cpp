@@ -33,6 +33,7 @@
 #include "PathUtils.h"
 #include "CommonAppUtils.h"
 #include "TaskbarUUID.h"
+#include "LangDll.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -101,34 +102,10 @@ BOOL CTortoiseGitBlameApp::InitInstance()
 	//set the resource dll for the required language
 	CRegDWORD loc = CRegDWORD(_T("Software\\TortoiseGit\\LanguageID"), 1033);
 	long langId = loc;
-	CString langDll;
-	HINSTANCE hInst = NULL;
-	do
-	{
-		langDll.Format(_T("%sLanguages\\TortoiseGitBlame%ld.dll"), (LPCTSTR)CPathUtils::GetAppParentDirectory(), langId);
-
-		hInst = LoadLibrary(langDll);
-		CString sVer = _T(STRPRODUCTVER);
-		CString sFileVer = CPathUtils::GetVersionFromFile(langDll);
-		if (sFileVer.Compare(sVer)!=0)
-		{
-			FreeLibrary(hInst);
-			hInst = NULL;
-		}
-		if (hInst != NULL)
-			AfxSetResourceHandle(hInst);
-		else
-		{
-			DWORD lid = SUBLANGID(langId);
-			lid--;
-			if (lid > 0)
-			{
-				langId = MAKELANGID(PRIMARYLANGID(langId), lid);
-			}
-			else
-				langId = 0;
-		}
-	} while ((hInst == NULL) && (langId != 0));
+	CLangDll langDLL;
+	HINSTANCE hInst = langDLL.Init(_T("TortoiseGitBlame"), langId);
+	if (hInst != NULL)
+		AfxSetResourceHandle(hInst);
 	TCHAR buf[6] = { 0 };
 	_tcscpy_s(buf, _T("en"));
 	langId = loc;

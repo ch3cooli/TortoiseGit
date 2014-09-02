@@ -39,6 +39,7 @@
 #include "Settings\setmainpage.h"
 #include "Libraries.h"
 #include "TaskbarUUID.h"
+#include "LangDll.h"
 #include "ProjectProperties.h"
 #include "HistoryCombo.h"
 #include <math.h>
@@ -118,36 +119,13 @@ BOOL CTortoiseProcApp::InitInstance()
 		langStr.Format(_T("%ld"), langId);
 		CCrashReport::Instance().AddUserInfoToReport(L"LanguageID", langStr);
 	}
-	CString langDll;
-	CStringA langpath = CStringA(CPathUtils::GetAppParentDirectory());
-	langpath += "Languages";
-	do
+	CLangDll langDLL;
+	HINSTANCE hInst = langDLL.Init(_T("TortoiseProc"), langId);
+	if (hInst != NULL)
 	{
-		langDll.Format(_T("%sLanguages\\TortoiseProc%ld.dll"), (LPCTSTR)CPathUtils::GetAppParentDirectory(), langId);
-
-		CString sVer = _T(STRPRODUCTVER);
-		CString sFileVer = CPathUtils::GetVersionFromFile(langDll);
-		if (sFileVer == sVer)
-		{
-			HINSTANCE hInst = LoadLibrary(langDll);
-			if (hInst != NULL)
-			{
-				CTraceToOutputDebugString::Instance()(_T(__FUNCTION__) _T(": Load Language DLL %s\n"), langDll);
-				AfxSetResourceHandle(hInst);
-				break;
-			}
-		}
-		{
-			DWORD lid = SUBLANGID(langId);
-			lid--;
-			if (lid > 0)
-			{
-				langId = MAKELANGID(PRIMARYLANGID(langId), lid);
-			}
-			else
-				langId = 0;
-		}
-	} while (langId != 0);
+		CTraceToOutputDebugString::Instance()(_T(__FUNCTION__) _T(": Load Language DLL %d\n"), langId);
+		AfxSetResourceHandle(hInst);
+	}
 	TCHAR buf[6] = { 0 };
 	_tcscpy_s(buf, _T("en"));
 	langId = loc;
