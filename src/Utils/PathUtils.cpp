@@ -190,6 +190,7 @@ void CPathUtils::ConvertToBackslash(LPTSTR dest, LPCTSTR src, size_t len)
 			*p = '\\';
 }
 
+#ifdef CSTRING_AVAILABLE
 CStringA CPathUtils::PathEscape(const CStringA& path)
 {
 	CStringA ret2;
@@ -236,7 +237,6 @@ CStringA CPathUtils::PathEscape(const CStringA& path)
 	return ret;
 }
 
-#ifdef CSTRING_AVAILABLE
 CString CPathUtils::GetFileNameFromPath(CString sPath)
 {
 	CString ret;

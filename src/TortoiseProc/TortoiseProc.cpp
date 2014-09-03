@@ -126,53 +126,11 @@ BOOL CTortoiseProcApp::InitInstance()
 		CTraceToOutputDebugString::Instance()(_T(__FUNCTION__) _T(": Load Language DLL %d\n"), langId);
 		AfxSetResourceHandle(hInst);
 	}
-	TCHAR buf[6] = { 0 };
-	_tcscpy_s(buf, _T("en"));
 	langId = loc;
 	// MFC uses a help file with the same name as the application by default,
 	// which means we have to change that default to our language specific help files
-	CString sHelppath = CPathUtils::GetAppDirectory() + _T("TortoiseGit_en.chm");
 	free((void*)m_pszHelpFilePath);
-	m_pszHelpFilePath=_tcsdup(sHelppath);
-	sHelppath = CPathUtils::GetAppParentDirectory() + _T("Languages\\TortoiseGit_en.chm");
-	do
-	{
-		CString sLang = _T("_");
-		if (GetLocaleInfo(MAKELCID(langId, SORT_DEFAULT), LOCALE_SISO639LANGNAME, buf, _countof(buf)))
-		{
-			sLang += buf;
-			sHelppath.Replace(_T("_en"), sLang);
-			if (PathFileExists(sHelppath))
-			{
-				free((void*)m_pszHelpFilePath);
-				m_pszHelpFilePath=_tcsdup(sHelppath);
-				break;
-			}
-		}
-		sHelppath.Replace(sLang, _T("_en"));
-		if (GetLocaleInfo(MAKELCID(langId, SORT_DEFAULT), LOCALE_SISO3166CTRYNAME, buf, _countof(buf)))
-		{
-			sLang += _T("_");
-			sLang += buf;
-			sHelppath.Replace(_T("_en"), sLang);
-			if (PathFileExists(sHelppath))
-			{
-				free((void*)m_pszHelpFilePath);
-				m_pszHelpFilePath=_tcsdup(sHelppath);
-				break;
-			}
-		}
-		sHelppath.Replace(sLang, _T("_en"));
-
-		DWORD lid = SUBLANGID(langId);
-		lid--;
-		if (lid > 0)
-		{
-			langId = MAKELANGID(PRIMARYLANGID(langId), lid);
-		}
-		else
-			langId = 0;
-	} while (langId);
+	m_pszHelpFilePath = langDLL.GetHelpFilePath(_T("TortoiseProc"), langId);
 	CTraceToOutputDebugString::Instance()(_T(__FUNCTION__) _T(": Set Help Filename %s\n"), m_pszHelpFilePath);
 	setlocale(LC_ALL, "");
 

@@ -55,7 +55,6 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\Utils\CommonAppUtils.cpp" />
-    <ClCompile Include="..\Utils\LangDll.cpp" />
     <ClCompile Include="..\Utils\MiscUI\FileDlgEventHandler.cpp" />
     <ClCompile Include="..\Utils\MiscUI\IconBitmapUtils.cpp" />
     <ClCompile Include="..\Utils\MiscUI\IconMenu.cpp" />
@@ -307,7 +306,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Utils\CommonAppUtils.h" />
-    <ClInclude Include="..\Utils\LangDll.h" />
     <ClInclude Include="..\Utils\MiscUI\FileDlgEventHandler.h" />
     <ClInclude Include="..\Utils\MiscUI\IconBitmapUtils.h" />
     <ClInclude Include="..\Utils\MiscUI\IconMenu.h" />
@@ -431,6 +429,9 @@
     <ProjectReference Include="..\Git\Git.vcxproj">
       <Project>{7ca5b1eb-8cc9-40a6-96d8-83649c1a870b}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\Utils\Utils.vcxproj">
+      <Project>{a2c38606-3d96-4a2c-b5c5-22ceac523b37}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

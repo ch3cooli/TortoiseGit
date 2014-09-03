@@ -20,6 +20,7 @@
 #include <assert.h>
 #include "LangDll.h"
 #include "..\version.h"
+#include "PathUtils.h"
 
 #pragma comment(lib, "Version.lib")
 
@@ -74,6 +75,52 @@ HINSTANCE CLangDll::Init(LPCTSTR appname, unsigned long langID)
 	}
 	return m_hInstance;
 }
+
+#ifdef CSTRING_AVAILABLE
+LPTSTR CLangDll::GetHelpFilePath(LPCTSTR name, unsigned long langId)
+{
+	TCHAR buf[6] = { 0 };
+	_tcscpy_s(buf, _T("en"));
+	CString sHelppath = CPathUtils::GetAppDirectory() + name + _T("_en.chm");
+	LPTSTR pszHelpFilePath = _tcsdup(sHelppath);
+	sHelppath = CPathUtils::GetAppParentDirectory() + _T("Languages\\") + name + _T("_en.chm");
+	do
+	{
+		GetLocaleInfo(MAKELCID(langId, SORT_DEFAULT), LOCALE_SISO639LANGNAME, buf, _countof(buf));
+		CString sLang = _T("_");
+		sLang += buf;
+		sHelppath.Replace(_T("_en"), sLang);
+		if (PathFileExists(sHelppath))
+		{
+			free(pszHelpFilePath);
+			pszHelpFilePath = _tcsdup(sHelppath);
+			break;
+		}
+		sHelppath.Replace(sLang, _T("_en"));
+		GetLocaleInfo(MAKELCID(langId, SORT_DEFAULT), LOCALE_SISO3166CTRYNAME, buf, _countof(buf));
+		sLang += _T("_");
+		sLang += buf;
+		sHelppath.Replace(_T("_en"), sLang);
+		if (PathFileExists(sHelppath))
+		{
+			free(pszHelpFilePath);
+			pszHelpFilePath=_tcsdup(sHelppath);
+			break;
+		}
+		sHelppath.Replace(sLang, _T("_en"));
+
+		DWORD lid = SUBLANGID(langId);
+		lid--;
+		if (lid > 0)
+		{
+			langId = MAKELANGID(PRIMARYLANGID(langId), lid);
+		}
+		else
+			langId = 0;
+	} while (langId);
+	return pszHelpFilePath;
+}
+#endif
 
 void CLangDll::Close()
 {

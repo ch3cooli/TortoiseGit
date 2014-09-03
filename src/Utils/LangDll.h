@@ -29,6 +29,9 @@ public:
 	~CLangDll();
 
 	HINSTANCE	Init(LPCTSTR appname, unsigned long langID);
+#ifdef CSTRING_AVAILABLE
+	LPTSTR		GetHelpFilePath(LPCTSTR name, unsigned long langID);
+#endif
 	void		Close();
 private:
 	bool		DoVersionStringsMatch(LPCTSTR sVer, LPCTSTR langDll) const;

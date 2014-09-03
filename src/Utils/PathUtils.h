@@ -37,13 +37,13 @@ public:
 	 */
 	static void Unescape(char * psz);
 
+
+#ifdef CSTRING_AVAILABLE
 	/**
 	 * Replaces non-URI chars with the corresponding escape sequences.
 	 */
 	static CStringA PathEscape(const CStringA& path);
 
-
-#ifdef CSTRING_AVAILABLE
 	/**
 	 * returns the filename of a full path
 	 */
