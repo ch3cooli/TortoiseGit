@@ -25,6 +25,7 @@
 
 #include "ShellExt.h"
 #include "ShellObjects.h"
+#include "LangDll.h"
 #include "..\version.h"
 #undef swprintf
 
@@ -70,119 +71,15 @@ void LoadLangDll()
 	{
 		g_langid = g_ShellCache.GetLangID();
 		DWORD langId = g_langid;
-		TCHAR langDll[MAX_PATH*4] = {0};
-		HINSTANCE hInst = NULL;
-		TCHAR langdir[MAX_PATH] = {0};
-		char langdirA[MAX_PATH] = {0};
-		if (GetModuleFileName(g_hmodThisDll, langdir, _countof(langdir))==0)
-			return;
-		if (GetModuleFileNameA(g_hmodThisDll, langdirA, _countof(langdirA))==0)
-			return;
-		TCHAR * dirpoint = _tcsrchr(langdir, '\\');
-		char * dirpointA = strrchr(langdirA, '\\');
-		if (dirpoint)
-			*dirpoint = 0;
-		if (dirpointA)
-			*dirpointA = 0;
-		dirpoint = _tcsrchr(langdir, '\\');
-		dirpointA = strrchr(langdirA, '\\');
-		if (dirpoint)
-			*dirpoint = 0;
-		if (dirpointA)
-			*dirpointA = 0;
-		strcat_s(langdirA, "\\Languages");
-
-		BOOL bIsWow = FALSE;
-		IsWow64Process(GetCurrentProcess(), &bIsWow);
-
-		do
+		CLangDll langDLL;
+		HINSTANCE hInst = langDLL.Init(_T("TortoiseProc"), langId, g_hmodThisDll);
+		if (hInst != NULL)
 		{
-			if (bIsWow)
-				_stprintf_s(langDll, _T("%s\\Languages\\TortoiseProc32%lu.dll"), langdir, langId);
-			else
-				_stprintf_s(langDll, _T("%s\\Languages\\TortoiseProc%lu.dll"), langdir, langId);
-			BOOL versionmatch = TRUE;
-
-			struct TRANSARRAY
-			{
-				WORD wLanguageID;
-				WORD wCharacterSet;
-			};
-
-			DWORD dwReserved,dwBufferSize;
-			dwBufferSize = GetFileVersionInfoSize((LPTSTR)langDll,&dwReserved);
-
-			if (dwBufferSize > 0)
-			{
-				LPVOID pBuffer = (void*) malloc(dwBufferSize);
-
-				if (pBuffer != (void*) NULL)
-				{
-					UINT        nInfoSize = 0;
-					UINT        nFixedLength = 0;
-					LPSTR       lpVersion = NULL;
-					VOID*       lpFixedPointer;
-					TRANSARRAY* lpTransArray;
-					TCHAR       strLangProductVersion[MAX_PATH] = {0};
-
-					if (GetFileVersionInfo((LPTSTR)langDll,
-						dwReserved,
-						dwBufferSize,
-						pBuffer))
-					{
-						// Query the current language
-						if (VerQueryValue(	pBuffer,
-							_T("\\VarFileInfo\\Translation"),
-							&lpFixedPointer,
-							&nFixedLength))
-						{
-							lpTransArray = (TRANSARRAY*) lpFixedPointer;
-
-							_stprintf_s(strLangProductVersion, _T("\\StringFileInfo\\%04x%04x\\ProductVersion"),
-								lpTransArray[0].wLanguageID, lpTransArray[0].wCharacterSet);
-
-							if (VerQueryValue(pBuffer,
-								(LPTSTR)strLangProductVersion,
-								(LPVOID *)&lpVersion,
-								&nInfoSize))
-							{
-								versionmatch = (_tcscmp((LPCTSTR)lpVersion, _T(STRPRODUCTVER)) == 0);
-							}
-
-						}
-					}
-					free(pBuffer);
-				} // if (pBuffer != (void*) NULL)
-			} // if (dwBufferSize > 0)
-			else
-				versionmatch = FALSE;
-
-			if (versionmatch)
-				hInst = LoadLibrary(langDll);
-			if (hInst != NULL)
-			{
-				if (g_hResInst != g_hmodThisDll)
-					FreeLibrary(g_hResInst);
-				g_hResInst = hInst;
-			}
-			else
-			{
-				DWORD lid = SUBLANGID(langId);
-				lid--;
-				if (lid > 0)
-				{
-					langId = MAKELANGID(PRIMARYLANGID(langId), lid);
-				}
-				else
-					langId = 0;
-			}
-		} while ((hInst == NULL) && (langId != 0));
-		if (hInst == NULL)
+			g_hResInst = hInst;
+			g_langTimeout = 0;
+		}
+		else
 		{
-			// either the dll for the selected language is not present, or
-			// it is the wrong version.
-			// fall back to English and set a timeout so we don't retry
-			// to load the language dll too often
 			if (g_hResInst != g_hmodThisDll)
 				FreeLibrary(g_hResInst);
 			g_hResInst = g_hmodThisDll;
@@ -191,8 +88,6 @@ void LoadLangDll()
 			if (g_ShellCache.GetLangID() != 1033)
 				g_langTimeout = GetTickCount() + 10000;
 		}
-		else
-			g_langTimeout = 0;
 	} // if (g_langid != g_ShellCache.GetLangID())
 }
 

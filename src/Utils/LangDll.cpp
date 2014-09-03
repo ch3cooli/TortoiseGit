@@ -33,13 +33,15 @@ CLangDll::~CLangDll()
 
 }
 
-HINSTANCE CLangDll::Init(LPCTSTR appname, unsigned long langID)
+HINSTANCE CLangDll::Init(LPCTSTR appname, unsigned long langID, HMODULE hModule)
 {
 	TCHAR langpath[MAX_PATH] = {0};
 	TCHAR langdllpath[MAX_PATH] = {0};
 	TCHAR sVer[MAX_PATH] = {0};
 	_tcscpy_s(sVer, MAX_PATH, _T(STRPRODUCTVER));
-	GetModuleFileName(NULL, langpath, MAX_PATH);
+	GetModuleFileName(hModule, langpath, MAX_PATH);
+	BOOL bIsWow = FALSE;
+	IsWow64Process(GetCurrentProcess(), &bIsWow);
 	TCHAR * pSlash = _tcsrchr(langpath, '\\');
 	if (pSlash)
 	{
@@ -52,7 +54,7 @@ HINSTANCE CLangDll::Init(LPCTSTR appname, unsigned long langID)
 			assert(m_hInstance == NULL);
 			do
 			{
-				_stprintf_s(langdllpath, MAX_PATH, _T("%s%s%lu.dll"), langpath, appname, langID);
+				_stprintf_s(langdllpath, MAX_PATH, bIsWow ? _T("%s%s32%lu.dll") : _T("%s%s%lu.dll"), langpath, appname, langID);
 
 				if (DoVersionStringsMatch(sVer, langdllpath))
 				{
