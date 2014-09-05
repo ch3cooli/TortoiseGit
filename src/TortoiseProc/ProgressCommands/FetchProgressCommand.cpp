@@ -84,7 +84,7 @@ bool FetchProgressCommand::Run(CGitProgressList* list, CString& sWindowTitle, in
 	// Update the references in the remote's namespace to point to the
 	// right commits. This may be needed even if there was no packfile
 	// to download, which can happen e.g. when the branches have been
-	// changed but all the neede objects are available locally.
+	// changed but all the needed objects are available locally.
 	if (git_remote_update_tips(remote, nullptr, nullptr) < 0)
 		goto error;
 
