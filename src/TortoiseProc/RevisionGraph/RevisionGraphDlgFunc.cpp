@@ -26,6 +26,7 @@
 #include "TempFile.h"
 #include "UnicodeUtils.h"
 #include "TGitPath.h"
+#include <stack>
 //#include "SVNInfo.h"
 //#include ".\revisiongraphwnd.h"
 //#include "CachedLogInfo.h"
@@ -225,8 +226,13 @@ bool CRevisionGraphWnd::FetchRevisionData
 
 	m_HeadNode = nullptr;
 
+	MAP_HASH_REV ignoreMap;
 	for (size_t i = 0; i < m_logEntries.size(); ++i)
 	{
+		const GitRev& rev = m_logEntries.GetGitRevAt(i);
+		if (FilterNode(rev))
+			ignoreMap[rev.m_CommitHash] = 1;
+
 		node nd;
 		nd = this->m_Graph.newNode();
 		nodes.Add(nd);
@@ -240,25 +246,54 @@ bool CRevisionGraphWnd::FetchRevisionData
 	for (size_t i = 0; i < m_logEntries.size(); ++i)
 	{
 		const GitRev& rev = m_logEntries.GetGitRevAt(i);
-		for (size_t j = 0; j < rev.m_ParentHash.size(); ++j)
+		if (ignoreMap.find(rev.m_CommitHash) != ignoreMap.end())
 		{
-			if(m_logEntries.m_HashMap.find(rev.m_ParentHash[j]) == m_logEntries.m_HashMap.end())
-			{
-				TRACE(_T("Can't found parent node"));
-				//new parent node as new node
-				node nd;
-				nd = this->m_Graph.newNode();
-				m_Graph.newEdge(nodes[i], nd);
-				m_logEntries.push_back(rev.m_ParentHash[j]);
-				m_logEntries.m_HashMap[rev.m_ParentHash[j]] = (int)m_logEntries.size() -1;
-				nodes.Add(nd);
-				SetNodeRect(dev, &nd, rev.m_ParentHash[j], 0);
+			m_Graph.delNode(nodes[i]);
+			continue;
+		}
 
-			}else
+		std::stack<std::pair<GitRev, size_t>> stk;
+		std::pair<GitRev, size_t> kvp = std::make_pair(rev, 0);
+		while (true)
+		{
+			bool ignore = false;
+			const GitRev &rev2 = kvp.first;
+			for (size_t j = kvp.second; j < rev2.m_ParentHash.size(); ++j)
 			{
-				TRACE(_T("edge %d - %d\n"),i, m_logEntries.m_HashMap[rev.m_ParentHash[j]]);
-				m_Graph.newEdge(nodes[i], nodes[m_logEntries.m_HashMap[rev.m_ParentHash[j]]]);
+				if (ignoreMap.find(rev2.m_ParentHash[j]) != ignoreMap.end())
+				{
+					stk.push(std::make_pair(rev2, j + 1));
+					kvp = std::make_pair(*GetRevFromHash(rev2.m_ParentHash[j]), 0);
+					ignore = true;
+					break;
+				}
+
+				if(m_logEntries.m_HashMap.find(rev2.m_ParentHash[j]) == m_logEntries.m_HashMap.end())
+				{
+					TRACE(_T("Can't found parent node"));
+					//new parent node as new node
+					node nd;
+					nd = this->m_Graph.newNode();
+					m_Graph.newEdge(nodes[i], nd);
+					m_logEntries.push_back(rev2.m_ParentHash[j]);
+					m_logEntries.m_HashMap[rev2.m_ParentHash[j]] = (int)m_logEntries.size() -1;
+					nodes.Add(nd);
+					SetNodeRect(dev, &nd, rev2.m_ParentHash[j], 0);
+				}
+				else
+				{
+					TRACE(_T("edge %d - %d\n"),i, m_logEntries.m_HashMap[rev2.m_ParentHash[j]]);
+					m_Graph.newEdge(nodes[i], nodes[m_logEntries.m_HashMap[rev2.m_ParentHash[j]]]);
+				}
 			}
+			if (ignore)
+				continue;
+			if (!stk.empty())
+			{
+				kvp = stk.top();
+				stk.pop();
+			}
+			break;
 		}
 	}
 
@@ -286,6 +321,35 @@ bool CRevisionGraphWnd::FetchRevisionData
 	m_GraphRect.right = (LONG)xmax;
 
 	return true;
+}
+
+bool CRevisionGraphWnd::FilterNode(const GitRev& rev)
+{
+	bool hasRef = false;
+	bool hasLocal = false;
+	for (auto ref : m_HashMap[rev.m_CommitHash])
+	{
+		hasRef = true;
+		if (ref.Left(11) == _T("refs/heads/") || ref.Left(10) == _T("refs/tags/"))
+		{
+			hasLocal = true;
+			break;
+		}
+	}
+	return hasRef && !hasLocal;
+}
+
+const GitRev* CRevisionGraphWnd::GetRevFromHash(const CGitHash& hash)
+{
+	for (size_t	i = 0; i < m_logEntries.size(); ++i)
+	{
+		const GitRev &rev = m_logEntries.GetGitRevAt(i);
+		if (rev.m_CommitHash == hash)
+		{
+			return &rev;
+		}
+	}
+	return nullptr;
 }
 
 bool CRevisionGraphWnd::AnalyzeRevisionData()

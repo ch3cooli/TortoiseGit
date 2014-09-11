@@ -418,4 +418,6 @@ private:
 	void			DrawRubberBand();
 	void	SetNodeRect(GraphicsDevice& graphics, ogdf::node *pnode, CGitHash rev, int mode = 0);
 
+	bool			FilterNode(const GitRev& rev);
+	const GitRev*	GetRevFromHash(const CGitHash& hash);
 };
