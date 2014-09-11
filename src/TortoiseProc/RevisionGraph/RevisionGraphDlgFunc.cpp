@@ -239,7 +239,7 @@ bool CRevisionGraphWnd::FetchRevisionData
 
 	for (size_t i = 0; i < m_logEntries.size(); ++i)
 	{
-		GitRev rev=m_logEntries.GetGitRevAt(i);
+		const GitRev& rev = m_logEntries.GetGitRevAt(i);
 		for (size_t j = 0; j < rev.m_ParentHash.size(); ++j)
 		{
 			if(m_logEntries.m_HashMap.find(rev.m_ParentHash[j]) == m_logEntries.m_HashMap.end())
