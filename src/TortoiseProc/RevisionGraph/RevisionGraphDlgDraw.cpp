@@ -311,22 +311,6 @@ BYTE MaxComponentDiff (const Color& c1, const Color& c2)
 	return (BYTE) max (max (rDiff, gDiff), bDiff);
 }
 
-#if 0
-void CRevisionGraphWnd::DrawShadow (GraphicsDevice& graphics, const RectF& rect,
-									Color shadowColor, NodeShape shape)
-{
-	// draw the shadow
-
-	RectF shadow = rect;
-	shadow.Offset (2, 2);
-
-	Pen pen (shadowColor);
-	SolidBrush brush (shadowColor);
-
-	DrawShape (graphics, shadowColor, 1, &pen, shadowColor, &brush, shadow, shape);
-}
-#endif
-
 RectF CRevisionGraphWnd::TransformRectToScreen (const CRect& rect, const CSize& offset) const
 {
 	PointF leftTop ( rect.left * m_fZoomFactor
@@ -360,88 +344,6 @@ RectF CRevisionGraphWnd::GetNodeRect (const node& node, const CSize& offset) con
 
 	return noderect;
 }
-
-
-#if 0
-RectF CRev
-isionGraphWnd::GetBranchCover
-	( const ILayoutNodeList* nodeList
-	, index_t nodeIndex
-	, bool upward
-	, const CSize& offset)
-{
-	// construct a rect that covers the respective branch
-
-	CRect cover (0, 0, 0, 0);
-	while (nodeIndex != NO_INDEX)
-	{
-		ILayoutNodeList::SNode node = nodeList->GetNode (nodeIndex);
-		cover |= node.rect;
-
-		const CVisibleGraphNode* nextNode = upward
-			? node.node->GetPrevious()
-			: node.node->GetNext();
-
-		nodeIndex = nextNode == NULL ? NO_INDEX : nextNode->GetIndex();
-	}
-
-	// expand it just a little to make it look nicer
-
-	cover.InflateRect (10, 2, 10, 2);
-
-	// and now, transfrom it
-
-	return TransformRectToScreen (cover, offset);
-}
-#endif
-
-#if 0
-void CRevisionGraphWnd::DrawShadows (GraphicsDevice& graphics, const CRect& logRect, const CSize& offset)
-{
-  // shadow color to use
-
-	Color background;
-	background.SetFromCOLORREF (GetSysColor(COLOR_WINDOW));
-	Color textColor;
-	textColor.SetFromCOLORREF (GetSysColor(COLOR_WINDOWTEXT));
-
-	Color shadowColor = LimitedScaleColor (background, ARGB (Color::Black), 0.5f);
-
-	// iterate over all visible nodes
-
-	CSyncPointer<const ILayoutNodeList> nodes (m_state.GetNodes());
-	for ( index_t index = nodes->GetFirstVisible (logRect)
-		; index != NO_INDEX
-		; index = nodes->GetNextVisible (index, logRect))
-	{
-		// get node and position
-
-		ILayoutNodeList::SNode node = nodes->GetNode (index);
-		RectF noderect (GetNodeRect (node, offset));
-
-		// actual drawing
-
-		switch (node.style)
-		{
-		case ILayoutNodeList::SNode::STYLE_DELETED:
-		case ILayoutNodeList::SNode::STYLE_RENAMED:
-			DrawShadow (graphics, noderect, shadowColor, TSVNOctangle);
-			break;
-		case ILayoutNodeList::SNode::STYLE_ADDED:
-			DrawShadow(graphics, noderect, shadowColor, TSVNRoundRect);
-			break;
-		case ILayoutNodeList::SNode::STYLE_LAST:
-			DrawShadow(graphics, noderect, shadowColor, TSVNEllipse);
-			break;
-		default:
-			DrawShadow(graphics, noderect, shadowColor, TSVNRectangle);
-			break;
-		}
-	}
-
-}
-#endif
-
 
 void CRevisionGraphWnd::DrawSquare
 	( GraphicsDevice& graphics
