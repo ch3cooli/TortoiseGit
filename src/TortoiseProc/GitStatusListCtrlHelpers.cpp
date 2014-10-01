@@ -29,79 +29,7 @@
 #ifndef assert
 #define assert(x) ATLASSERT(x)
 #endif
-// assign property list
-#if 0
-PropertyList&
-PropertyList::operator= (const char* rhs)
-{
-	// do you really want to replace the property list?
 
-	assert (properties.empty());
-	properties.clear();
-
-	// add all properties in the list
-
-	while ((rhs != NULL) && (*rhs != 0))
-	{
-		const char* next = strchr (rhs, ' ');
-
-		CString name (rhs, static_cast<int>(next == NULL ? strlen (rhs) : next - rhs));
-		properties.insert (std::make_pair (name, CString()));
-
-		rhs = next == NULL ? NULL : next+1;
-	}
-
-	// done
-
-	return *this;
-}
-
-// collect property names in a set
-
-void PropertyList::GetPropertyNames (std::set<CString>& names)
-{
-	for ( CIT iter = properties.begin(), end = properties.end()
-		; iter != end
-		; ++iter)
-	{
-		names.insert (iter->first);
-	}
-}
-
-// get a property value.
-
-CString PropertyList::operator[](const CString& name) const
-{
-	CIT iter = properties.find (name);
-
-	return iter == properties.end()
-		? CString()
-		: iter->second;
-}
-
-// set a property value.
-
-CString& PropertyList::operator[](const CString& name)
-{
-	return properties[name];
-}
-
-/// check whether that property has been set on this item.
-
-bool PropertyList::HasProperty (const CString& name) const
-{
-	return properties.find (name) != properties.end();
-}
-
-// due to frequent use: special check for svn:needs-lock
-
-bool PropertyList::IsNeedsLockSet() const
-{
-	static const CString svnNeedsLock = _T("svn:needs-lock");
-	return HasProperty (svnNeedsLock);
-}
-
-#endif
 // registry access
 
 void ColumnManager::ReadSettings
