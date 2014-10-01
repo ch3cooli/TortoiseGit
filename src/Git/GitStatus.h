@@ -155,12 +155,6 @@ public:
 	 */
 	void GetStatus(const CTGitPath& path, bool update = false, bool noignore = false, bool noexternals = false);
 
-	/**
-	 * Returns a string representation of a git status.
-	 * \param status the status enum
-	 * \param string a string representation
-	 */
-	static void GetStatusString(git_wc_status_kind status, size_t buflen, TCHAR * string);
 
 	/**
 	 * This member variable hold the status of the last call to GetStatus().
