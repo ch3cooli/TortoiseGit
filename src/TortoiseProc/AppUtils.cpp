@@ -2631,7 +2631,7 @@ bool CAppUtils::Push(CString selectLocalBranch)
 				return;
 			}
 
-			postCmdList.push_back(PostCmd(IDS_PROC_REQUESTPULL, [&]{ RequestPull(dlg.m_BranchRemoteName); }));
+			postCmdList.push_back(PostCmd(IDI_REQUESTPULL, IDS_PROC_REQUESTPULL, [&]{ RequestPull(dlg.m_BranchRemoteName); }));
 			postCmdList.push_back(PostCmd(IDI_PUSH, IDS_MENUPUSH, [&]{ Push(selectLocalBranch); }));
 			postCmdList.push_back(PostCmd(IDI_SWITCH, IDS_MENUSWITCH, [&]{ Switch(); }));
 			if (!superprojectRoot.IsEmpty())
