@@ -66,7 +66,7 @@ protected:
 	CTGitPathList	m_Files;
 	int		m_Action;
 	int		m_RebaseAction;
-	CTGitPathList	m_UnRevFiles;
+	CTGitPathList*	m_UnRevFiles;
 
 public:
 	GitRev(void);
@@ -112,7 +112,9 @@ public:
 
 	CTGitPathList & GetUnRevFiles()
 	{
-		return m_UnRevFiles;
+		if (m_UnRevFiles == nullptr)
+			m_UnRevFiles = new CTGitPathList;
+		return *m_UnRevFiles;
 	}
 
 //	GitRev(GitRev &rev);

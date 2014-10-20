@@ -45,12 +45,15 @@ GitRev::GitRev(void)
 	m_CallDiffAsync = NULL;
 	m_IsSimpleListReady =0;
 	m_Mark = 0;
+	m_UnRevFiles = nullptr;
 
 	memset(&this->m_GitCommit,0,sizeof(GIT_COMMIT));
 }
 
 GitRev::~GitRev(void)
 {
+	if (m_UnRevFiles)
+		delete m_UnRevFiles;
 }
 
 #if 0
