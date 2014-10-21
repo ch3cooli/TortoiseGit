@@ -2,6 +2,7 @@
 <!DOCTYPE sect1 SYSTEM "../../../dtd/dblite.dtd">
 <sect1 id="tgit-dug-create">
   <title>Create Repository</title>
+  <?dbhh topicname="HIDD_CREATEREPO"?>
   <indexterm>
     <primary>Create Repository</primary>
   </indexterm>
