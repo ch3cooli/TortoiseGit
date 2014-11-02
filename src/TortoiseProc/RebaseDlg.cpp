@@ -991,6 +991,8 @@ void CRebaseDlg::OnBnClickedContinue()
 
 	if( this->m_IsFastForward )
 	{
+		m_RebaseStage = REBASE_START;
+		GetDlgItem(IDC_REBASE_CONTINUE)->EnableWindow(FALSE);
 		CString cmd,out;
 		if (g_Git.GetHash(m_OrigBranchHash, m_BranchCtrl.GetString()))
 		{
@@ -1052,6 +1054,7 @@ void CRebaseDlg::OnBnClickedContinue()
 		}
 		AddLogString(out);
 		AddLogString(CString(MAKEINTRESOURCE(IDS_DONE)));
+		GetDlgItem(IDC_REBASE_CONTINUE)->EnableWindow(TRUE);
 		m_RebaseStage = REBASE_DONE;
 		UpdateCurrentStatus();
 		return;
