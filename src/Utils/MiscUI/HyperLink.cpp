@@ -1,6 +1,7 @@
 // TortoiseGit - a Windows shell extension for easy version control
 
 // Copyright (C) 2003-2006,2008, 2011 - TortoiseSVN
+// Copyright (C) 2014 - TortoiseGit
 
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -112,6 +113,8 @@ BEGIN_MESSAGE_MAP(CHyperLink, CStatic)
 	ON_WM_TIMER()
 	ON_WM_ERASEBKGND()
 	ON_CONTROL_REFLECT(STN_CLICKED, OnClicked)
+	ON_WM_SETFOCUS()
+	ON_WM_KILLFOCUS()
 END_MESSAGE_MAP()
 
 
@@ -125,6 +128,32 @@ void CHyperLink::OnClicked()
 	{
 		::SendMessage(this->GetParent()->m_hWnd,WM_COMMAND,this->GetDlgCtrlID(),0);
 	}
+}
+
+void CHyperLink::DrawRectFocus()
+{
+	CWnd* parent = GetParent();
+	if (!parent)
+		return;
+
+	CRect rc;
+	GetWindowRect(&rc);
+	rc.InflateRect(1, 1);
+	parent->ScreenToClient((LPPOINT)&rc);
+	parent->ScreenToClient(((LPPOINT)&rc) + 1);
+	CDC* dcParent = parent->GetDC();
+	dcParent->DrawFocusRect(&rc);
+	parent->ReleaseDC(dcParent);
+}
+
+void CHyperLink::OnSetFocus(CWnd*)
+{
+	DrawRectFocus();
+}
+
+void CHyperLink::OnKillFocus(CWnd*)
+{
+	DrawRectFocus();
 }
 
 HBRUSH CHyperLink::CtlColor(CDC* pDC, UINT /*nCtlColor*/)

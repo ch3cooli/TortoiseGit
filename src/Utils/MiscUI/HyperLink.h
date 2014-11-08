@@ -1,6 +1,7 @@
 // TortoiseGit - a Windows shell extension for easy version control
 
 // Copyright (C) 2003-2007,2008 - TortoiseSVN
+// Copyright (C) 2014 - TortoiseGit
 
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -56,6 +57,7 @@ protected:
 protected:
     HINSTANCE	GotoURL(LPCTSTR url);
     void		SetDefaultCursor();
+	void		DrawRectFocus();
 
 protected:
     COLORREF	m_crLinkColor;			///< Hyperlink color
@@ -76,5 +78,7 @@ protected:
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
     afx_msg void OnClicked();
+	afx_msg void OnSetFocus(CWnd*);
+	afx_msg void OnKillFocus(CWnd*);
     DECLARE_MESSAGE_MAP()
 };
