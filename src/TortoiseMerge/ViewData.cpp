@@ -68,3 +68,11 @@ int CViewData::FindLineNumber(int number) const
 			return (int)i;
 	return -1;
 }
+
+bool CViewData::HasMarkedBlocks() const
+{
+	for(size_t i = 0; i < m_data.size(); ++i)
+		if (m_data[i].marked)
+			return true;
+	return false;
+}

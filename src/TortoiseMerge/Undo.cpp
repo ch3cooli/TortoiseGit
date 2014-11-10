@@ -224,6 +224,14 @@ bool CUndo::Undo(CBaseView * pLeft, CBaseView * pRight, CBaseView * pBottom)
 void CUndo::UndoOne(CBaseView * pLeft, CBaseView * pRight, CBaseView * pBottom)
 {
 	allviewstate allstate = m_viewstates.back();
+	for (auto state : allstate.right.markedlines)
+	{
+		if (state.second)
+		{
+			pRight->SetMayHaveMarkedBlocks();
+			break;
+		}
+	}
 	POINT pt = m_caretpoints.back();
 
 	Undo(allstate.left, pLeft, pt);

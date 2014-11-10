@@ -101,6 +101,7 @@ public:
 	bool			IsMoved(int index) const {return m_data.size() ? m_data[index].movedIndex >= 0 : false;}
 	bool			IsMovedFrom(int index) const {return m_data.size() ? m_data[index].movedFrom : true;}
 	int				FindLineNumber(int number) const;
+	bool			HasMarkedBlocks() const;
 	EOL				GetLineEnding(int index) const {return m_data[index].ending;}
 	bool			GetMarked(int index) const {return m_data[index].marked;}
 
