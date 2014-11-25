@@ -163,12 +163,19 @@ BEGIN_MESSAGE_MAP(CSettingsAdvanced, ISettingsPropPage)
 	ON_NOTIFY(LVN_BEGINLABELEDIT, IDC_CONFIG, &CSettingsAdvanced::OnLvnBeginlabeledit)
 	ON_NOTIFY(LVN_ENDLABELEDIT, IDC_CONFIG, &CSettingsAdvanced::OnLvnEndlabeledit)
 	ON_NOTIFY(NM_DBLCLK, IDC_CONFIG, &CSettingsAdvanced::OnNMDblclkConfig)
+	ON_NOTIFY(NM_CUSTOMDRAW, IDC_CONFIG, &CSettingsAdvanced::OnNMCustomdraw)
 END_MESSAGE_MAP()
 
 
 BOOL CSettingsAdvanced::OnInitDialog()
 {
 	ISettingsPropPage::OnInitDialog();
+
+	HFONT hFont = (HFONT)GetStockObject(DEFAULT_GUI_FONT);
+	LOGFONT lf = {0};
+	GetObject(hFont, sizeof(LOGFONT), &lf);
+	lf.lfWeight = FW_BOLD;
+	m_boldFont = CreateFontIndirect(&lf);
 
 	m_ListCtrl.DeleteAllItems();
 	int c = ((CHeaderCtrl*)(m_ListCtrl.GetDlgItem(0)))->GetItemCount() - 1;
@@ -349,4 +356,41 @@ void CSettingsAdvanced::OnNMDblclkConfig(NMHDR *pNMHDR, LRESULT *pResult)
 	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
 	m_ListCtrl.EditLabel(pNMItemActivate->iItem);
 	*pResult = 0;
+}
+
+void CSettingsAdvanced::OnNMCustomdraw(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	auto pNMLVCUSTOMDRAW = (NMLVCUSTOMDRAW*)pNMHDR;
+	switch (pNMLVCUSTOMDRAW->nmcd.dwDrawStage)
+	{
+	case CDDS_PREPAINT :
+		*pResult |= CDRF_NOTIFYITEMDRAW;
+		break;
+	case CDDS_ITEMPREPAINT:
+		*pResult |= CDRF_NOTIFYSUBITEMDRAW;
+		break;
+	case CDDS_ITEMPREPAINT | CDDS_SUBITEM:
+		{
+			CString	sValue = m_ListCtrl.GetItemText(pNMLVCUSTOMDRAW->nmcd.dwItemSpec, 0);
+			auto item = settings[pNMLVCUSTOMDRAW->nmcd.dwItemSpec];
+			bool isDefault = false;
+			switch (item.type)
+			{
+			case SettingTypeBoolean:
+				isDefault = item.def.b == (sValue == _T("true"));
+				break;
+			case SettingTypeNumber:
+				isDefault = std::to_wstring(item.def.l).c_str() == sValue;
+				break;
+			case SettingTypeString:
+				isDefault = item.def.s == sValue;
+				break;
+			}
+
+			bool bold = pNMLVCUSTOMDRAW->iSubItem == 0 && !isDefault;
+			SelectObject(pNMLVCUSTOMDRAW->nmcd.hdc, bold ? m_boldFont : (HFONT)GetStockObject(DEFAULT_GUI_FONT));
+			*pResult |= CDRF_NEWFONT;
+			break;
+		}
+	}
 }

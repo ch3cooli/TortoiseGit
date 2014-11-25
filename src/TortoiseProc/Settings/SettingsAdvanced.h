@@ -63,10 +63,12 @@ protected:
 	afx_msg void OnLvnBeginlabeledit(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnLvnEndlabeledit(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnNMDblclkConfig(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnNMCustomdraw(NMHDR* pNMHDR, LRESULT* pResult);
 
 	DECLARE_MESSAGE_MAP()
 
 private:
 	CListCtrl		m_ListCtrl;
 	AdvancedSetting	settings[50];
+	HFONT			m_boldFont;
 };
