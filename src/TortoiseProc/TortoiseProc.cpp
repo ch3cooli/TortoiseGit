@@ -298,6 +298,10 @@ BOOL CTortoiseProcApp::InitInstance()
 		{
 			url = url.Mid(21); // 21 = "smartgit://cloneRepo/".GetLength()
 		}
+		else if (url.Find(_T("sourcetree://cloneRepo/")) == 0)
+		{
+			url = url.Mid(23); // 23 = "sourcetree://cloneRepo/".GetLength()
+		}
 		else
 		{
 			CMessageBox::Show(NULL, IDS_ERR_INVALIDPATH, IDS_APPNAME, MB_ICONERROR);

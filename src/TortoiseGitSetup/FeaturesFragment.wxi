@@ -102,6 +102,9 @@
 			<Feature Id="ProtocolAssocSmartgit" Level="4" Title="Register smartgit://-link handler" Description="Associate smartgit://-links with TortoiseGit clone command" TypicalDefault="install" Absent="allow" AllowAdvertise="no">
 				<ComponentRef Id="ProtocolSmartgit"/>
 			</Feature>
+			<Feature Id="ProtocolAssocSourcetree" Level="4" Title="Register sourcetree://-link handler" Description="Associate sourcetree://-links with TortoiseGit clone command" TypicalDefault="install" Absent="allow" AllowAdvertise="no">
+				<ComponentRef Id="ProtocolSourcetree"/>
+			</Feature>
 		</Feature>
 
 		<?if $(var.DictionaryENGB) = 1 ?>
