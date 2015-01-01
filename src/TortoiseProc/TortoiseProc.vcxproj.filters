@@ -899,6 +899,9 @@
     <ClCompile Include="SubmoduleResolveConflictDlg.cpp">
       <Filter>Utility Dialogs</Filter>
     </ClCompile>
+    <ClCompile Include="..\Utils\BugTraqWrapper.cpp">
+      <Filter>Utils\General</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AddRemoteDlg.h">
@@ -1653,6 +1656,9 @@
     </ClInclude>
     <ClInclude Include="SubmoduleResolveConflictDlg.h">
       <Filter>Utility Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Utils\BugTraqWrapper.h">
+      <Filter>Utils\General</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

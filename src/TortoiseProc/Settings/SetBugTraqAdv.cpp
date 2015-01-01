@@ -1,6 +1,6 @@
 // TortoiseGit - a Windows shell extension for easy version control
 
-// Copyright (C) 2014 - TortoiseGit
+// Copyright (C) 2014-2015 - TortoiseGit
 // Copyright (C) 2008,2010,2014-2015 - TortoiseSVN
 
 // This program is free software; you can redistribute it and/or
@@ -21,7 +21,7 @@
 #include "SetBugTraqAdv.h"
 #include "BrowseFolder.h"
 #include "BugTraqAssociations.h"
-#include "..\IBugTraqProvider\IBugTraqProvider_h.h"
+#include "BugTraqWrapper.h"
 
 IMPLEMENT_DYNAMIC(CSetBugTraqAdv, CResizableStandAloneDialog)
 
@@ -131,25 +131,22 @@ void CSetBugTraqAdv::OnOK()
 		m_provider_clsid = provider->clsid;
 	}
 
-	CComPtr<IBugTraqProvider> pProvider;
-	HRESULT hr = pProvider.CoCreateInstance(m_provider_clsid);
-
-	if (FAILED(hr))
+	CBugTraqAssociation assoc(_T(""), m_provider_clsid, _T(""), m_sParameters);
+	CBugTraqWrapper pBugTraqWrapper;
+	if (!pBugTraqWrapper.CreateProvider(assoc))
 	{
 		m_tooltips.ShowBalloon(IDC_BUGTRAQPROVIDERCOMBO, IDS_ERR_MISSING_PROVIDER, IDS_ERR_ERROR, TTI_ERROR);
 		return;
 	}
 
-	VARIANT_BOOL valid;
-	ATL::CComBSTR parameters(m_sParameters);
-	hr = pProvider->ValidateParameters(GetSafeHwnd(), parameters, &valid);
-	if (FAILED(hr))
+	bool valid = false;
+	if (!pBugTraqWrapper.ValidateParameters(GetSafeHwnd(), valid))
 	{
 		ShowEditBalloon(IDC_BUGTRAQPARAMETERS, IDS_ERR_PROVIDER_VALIDATE_FAILED, IDS_ERR_ERROR, TTI_ERROR);
 		return;
 	}
 
-	if (valid != VARIANT_TRUE)
+	if (!valid)
 		return;	// It's assumed that the provider will have done this.
 
 	CResizableStandAloneDialog::OnOK();
@@ -182,15 +179,14 @@ void CSetBugTraqAdv::CheckHasOptions()
 		m_provider_clsid = provider->clsid;
 	}
 
-	CComPtr<IBugTraqProvider2> pProvider;
-	HRESULT hr = pProvider.CoCreateInstance(m_provider_clsid);
-
-	if (SUCCEEDED(hr))
+	CBugTraqAssociation assoc(_T(""), m_provider_clsid, _T(""), m_sParameters);
+	CBugTraqWrapper pBugTraqWrapper;
+	if (pBugTraqWrapper.CreateProvider(assoc) && pBugTraqWrapper.HasIBugTraqProvider2())
 	{
-		VARIANT_BOOL hasOptions = VARIANT_FALSE;
-		if (SUCCEEDED(hr = pProvider->HasOptions(&hasOptions)))
+		bool hasOptions = false;
+		if (pBugTraqWrapper.HasOptions(hasOptions))
 		{
-			if (hasOptions == VARIANT_TRUE)
+			if (hasOptions)
 			{
 				GetDlgItem(IDC_OPTIONS)->EnableWindow(TRUE);
 				return;
@@ -217,16 +213,14 @@ void CSetBugTraqAdv::OnBnClickedOptions()
 		m_provider_clsid = provider->clsid;
 	}
 
-	CComPtr<IBugTraqProvider2> pProvider;
-	HRESULT hr = pProvider.CoCreateInstance(m_provider_clsid);
-
-	if (SUCCEEDED(hr))
+	CString p;
+	GetDlgItemText(IDC_BUGTRAQPARAMETERS, p);
+	CBugTraqAssociation assoc(_T(""), m_provider_clsid, _T(""), p);
+	CBugTraqWrapper pBugTraqWrapper;
+	if (pBugTraqWrapper.CreateProvider(assoc) && pBugTraqWrapper.HasIBugTraqProvider2())
 	{
-		ATL::CComBSTR temp;
-		CString p;
-		GetDlgItemText(IDC_BUGTRAQPARAMETERS, p);
-		ATL::CComBSTR params(p);
-		if (SUCCEEDED(hr = pProvider->ShowOptionsDialog(GetSafeHwnd(), params, &temp)))
+		CString temp;
+		if (pBugTraqWrapper.ShowOptionsDialog(GetSafeHwnd(), temp))
 		{
 			SetDlgItemText(IDC_BUGTRAQPARAMETERS, temp);
 		}

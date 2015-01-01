@@ -1,7 +1,7 @@
 // TortoiseGit - a Windows shell extension for easy version control
 
 // Copyright (C) 2003-2008 - TortoiseSVN
-// Copyright (C) 2008-2014 - TortoiseGit
+// Copyright (C) 2008-2015 - TortoiseGit
 
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -29,10 +29,10 @@
 #include "PathWatcher.h"
 #include "BugTraqAssociations.h"
 #include "Tooltip.h"
-#include "..\IBugTraqProvider\IBugTraqProvider_h.h"
 #include "Git.h"
 #include "HyperLink.h"
 #include "PatchViewDlg.h"
+#include "BugTraqWrapper.h"
 
 #include <regex>
 
@@ -157,7 +157,7 @@ protected:
 	CTGitPathList		m_selectedPathList;
 	CSciEdit			m_cLogMessage;
 	INT_PTR				m_itemsCount;
-	CComPtr<IBugTraqProvider> m_BugTraqProvider;
+	CBugTraqWrapper		m_BugTraqWrapper;
 	CString				m_NoAmendStr;
 	BOOL				m_bCreateNewBranch;
 	CString				m_sCreateNewBranch;
