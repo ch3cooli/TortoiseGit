@@ -81,6 +81,7 @@ int ProjectProperties::ReadProps()
 	gitconfig.GetString(BUGTRAQPROPNAME_PROVIDERUUID, sProviderUuid);
 	gitconfig.GetString(BUGTRAQPROPNAME_PROVIDERUUID64, sProviderUuid64);
 	gitconfig.GetString(BUGTRAQPROPNAME_PROVIDERPARAMS, sProviderParams);
+	gitconfig.GetString(BUGTRAQPROPNAME_PROVIDERDLL, sProviderDll);
 
 	gitconfig.GetBOOL(PROJECTPROPNAME_WARNNOSIGNEDOFFBY, bWarnNoSignedOffBy);
 	gitconfig.GetString(PROJECTPROPNAME_ICON, sIcon);

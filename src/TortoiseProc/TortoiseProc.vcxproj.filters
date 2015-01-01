@@ -902,6 +902,9 @@
     <ClCompile Include="..\Utils\BugTraqWrapper.cpp">
       <Filter>Utils\General</Filter>
     </ClCompile>
+    <ClCompile Include="..\Utils\BugTraqCom.cpp">
+      <Filter>Utils\General</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AddRemoteDlg.h">
@@ -1658,6 +1661,9 @@
       <Filter>Utility Dialogs</Filter>
     </ClInclude>
     <ClInclude Include="..\Utils\BugTraqWrapper.h">
+      <Filter>Utils\General</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Utils\BugTraqCom.h">
       <Filter>Utils\General</Filter>
     </ClInclude>
   </ItemGroup>

@@ -31,6 +31,7 @@
 #define BUGTRAQPROPNAME_PROVIDERUUID      _T("bugtraq.provideruuid")
 #define BUGTRAQPROPNAME_PROVIDERUUID64    _T("bugtraq.provideruuid64")
 #define BUGTRAQPROPNAME_PROVIDERPARAMS    _T("bugtraq.providerparams")
+#define BUGTRAQPROPNAME_PROVIDERDLL       _T("bugtraq.providerdll")
 
 #define PROJECTPROPNAME_LOGWIDTHLINE	  _T("tgit.logwidthmarker")
 #define PROJECTPROPNAME_LOGMINSIZE		  _T("tgit.logminsize")
@@ -194,6 +195,7 @@ public:
 	   interface. */
 	CString		sProviderUuid;
 	CString		sProviderUuid64;
+	CString		sProviderDll;
 
 private:
 	/**

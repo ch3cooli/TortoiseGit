@@ -62,6 +62,7 @@
     <ClCompile Include="..\Utils\ACEdit.cpp" />
     <ClCompile Include="..\Utils\ACListWnd.cpp" />
     <ClCompile Include="..\Utils\BugTraqAssociations.cpp" />
+    <ClCompile Include="..\Utils\BugTraqCom.cpp" />
     <ClCompile Include="..\Utils\BugTraqWrapper.cpp" />
     <ClCompile Include="..\Utils\CmdLineParser.cpp" />
     <ClCompile Include="..\Utils\COMError.cpp" />
@@ -316,6 +317,7 @@
     <ClInclude Include="..\Utils\ACEdit.h" />
     <ClInclude Include="..\Utils\ACListWnd.h" />
     <ClInclude Include="..\Utils\BugTraqAssociations.h" />
+    <ClInclude Include="..\Utils\BugTraqCom.h" />
     <ClInclude Include="..\Utils\BugTraqWrapper.h" />
     <ClInclude Include="..\Utils\CertificateValidationHelper.h" />
     <ClInclude Include="..\Utils\CmdLineParser.h" />

@@ -41,7 +41,7 @@ CBugTraqAssociations::~CBugTraqAssociations()
 		delete pProjectProvider;
 }
 
-void CBugTraqAssociations::Load(LPCTSTR uuid /* = nullptr */, LPCTSTR params /* = nullptr */)
+void CBugTraqAssociations::Load(LPCTSTR uuid /* = nullptr */, LPCTSTR params /* = nullptr */, LPCTSTR dll /* = nullptr */)
 {
 	HKEY hk;
 	if (RegOpenKeyEx(HKEY_CURRENT_USER, BUGTRAQ_ASSOCIATIONS_REGPATH, 0, KEY_READ, &hk) != ERROR_SUCCESS)
@@ -50,6 +50,8 @@ void CBugTraqAssociations::Load(LPCTSTR uuid /* = nullptr */, LPCTSTR params /* 
 			providerUUID = uuid;
 		if (params)
 			providerParams = params;
+		if (dll)
+			providerDLL = dll;
 		return;
 	}
 
@@ -92,6 +94,8 @@ void CBugTraqAssociations::Load(LPCTSTR uuid /* = nullptr */, LPCTSTR params /* 
 		providerUUID = uuid;
 	if (params)
 		providerParams = params;
+	if (dll)
+		providerDLL = dll;
 }
 
 void CBugTraqAssociations::Add(const CBugTraqAssociation &assoc)
@@ -113,11 +117,11 @@ bool CBugTraqAssociations::FindProvider(const CString &path, CBugTraqAssociation
 			*assoc = *pProjectProvider;
 		return true;
 	}
-	if (!providerUUID.IsEmpty())
+	if (!providerUUID.IsEmpty() || !providerDLL.IsEmpty())
 	{
 		CLSID provider_clsid;
 		CLSIDFromString((LPOLESTR)(LPCWSTR)providerUUID, &provider_clsid);
-		pProjectProvider = new CBugTraqAssociation(_T(""), provider_clsid, _T("bugtraq:provider"), (LPCWSTR)providerParams);
+		pProjectProvider = new CBugTraqAssociation(_T(""), provider_clsid, _T("bugtraq:provider"), (LPCWSTR)providerParams, providerDLL);
 		if (pProjectProvider)
 		{
 			if (assoc)

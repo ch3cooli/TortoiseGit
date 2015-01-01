@@ -157,7 +157,7 @@ protected:
 	CTGitPathList		m_selectedPathList;
 	CSciEdit			m_cLogMessage;
 	INT_PTR				m_itemsCount;
-	CBugTraqWrapper		m_BugTraqWrapper;
+	std::shared_ptr<CBugTraqWrapper> m_BugTraqWrapper;
 	CString				m_NoAmendStr;
 	BOOL				m_bCreateNewBranch;
 	CString				m_sCreateNewBranch;

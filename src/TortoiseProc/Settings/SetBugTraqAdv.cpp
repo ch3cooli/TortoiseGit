@@ -132,15 +132,15 @@ void CSetBugTraqAdv::OnOK()
 	}
 
 	CBugTraqAssociation assoc(_T(""), m_provider_clsid, _T(""), m_sParameters);
-	CBugTraqWrapper pBugTraqWrapper;
-	if (!pBugTraqWrapper.CreateProvider(assoc))
+	auto pBugTraqWrapper = CBugTraqWrapper::CreateInstance(assoc);
+	if (!pBugTraqWrapper->CreateProvider(assoc))
 	{
 		m_tooltips.ShowBalloon(IDC_BUGTRAQPROVIDERCOMBO, IDS_ERR_MISSING_PROVIDER, IDS_ERR_ERROR, TTI_ERROR);
 		return;
 	}
 
 	bool valid = false;
-	if (!pBugTraqWrapper.ValidateParameters(GetSafeHwnd(), valid))
+	if (!pBugTraqWrapper->ValidateParameters(GetSafeHwnd(), valid))
 	{
 		ShowEditBalloon(IDC_BUGTRAQPARAMETERS, IDS_ERR_PROVIDER_VALIDATE_FAILED, IDS_ERR_ERROR, TTI_ERROR);
 		return;
@@ -180,11 +180,11 @@ void CSetBugTraqAdv::CheckHasOptions()
 	}
 
 	CBugTraqAssociation assoc(_T(""), m_provider_clsid, _T(""), m_sParameters);
-	CBugTraqWrapper pBugTraqWrapper;
-	if (pBugTraqWrapper.CreateProvider(assoc) && pBugTraqWrapper.HasIBugTraqProvider2())
+	auto pBugTraqWrapper = CBugTraqWrapper::CreateInstance(assoc);
+	if (pBugTraqWrapper->CreateProvider(assoc) && pBugTraqWrapper->HasIBugTraqProvider2())
 	{
 		bool hasOptions = false;
-		if (pBugTraqWrapper.HasOptions(hasOptions))
+		if (pBugTraqWrapper->HasOptions(hasOptions))
 		{
 			if (hasOptions)
 			{
@@ -216,11 +216,11 @@ void CSetBugTraqAdv::OnBnClickedOptions()
 	CString p;
 	GetDlgItemText(IDC_BUGTRAQPARAMETERS, p);
 	CBugTraqAssociation assoc(_T(""), m_provider_clsid, _T(""), p);
-	CBugTraqWrapper pBugTraqWrapper;
-	if (pBugTraqWrapper.CreateProvider(assoc) && pBugTraqWrapper.HasIBugTraqProvider2())
+	auto pBugTraqWrapper = CBugTraqWrapper::CreateInstance(assoc);
+	if (pBugTraqWrapper->CreateProvider(assoc) && pBugTraqWrapper->HasIBugTraqProvider2())
 	{
 		CString temp;
-		if (pBugTraqWrapper.ShowOptionsDialog(GetSafeHwnd(), temp))
+		if (pBugTraqWrapper->ShowOptionsDialog(GetSafeHwnd(), temp))
 		{
 			SetDlgItemText(IDC_BUGTRAQPARAMETERS, temp);
 		}

@@ -33,6 +33,7 @@ class CBugTraqAssociation
 	CTGitPath m_path;
 	CBugTraqProvider m_provider;
 	CString m_parameters;
+	CString m_providerDll;
 
 public:
 	CBugTraqAssociation()
@@ -40,8 +41,8 @@ public:
 		 m_provider.clsid = GUID_NULL;
 	}
 
-	CBugTraqAssociation(LPCTSTR szWorkingCopy, const CLSID &provider_clsid, LPCTSTR szProviderName, LPCTSTR szParameters)
-		: m_path(szWorkingCopy), m_parameters(szParameters)
+	CBugTraqAssociation(LPCTSTR szWorkingCopy, const CLSID &provider_clsid, LPCTSTR szProviderName, LPCTSTR szParameters, LPCTSTR providerDll = nullptr)
+		: m_path(szWorkingCopy), m_parameters(szParameters), m_providerDll(providerDll)
 	{
 		m_provider.clsid = provider_clsid;
 		m_provider.name = szProviderName;
@@ -52,6 +53,7 @@ public:
 	CLSID GetProviderClass() const { return m_provider.clsid; }
 	CString GetProviderClassAsString() const;
 	CString GetParameters() const { return m_parameters; }
+	CString GetProviderDll() const { return m_providerDll; }
 };
 
 class CBugTraqAssociations
@@ -63,7 +65,7 @@ public:
 	CBugTraqAssociations();
 	~CBugTraqAssociations();
 
-	void Load(LPCTSTR uuid = nullptr, LPCTSTR params = nullptr);
+	void Load(LPCTSTR uuid = nullptr, LPCTSTR params = nullptr, LPCTSTR dll = nullptr);
 	void Save() const;
 
 	void Add(const CBugTraqAssociation &assoc);
@@ -95,5 +97,6 @@ private:
 	};
 	CString	providerUUID;
 	CString	providerParams;
+	CString	providerDLL;
 	CBugTraqAssociation * pProjectProvider;
 };

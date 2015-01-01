@@ -261,17 +261,18 @@ BOOL CCommitDlg::OnInitDialog()
 //	m_tooltips.AddTool(IDC_HISTORY, IDS_COMMITDLG_HISTORY_TT);
 
 	CBugTraqAssociations bugtraq_associations;
-	bugtraq_associations.Load(m_ProjectProperties.GetProviderUUID(), m_ProjectProperties.sProviderParams);
+	bugtraq_associations.Load(m_ProjectProperties.GetProviderUUID(), m_ProjectProperties.sProviderParams, m_ProjectProperties.sProviderDll);
 
 	if (bugtraq_associations.FindProvider(g_Git.m_CurrentDir, &m_bugtraq_association))
 	{
 		GetDlgItem(IDC_BUGID)->ShowWindow(SW_HIDE);
 		GetDlgItem(IDC_BUGIDLABEL)->ShowWindow(SW_HIDE);
 
-		if (m_BugTraqWrapper.CreateProvider(m_bugtraq_association))
+		m_BugTraqWrapper.reset(CBugTraqWrapper::CreateInstance(m_bugtraq_association));
+		if (m_BugTraqWrapper->CreateProvider(m_bugtraq_association))
 		{
 			CString temp;
-			if (m_BugTraqWrapper.GetLinkText(GetSafeHwnd(), temp))
+			if (m_BugTraqWrapper->GetLinkText(GetSafeHwnd(), temp))
 			{
 				SetDlgItemText(IDC_BUGTRAQBUTTON, temp);
 				GetDlgItem(IDC_BUGTRAQBUTTON)->EnableWindow(TRUE);
@@ -891,7 +892,7 @@ void CCommitDlg::OnOK()
 	}
 
 	// now let the bugtraq plugin check the commit message
-	if (m_BugTraqWrapper.HasIBugTraqProvider2())
+	if (m_BugTraqWrapper->HasIBugTraqProvider2())
 	{
 		{
 			CString temp;
@@ -903,10 +904,10 @@ void CCommitDlg::OnOK()
 			for (LONG index = 0; index < m_selectedPathList.GetCount(); ++index)
 				pathList.push_back(m_selectedPathList[index].GetGitPathString());
 
-			if (!m_BugTraqWrapper.CheckCommit(GetSafeHwnd(), repositoryRoot, commonRoot, pathList, commitMessage, temp))
+			if (!m_BugTraqWrapper->CheckCommit(GetSafeHwnd(), repositoryRoot, commonRoot, pathList, commitMessage, temp))
 			{
 				CString sErr;
-				sErr.Format(IDS_ERR_FAILEDISSUETRACKERCOM, m_bugtraq_association.GetProviderName(), m_BugTraqWrapper.GetLastErr());
+				sErr.Format(IDS_ERR_FAILEDISSUETRACKERCOM, m_bugtraq_association.GetProviderName(), m_BugTraqWrapper->GetLastErr());
 				CMessageBox::Show(m_hWnd, sErr, _T("TortoiseGit"), MB_ICONERROR);
 			}
 			else
@@ -1016,7 +1017,7 @@ void CCommitDlg::OnOK()
 
 		::DeleteFile(tempfile);
 
-		if (m_BugTraqWrapper.HasIBugTraqProvider2() && progress.m_GitStatus == 0)
+		if (m_BugTraqWrapper->HasIBugTraqProvider2() && progress.m_GitStatus == 0)
 		{
 			{
 				CString commonRoot(g_Git.m_CurrentDir);
@@ -1033,7 +1034,7 @@ void CCommitDlg::OnOK()
 				LONG version = g_Git.Hash2int(hash);
 
 				CString temp;
-				if (!m_BugTraqWrapper.OnCommitFinished(GetSafeHwnd(),
+				if (!m_BugTraqWrapper->OnCommitFinished(GetSafeHwnd(),
 					commonRoot,
 					pathList,
 					logMessage,
@@ -1045,7 +1046,7 @@ void CCommitDlg::OnOK()
 						CMessageBox::Show(NULL,(sErr),_T("TortoiseGit"),MB_OK|MB_ICONERROR);
 					else
 					{
-						sErr.Format(IDS_ERR_FAILEDISSUETRACKERCOM, L"Error", m_bugtraq_association.GetProviderName(), m_BugTraqWrapper.GetLastErr());
+						sErr.Format(IDS_ERR_FAILEDISSUETRACKERCOM, L"Error", m_bugtraq_association.GetProviderName(), m_BugTraqWrapper->GetLastErr());
 						CMessageBox::Show(NULL,(sErr),_T("TortoiseGit"),MB_OK|MB_ICONERROR);
 					}
 				}
@@ -1968,7 +1969,7 @@ void CCommitDlg::OnBnClickedBugtraqbutton()
 	m_tooltips.Pop();	// hide the tooltips
 	CString sMsg = m_cLogMessage.GetText();
 
-	if (!m_BugTraqWrapper.HasIBugTraqProvider())
+	if (!m_BugTraqWrapper->HasIBugTraqProvider())
 		return;
 
 	CString commonRoot(m_pathList.GetCommonRoot().GetDirectory().GetWinPath());
@@ -1982,7 +1983,7 @@ void CCommitDlg::OnBnClickedBugtraqbutton()
 
 	// first try the IBugTraqProvider2 interface
 	bool bugIdOutSet = false;
-	if (m_BugTraqWrapper.HasIBugTraqProvider2())
+	if (m_BugTraqWrapper->HasIBugTraqProvider2())
 	{
 		CString repositoryRoot(g_Git.m_CurrentDir);
 		CString bugIDOut;
@@ -1990,10 +1991,10 @@ void CCommitDlg::OnBnClickedBugtraqbutton()
 		CString bugID(m_sBugID);
 		STRING_VECTOR revPropNames;
 		STRING_VECTOR revPropValues;
-		if (!m_BugTraqWrapper.GetCommitMessage2(GetSafeHwnd(), repositoryRoot, commonRoot, pathList, originalMessage, bugID, bugIDOut, revPropNames, revPropValues, temp))
+		if (!m_BugTraqWrapper->GetCommitMessage2(GetSafeHwnd(), repositoryRoot, commonRoot, pathList, originalMessage, bugID, bugIDOut, revPropNames, revPropValues, temp))
 		{
 			CString sErr;
-			sErr.Format(IDS_ERR_FAILEDISSUETRACKERCOM, m_bugtraq_association.GetProviderName(), m_BugTraqWrapper.GetLastErr());
+			sErr.Format(IDS_ERR_FAILEDISSUETRACKERCOM, m_bugtraq_association.GetProviderName(), m_BugTraqWrapper->GetLastErr());
 			CMessageBox::Show(m_hWnd, sErr, _T("TortoiseGit"), MB_ICONERROR);
 		}
 		else
@@ -2010,10 +2011,10 @@ void CCommitDlg::OnBnClickedBugtraqbutton()
 	else
 	{
 		// if IBugTraqProvider2 failed, try IBugTraqProvider
-		if (!m_BugTraqWrapper.GetCommitMessage(GetSafeHwnd(), commonRoot, pathList, originalMessage, temp))
+		if (!m_BugTraqWrapper->GetCommitMessage(GetSafeHwnd(), commonRoot, pathList, originalMessage, temp))
 		{
 			CString sErr;
-			sErr.Format(IDS_ERR_FAILEDISSUETRACKERCOM, m_bugtraq_association.GetProviderName(), m_BugTraqWrapper.GetLastErr());
+			sErr.Format(IDS_ERR_FAILEDISSUETRACKERCOM, m_bugtraq_association.GetProviderName(), m_BugTraqWrapper->GetLastErr());
 			CMessageBox::Show(m_hWnd, sErr, _T("TortoiseGit"), MB_ICONERROR);
 		}
 		else

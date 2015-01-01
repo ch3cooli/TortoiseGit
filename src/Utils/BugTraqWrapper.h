@@ -23,30 +23,25 @@
 class CBugTraqWrapper
 {
 public:
-	CBugTraqWrapper();
-	virtual ~CBugTraqWrapper();
+	static CBugTraqWrapper* CreateInstance(const CBugTraqAssociation& assoc);
 
-	bool CreateProvider(const CBugTraqAssociation& assoc);
+	virtual bool CreateProvider(const CBugTraqAssociation& assoc) = 0;
 
-	bool HasIBugTraqProvider();
-	bool HasIBugTraqProvider2();
+	virtual bool HasIBugTraqProvider() = 0;
+	virtual bool HasIBugTraqProvider2() = 0;
 
-	CString GetLastErr();
+	virtual CString GetLastErr() = 0;
 
 	// IBugTraqProvider methods
-	bool ValidateParameters(HWND hParentWnd, bool& valid);
-	bool GetLinkText(HWND hParentWnd, CString& linkText);
-	bool GetCommitMessage(HWND hParentWnd, CString commonRoot, const STRING_VECTOR& pathList, CString originalMessage, CString& newMessage);
+	virtual bool ValidateParameters(HWND hParentWnd, bool& valid) = 0;
+	virtual bool GetLinkText(HWND hParentWnd, CString& linkText) = 0;
+	virtual bool GetCommitMessage(HWND hParentWnd, CString commonRoot, const STRING_VECTOR& pathList, CString originalMessage, CString& newMessage) = 0;
 	
 	// IBugTraqProvider2 methods
-	bool GetCommitMessage2(HWND hParentWnd, CString commonURL, CString commonRoot, const STRING_VECTOR& pathList, CString originalMessage, CString bugID,
-        CString& bugIDOut, STRING_VECTOR& revPropNames, STRING_VECTOR& revPropValues, CString& newMessage);
-	bool CheckCommit(HWND hParentWnd, CString commonURL, CString commonRoot, const STRING_VECTOR& pathList, CString commitMessage, CString& errorMessage);
-	bool OnCommitFinished(HWND hParentWnd, CString commonRoot, const STRING_VECTOR& pathList, CString logMessage, ULONG revision, CString& error);
-	bool HasOptions(bool& ret);
-	bool ShowOptionsDialog(HWND hParentWnd, CString& newparameters);
-
-private:
-	struct Internal;
-	std::shared_ptr<Internal> m;
+	virtual bool GetCommitMessage2(HWND hParentWnd, CString commonURL, CString commonRoot, const STRING_VECTOR& pathList, CString originalMessage, CString bugID,
+        CString& bugIDOut, STRING_VECTOR& revPropNames, STRING_VECTOR& revPropValues, CString& newMessage) = 0;
+	virtual bool CheckCommit(HWND hParentWnd, CString commonURL, CString commonRoot, const STRING_VECTOR& pathList, CString commitMessage, CString& errorMessage) = 0;
+	virtual bool OnCommitFinished(HWND hParentWnd, CString commonRoot, const STRING_VECTOR& pathList, CString logMessage, ULONG revision, CString& error) = 0;
+	virtual bool HasOptions(bool& ret) = 0;
+	virtual bool ShowOptionsDialog(HWND hParentWnd, CString& newparameters) = 0;
 };
