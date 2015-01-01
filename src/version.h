@@ -1,12 +1,12 @@
-#define FILEVER				1,8,12,0
+#define FILEVER				1,8,12,1
 #define PRODUCTVER			FILEVER
-#define STRFILEVER			"1.8.12.0"
+#define STRFILEVER			"1.8.12.1"
 #define STRPRODUCTVER		STRFILEVER
 
 #define TGIT_VERMAJOR		1
 #define TGIT_VERMINOR		8
 #define TGIT_VERMICRO		12
-#define TGIT_VERBUILD		0
+#define TGIT_VERBUILD		1
 #define TGIT_VERDATE		__DATE__
 
 #ifdef _WIN64
@@ -15,7 +15,7 @@
 #define TGIT_PLATFORM		"32 Bit"
 #endif
 
-#define PREVIEW				0
+#define PREVIEW				1
 
 /*
  * TortoiseGit crash handler
@@ -25,7 +25,7 @@
  *
  * This only makes sense for official (preview) releases of the TortoiseGit team
  */
-#define ENABLE_CRASHHANLDER	0
+#define ENABLE_CRASHHANLDER	1
 
 /*****************************************************************************
  * TortoiseGit PGP Public Key used to sign releases
