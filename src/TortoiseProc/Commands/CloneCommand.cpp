@@ -64,6 +64,175 @@ error:
 	MessageBox(hWndExplorer, CGit::GetLibGit2LastErr(L"Could not open repository"), _T("TortoiseGit"), MB_ICONERROR);
 }
 
+static bool DoClone(CCloneDlg &dlg)
+{
+	CString recursiveStr;
+	if (dlg.m_bRecursive)
+		recursiveStr = _T(" --recursive");
+
+	CString bareStr;
+	if (dlg.m_bBare)
+		bareStr = _T(" --bare");
+
+	CString nocheckoutStr;
+	if (dlg.m_bNoCheckout)
+		nocheckoutStr = _T(" --no-checkout");
+
+	CString branchStr;
+	if (dlg.m_bBranch)
+		branchStr = _T(" --branch ") + dlg.m_strBranch;
+
+	CString originStr;
+	if (dlg.m_bOrigin && !dlg.m_bSVN)
+		originStr = _T(" --origin ") + dlg.m_strOrigin;
+
+	if(dlg.m_bAutoloadPuttyKeyFile)
+		CAppUtils::LaunchPAgent(&dlg.m_strPuttyKeyFile);
+
+	CAppUtils::RemoveTrailSlash(dlg.m_Directory);
+	if (!dlg.m_bSVN)
+		CAppUtils::RemoveTrailSlash(dlg.m_URL);
+
+	CString dir = dlg.m_Directory;
+	CString url = dlg.m_URL;
+
+	// is this a windows format UNC path, ie starts with \\?
+	if (url.Find(_T("\\\\")) == 0)
+	{
+		// yes, change all \ to /
+		// this should not be necessary but msysgit does not support the use \ here yet
+		int atSign = url.Find(_T('@'));
+		if (atSign > 0)
+		{
+			CString path = url.Mid(atSign);
+			path.Replace(_T('\\'), _T('/'));
+			url = url.Mid(0, atSign) + path;
+		}
+		else
+			url.Replace( _T('\\'), _T('/'));
+	}
+
+	CString depth;
+	if (dlg.m_bDepth)
+		depth.Format(_T(" --depth %d"),dlg.m_nDepth);
+
+	CString cmd;
+	CString progressarg;
+
+	int ver = CAppUtils::GetMsysgitVersion();
+
+	if(ver >= 0x01070002) //above 1.7.0.2
+		progressarg = _T(" --progress");
+
+	cmd.Format(_T("git.exe clone%s%s%s%s%s%s -v%s \"%s\" \"%s\""),
+					nocheckoutStr,
+					recursiveStr,
+					bareStr,
+					branchStr,
+					originStr,
+					progressarg,
+					depth,
+					url,
+					dir);
+
+	bool retry = false;
+	auto postCmdCallback = [&](DWORD status, PostCmdList& postCmdList)
+	{
+		if (status)
+		{
+			postCmdList.push_back(PostCmd(IDI_REFRESH, IDS_MSGBOX_RETRY, [&] { DoClone(dlg); }));
+			return;
+		}
+
+		// After cloning, change current directory to the cloned directory
+		g_Git.m_CurrentDir = dlg.m_Directory;
+		if (dlg.m_bAutoloadPuttyKeyFile) // do this here, since it might be needed for actions performed in Log
+			StorePuttyKey(dlg.m_Directory, dlg.m_strPuttyKeyFile);
+
+		postCmdList.push_back(PostCmd(IDI_LOG, IDS_MENULOG, [&]
+		{
+			CString cmd = _T("/command:log");
+			cmd += _T(" /path:\"") + dlg.m_Directory + _T("\"");
+			CAppUtils::RunTortoiseGitProc(cmd);
+		}));
+
+		postCmdList.push_back(PostCmd(IDI_EXPLORER, IDS_STATUSLIST_CONTEXT_EXPLORE, [&]{ CAppUtils::ExploreTo(hWndExplorer, dlg.m_Directory); }));
+	};
+
+	// Handle Git SVN-clone
+	if (dlg.m_bSVN)
+	{
+		//g_Git.m_CurrentDir=dlg.m_Directory;
+		cmd.Format(_T("git.exe svn clone \"%s\"  \"%s\""), url, dlg.m_Directory);
+
+		if (dlg.m_bOrigin)
+		{
+			CString str;
+			if (dlg.m_strOrigin.IsEmpty())
+				str = _T(" --prefix \"\"");
+			else
+				str.Format(_T(" --prefix \"%s/\""), dlg.m_strOrigin);
+			cmd += str;
+		}
+
+		if (dlg.m_bSVNTrunk)
+			cmd += _T(" -T ") + dlg.m_strSVNTrunk;
+
+		if (dlg.m_bSVNBranch)
+			cmd += _T(" -b ") + dlg.m_strSVNBranchs;
+
+		if (dlg.m_bSVNTags)
+			cmd += _T(" -t ") + dlg.m_strSVNTags;
+
+		if (dlg.m_bSVNFrom)
+		{
+			CString str;
+			str.Format(_T("%d:HEAD"),dlg.m_nSVNFrom);
+			cmd+=_T(" -r ")+str;
+		}
+
+		if (dlg.m_bSVNUserName)
+		{
+			cmd +=  _T(" --username ");
+			cmd += dlg.m_strUserName;
+		}
+	}
+	else
+	{
+		if (g_Git.UsingLibGit2(CGit::GIT_CMD_CLONE))
+		{
+			CGitProgressDlg GitDlg;
+			CTGitPathList list;
+			g_Git.m_CurrentDir = GetExistingDirectoryForClone(dlg.m_Directory);
+			list.AddPath(CTGitPath(dir));
+			CloneProgressCommand cloneProgressCommand;
+			GitDlg.SetCommand(&cloneProgressCommand);
+			cloneProgressCommand.m_PostCmdCallback = postCmdCallback;
+			cloneProgressCommand.SetUrl(url);
+			cloneProgressCommand.SetPathList(list);
+			cloneProgressCommand.SetIsBare(dlg.m_bBare == TRUE);
+			if (dlg.m_bBranch)
+				cloneProgressCommand.SetRefSpec(dlg.m_strBranch);
+			if (dlg.m_bOrigin)
+				cloneProgressCommand.SetRemote(dlg.m_strOrigin);
+			cloneProgressCommand.SetNoCheckout(dlg.m_bNoCheckout == TRUE);
+			GitDlg.DoModal();
+			return !GitDlg.DidErrorsOccur();
+		}
+	}
+
+	g_Git.m_CurrentDir = GetExistingDirectoryForClone(dlg.m_Directory);
+	CProgressDlg progress;
+	progress.m_GitCmd = cmd;
+	progress.m_PostCmdCallback = postCmdCallback;
+	INT_PTR ret = progress.DoModal();
+
+	if (dlg.m_bSVN)
+		::DeleteFile(g_Git.m_CurrentDir + _T("\\sys$command"));
+
+	return ret == IDOK;
+}
+
 bool CloneCommand::Execute()
 {
 	CTGitPath cloneDirectory;
@@ -95,191 +264,6 @@ bool CloneCommand::Execute()
 		dlg.m_bExactPath = TRUE;
 
 	if(dlg.DoModal()==IDOK)
-	{
-		CString recursiveStr;
-		if(dlg.m_bRecursive)
-			recursiveStr = _T(" --recursive");
-		else
-			recursiveStr = _T("");
-
-		CString bareStr;
-		if(dlg.m_bBare)
-			bareStr = _T(" --bare");
-		else
-			bareStr = _T("");
-
-		CString nocheckoutStr;
-		if (dlg.m_bNoCheckout)
-			nocheckoutStr = _T(" --no-checkout");
-
-		CString branchStr;
-		if (dlg.m_bBranch)
-			branchStr = _T(" --branch ") + dlg.m_strBranch;
-
-		CString originStr;
-		if (dlg.m_bOrigin && !dlg.m_bSVN)
-			originStr = _T(" --origin ") + dlg.m_strOrigin;
-
-		if(dlg.m_bAutoloadPuttyKeyFile)
-		{
-			CAppUtils::LaunchPAgent(&dlg.m_strPuttyKeyFile);
-		}
-
-		CAppUtils::RemoveTrailSlash(dlg.m_Directory);
-		if (!dlg.m_bSVN)
-			CAppUtils::RemoveTrailSlash(dlg.m_URL);
-
-		CString dir=dlg.m_Directory;
-		CString url=dlg.m_URL;
-
-		// is this a windows format UNC path, ie starts with \\?
-		if (url.Find(_T("\\\\")) == 0)
-		{
-			// yes, change all \ to /
-			// this should not be necessary but msysgit does not support the use \ here yet
-			int atSign = url.Find(_T('@'));
-			if (atSign > 0)
-			{
-				CString path = url.Mid(atSign);
-				path.Replace(_T('\\'), _T('/'));
-				url = url.Mid(0, atSign) + path;
-			}
-			else
-				url.Replace( _T('\\'), _T('/'));
-		}
-
-		CString depth;
-		if (dlg.m_bDepth)
-		{
-			depth.Format(_T(" --depth %d"),dlg.m_nDepth);
-		}
-
-		CString cmd;
-		CString progressarg;
-
-		int ver = CAppUtils::GetMsysgitVersion();
-
-		if(ver >= 0x01070002) //above 1.7.0.2
-			progressarg = _T(" --progress");
-
-		cmd.Format(_T("git.exe clone%s%s%s%s%s%s -v%s \"%s\" \"%s\""),
-						nocheckoutStr,
-						recursiveStr,
-						bareStr,
-						branchStr,
-						originStr,
-						progressarg,
-						depth,
-						url,
-						dir);
-
-		bool retry = false;
-		auto postCmdCallback = [&](DWORD status, PostCmdList& postCmdList)
-		{
-			if (status)
-			{
-				postCmdList.push_back(PostCmd(IDI_REFRESH, IDS_MSGBOX_RETRY, [&] { retry = true; }));
-				return;
-			}
-
-			// After cloning, change current directory to the cloned directory
-			g_Git.m_CurrentDir = dlg.m_Directory;
-			if (dlg.m_bAutoloadPuttyKeyFile) // do this here, since it might be needed for actions performed in Log
-				StorePuttyKey(dlg.m_Directory, dlg.m_strPuttyKeyFile);
-
-			postCmdList.push_back(PostCmd(IDI_LOG, IDS_MENULOG, [&]
-			{
-				CString cmd = _T("/command:log");
-				cmd += _T(" /path:\"") + dlg.m_Directory + _T("\"");
-				CAppUtils::RunTortoiseGitProc(cmd);
-			}));
-
-			postCmdList.push_back(PostCmd(IDI_EXPLORER, IDS_STATUSLIST_CONTEXT_EXPLORE, [&]{ CAppUtils::ExploreTo(hWndExplorer, dlg.m_Directory); }));
-		};
-
-		// Handle Git SVN-clone
-		if(dlg.m_bSVN)
-		{
-			//g_Git.m_CurrentDir=dlg.m_Directory;
-			cmd.Format(_T("git.exe svn clone \"%s\"  \"%s\""),
-				url,dlg.m_Directory);
-
-			if (dlg.m_bOrigin)
-			{
-				CString str;
-				if (dlg.m_strOrigin.IsEmpty())
-					str = _T(" --prefix \"\"");
-				else
-					str.Format(_T(" --prefix \"%s/\""), dlg.m_strOrigin);
-				cmd += str;
-			}
-
-			if(dlg.m_bSVNTrunk)
-				cmd+=_T(" -T ")+dlg.m_strSVNTrunk;
-
-			if(dlg.m_bSVNBranch)
-				cmd+=_T(" -b ")+dlg.m_strSVNBranchs;
-
-			if(dlg.m_bSVNTags)
-				cmd+=_T(" -t ")+dlg.m_strSVNTags;
-
-			if(dlg.m_bSVNFrom)
-			{
-				CString str;
-				str.Format(_T("%d:HEAD"),dlg.m_nSVNFrom);
-				cmd+=_T(" -r ")+str;
-			}
-
-			if(dlg.m_bSVNUserName)
-			{
-				cmd+= _T(" --username ");
-				cmd+=dlg.m_strUserName;
-			}
-		}
-		else
-		{
-			if (g_Git.UsingLibGit2(CGit::GIT_CMD_CLONE))
-			{
-				while (true)
-				{
-					retry = false;
-					CGitProgressDlg GitDlg;
-					CTGitPathList list;
-					g_Git.m_CurrentDir = GetExistingDirectoryForClone(dlg.m_Directory);
-					list.AddPath(CTGitPath(dir));
-					CloneProgressCommand cloneProgressCommand;
-					GitDlg.SetCommand(&cloneProgressCommand);
-					cloneProgressCommand.m_PostCmdCallback = postCmdCallback;
-					cloneProgressCommand.SetUrl(url);
-					cloneProgressCommand.SetPathList(list);
-					cloneProgressCommand.SetIsBare(dlg.m_bBare == TRUE);
-					if (dlg.m_bBranch)
-						cloneProgressCommand.SetRefSpec(dlg.m_strBranch);
-					if (dlg.m_bOrigin)
-						cloneProgressCommand.SetRemote(dlg.m_strOrigin);
-					cloneProgressCommand.SetNoCheckout(dlg.m_bNoCheckout == TRUE);
-					GitDlg.DoModal();
-					if (!retry)
-						return !GitDlg.DidErrorsOccur();
-				}
-			}
-		}
-
-		while (true)
-		{
-			retry = false;
-			g_Git.m_CurrentDir = GetExistingDirectoryForClone(dlg.m_Directory);
-			CProgressDlg progress;
-			progress.m_GitCmd=cmd;
-			progress.m_PostCmdCallback = postCmdCallback;
-			INT_PTR ret = progress.DoModal();
-
-			if (dlg.m_bSVN)
-				::DeleteFile(g_Git.m_CurrentDir + _T("\\sys$command"));
-
-			if (!retry)
-				return ret == IDOK;
-		}
-	}
+		return DoClone(dlg);
 	return FALSE;
 }
