@@ -336,7 +336,7 @@ FontCached::FontCached(const FontParameters &fp) :
 		const int faceSize = 200;
 		WCHAR wszFace[faceSize];
 		UTF16FromUTF8(fp.faceName, static_cast<unsigned int>(strlen(fp.faceName))+1, wszFace, faceSize);
-		FLOAT fHeight = fp.size;
+		FLOAT fHeight = -lf.lfHeight;
 		DWRITE_FONT_STYLE style = fp.italic ? DWRITE_FONT_STYLE_ITALIC : DWRITE_FONT_STYLE_NORMAL;
 		HRESULT hr = pIDWriteFactory->CreateTextFormat(wszFace, NULL,
 			static_cast<DWRITE_FONT_WEIGHT>(fp.weight),
