@@ -413,6 +413,24 @@ int CStringUtils::FastCompareNoCase (const CStringW& lhs, const CStringW& rhs)
 
 	return 0;
 }
+
+CString CStringUtils::Lf2Crlf(const CString& text)
+{
+	CString s;
+	if (text.GetLength() == 0)
+		return s;
+
+	TCHAR c = '\0';
+	for (int i = 0; i < text.GetLength(); i++)
+	{
+		if (text[i] == '\n' && c != '\r')
+			s += "\r\n";
+		else
+			s += text[i];
+		c = text[i];
+	}
+	return s;
+}
 #endif // #if defined(CSTRING_AVAILABLE) || defined(_MFC_VER)
 
 bool CStringUtils::WriteStringToTextFile(const std::wstring& path, const std::wstring& text, bool bUTF8 /* = true */)

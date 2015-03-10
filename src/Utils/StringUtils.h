@@ -100,6 +100,11 @@ public:
 	 * Optimizing wrapper around CompareNoCase.
 	 */
 	static int FastCompareNoCase (const CStringW& lhs, const CStringW& rhs);
+
+	/**
+	 * Converts LF to CRLF
+	 */
+	static CString Lf2Crlf(const CString& text);
 #endif
 	/**
 	 * Writes the string \text to the file \path, either in utf16 or utf8 encoding,

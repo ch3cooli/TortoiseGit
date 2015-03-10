@@ -24,6 +24,7 @@
 #include "../../apr/include/apr_version.h"
 #include "../../apr-util/include/apu_version.h"
 #include "../version.h"
+#include "StringUtils.h"
 
 // CAboutDlg dialog
 
@@ -65,7 +66,7 @@ BOOL CAboutDlg::OnInitDialog()
 		diffver->major, diffver->minor, diffver->patch, CString(diffver->tag),
 		APR_MAJOR_VERSION, APR_MINOR_VERSION, APR_PATCH_VERSION,
 		APU_MAJOR_VERSION, APU_MINOR_VERSION, APU_PATCH_VERSION);
-	SetDlgItemText(IDC_VERSIONABOUT, temp);
+	SetDlgItemText(IDC_VERSIONABOUT, CStringUtils::Lf2Crlf(temp));
 	this->SetWindowText(_T("TortoiseGitMerge"));
 
 	CPictureHolder tmpPic;
