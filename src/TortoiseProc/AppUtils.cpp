@@ -2693,12 +2693,15 @@ bool CAppUtils::Push(const CString& selectLocalBranch)
 			}
 		}
 
+		int ver = CAppUtils::GetMsysgitVersion();
 		CString arg;
 
 		if(dlg.m_bPack)
 			arg += _T("--thin ");
 		if(dlg.m_bTags && !dlg.m_bPushAllBranches)
 			arg += _T("--tags ");
+		if ((dlg.m_bTags || dlg.m_bPushAllBranches) && ver >= 0x02040000) // since git 2.4
+			arg += "--atomic ";
 		if(dlg.m_bForce)
 			arg += _T("--force ");
 		if (dlg.m_bForceWithLease)
@@ -2709,8 +2712,6 @@ bool CAppUtils::Push(const CString& selectLocalBranch)
 			arg += _T("--recurse-submodules=check ");
 		if (dlg.m_RecurseSubmodules == 2)
 			arg += _T("--recurse-submodules=on-demand ");
-
-		int ver = CAppUtils::GetMsysgitVersion();
 
 		if(ver >= 0x01070203) //above 1.7.0.2
 			arg += _T("--progress ");

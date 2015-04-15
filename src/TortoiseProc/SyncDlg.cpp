@@ -525,6 +525,8 @@ void CSyncDlg::OnBnClickedButtonPush()
 
 	if(m_Gitverion >= 0x01070203) //above 1.7.0.2
 		arg += _T("--progress ");
+	if (m_Gitverion >= 0x02040000) // since git 2.4
+		arg += _T("--atomic ");
 
 	cmd.Format(_T("git.exe push -v %s \"%s\" %s"),
 				(LPCTSTR)arg,
