@@ -731,9 +731,15 @@ void CLogDlg::FillLogMessageCtrl(bool bShow /* = true*/)
 			CString out_describe;
 			if (m_bShowDescribe)
 			{
-				CString result;
-				if (!DescribeCommit(pLogEntry->m_CommitHash, result))
-					out_describe = _T("Describe: ") + result + _T("\r\n");
+				if (!pLogEntry->m_bDescribe)
+				{
+					pLogEntry->m_bDescribe = true;
+					CString result;
+					if (!DescribeCommit(pLogEntry->m_CommitHash, result))
+						pLogEntry->m_Describe = result;
+				}
+				if (!pLogEntry->m_Describe.IsEmpty())
+					out_describe = _T("Describe: ") + pLogEntry->m_Describe + _T("\r\n");
 			}
 
 			// set the log message text

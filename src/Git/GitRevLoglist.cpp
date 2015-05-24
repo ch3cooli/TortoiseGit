@@ -36,6 +36,7 @@ GitRevLoglist::GitRevLoglist(void)
 	m_IsDiffFiles = FALSE;
 	m_CallDiffAsync = nullptr;
 	m_IsSimpleListReady = FALSE;
+	m_bDescribe = false;
 	m_Mark = 0;
 
 	SecureZeroMemory(&m_GitCommit, sizeof(GIT_COMMIT));

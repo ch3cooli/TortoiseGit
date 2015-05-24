@@ -45,6 +45,8 @@ public:
 	GIT_COMMIT m_GitCommit;
 
 	CString m_Notes;
+	bool m_bDescribe;
+	CString m_Describe;
 
 	TCHAR m_Mark;
 	CString m_Ref; // for Refloglist
