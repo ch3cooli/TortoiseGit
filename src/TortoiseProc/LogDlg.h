@@ -123,6 +123,7 @@ protected:
 	afx_msg void OnBnClickedView();
 	afx_msg void OnBnClickShowWholeProject();
 	void OnBnClickedHidepaths();
+	afx_msg void OnFetchedDescribe();
 	afx_msg void OnBnClickedAllBranch();
 	void OnBnClickedFollowRenames();
 	void HandleShowLabels(bool var, int flag);

@@ -67,6 +67,8 @@
 #define MSG_LOAD_PERCENTAGE		(WM_USER+111)
 #define MSG_REFLOG_CHANGED		(WM_USER+112)
 #define MSG_FETCHED_DIFF		(WM_USER+113)
+#define MSG_FETCHED_DESCRIBE	(WM_USER+114)
+#define MSG_FETCHED_DESCRIBE2	(WM_USER+115)
 
 class SelectionHistory
 {
@@ -572,6 +574,28 @@ protected:
 	bool m_AsyncThreadExited;
 
 public:
+	void DescribeAsync(GitRevLoglist* rev)
+	{
+		if (!rev->m_bDescribe)
+		{
+			rev->m_bDescribe = true;
+			m_DescribeLock.Lock();
+			m_DescribeList.push_back(rev);
+			m_DescribeLock.Unlock();
+			::SetEvent(m_DescribeEvent);
+		}
+	}
+
+protected:	
+	std::vector<GitRevLoglist*> m_DescribeList;
+	CComCriticalSection m_DescribeLock;
+	HANDLE	m_DescribeEvent;
+	volatile LONG m_DescribeThreadExit;
+	CWinThread*			m_DescribeThread;
+	int DescribeThread();
+	bool m_DescribeThreadExited;
+
+public:
 	void SafeTerminateAsyncDiffThread()
 	{
 		if(m_DiffingThread!=NULL && m_AsyncThreadExit != TRUE)
@@ -590,6 +614,25 @@ public:
 			m_DiffingThread = NULL;
 		}
 	};
+
+	void SafeTerminateDescribeThread()
+	{
+		if (m_DescribeThread != NULL && m_DescribeThreadExit != TRUE)
+		{
+			m_DescribeThreadExit = TRUE;
+			::SetEvent(m_DescribeEvent);
+			DWORD ret = WAIT_TIMEOUT;
+			// do not block here, but process messages and ask until the thread ends
+			while (ret == WAIT_TIMEOUT && !m_DescribeThreadExited)
+			{
+				MSG msg;
+				if (::PeekMessage(&msg, NULL, 0,0, PM_NOREMOVE))
+					AfxGetThread()->PumpMessage(); // process messages, so that GetTopIndex and so on in the thread work
+				ret = ::WaitForSingleObject(m_DescribeThread->m_hThread, 100);
+			}
+			m_DescribeThread = NULL;
+		}
+	}
 
 protected:
 	CComCriticalSection	m_critSec;

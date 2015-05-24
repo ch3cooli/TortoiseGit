@@ -167,6 +167,7 @@ BEGIN_MESSAGE_MAP(CLogDlg, CResizableStandAloneDialog)
 	ON_BN_CLICKED(IDC_WHOLE_PROJECT, OnBnClickShowWholeProject)
 	ON_NOTIFY(LVN_COLUMNCLICK,IDC_LOGLIST, OnLvnColumnclick)
 	ON_COMMAND(MSG_FETCHED_DIFF, OnBnClickedHidepaths)
+	ON_COMMAND(MSG_FETCHED_DESCRIBE2, OnFetchedDescribe)
 	ON_BN_CLICKED(IDC_LOG_ALLBRANCH, OnBnClickedAllBranch)
 	ON_EN_CHANGE(IDC_FILTER, OnEnChangeFileFilter)
 
@@ -645,32 +646,6 @@ BOOL FindGitHash(const CString& msg, int offset, CWnd *pWnd)
 	return positions.empty() ? FALSE : TRUE;
 }
 
-static int DescribeCommit(CGitHash& hash, CString& result)
-{
-	CAutoRepository repo(g_Git.GetGitRepository());
-	if (!repo)
-		return -1;
-	CAutoObject commit;
-	if (git_object_lookup(commit.GetPointer(), repo, (const git_oid *)hash.m_hash, GIT_OBJ_COMMIT))
-		return -1;
-
-	CAutoDescribeResult describe;
-	git_describe_options describe_options = GIT_DESCRIBE_OPTIONS_INIT;
-	describe_options.describe_strategy = CRegDWORD(_T("Software\\TortoiseGit\\DescribeStrategy"), GIT_DESCRIBE_DEFAULT);
-	if (git_describe_commit(describe.GetPointer(), (git_object *)commit, &describe_options))
-		return -1;
-
-	CAutoBuf describe_buf;
-	git_describe_format_options format_options = GIT_DESCRIBE_FORMAT_OPTIONS_INIT;
-	format_options.abbreviated_size = CRegDWORD(_T("Software\\TortoiseGit\\DescribeAbbreviatedSize"), GIT_DESCRIBE_DEFAULT_ABBREVIATED_SIZE);
-	format_options.always_use_long_format = CRegDWORD(_T("Software\\TortoiseGit\\DescribeAlwaysLong"));
-	if (git_describe_format(describe_buf, describe, &format_options))
-		return -1;
-
-	result = CUnicodeUtils::GetUnicode(describe_buf->ptr);
-	return 0;
-}
-
 void CLogDlg::FillLogMessageCtrl(bool bShow /* = true*/)
 {
 	// we fill here the log message rich edit control,
@@ -731,13 +706,7 @@ void CLogDlg::FillLogMessageCtrl(bool bShow /* = true*/)
 			CString out_describe;
 			if (m_bShowDescribe)
 			{
-				if (!pLogEntry->m_bDescribe)
-				{
-					pLogEntry->m_bDescribe = true;
-					CString result;
-					if (!DescribeCommit(pLogEntry->m_CommitHash, result))
-						pLogEntry->m_Describe = result;
-				}
+				m_LogList.DescribeAsync(pLogEntry);
 				if (!pLogEntry->m_Describe.IsEmpty())
 					out_describe = _T("Describe: ") + pLogEntry->m_Describe + _T("\r\n");
 			}
@@ -2702,6 +2671,11 @@ void CLogDlg::OnBnClickedHidepaths()
 {
 	FillLogMessageCtrl();
 	m_ChangedFileListCtrl.Invalidate();
+}
+
+void CLogDlg::OnFetchedDescribe()
+{
+	FillLogMessageCtrl();
 }
 
 void CLogDlg::UpdateLogInfoLabel()

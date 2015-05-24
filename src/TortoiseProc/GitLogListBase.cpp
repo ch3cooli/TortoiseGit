@@ -144,6 +144,10 @@ CGitLogListBase::CGitLogListBase():CHintListCtrl()
 	m_AsyncDiffEvent = ::CreateEvent(NULL,FALSE,TRUE,NULL);
 	m_AsynDiffListLock.Init();
 
+	m_DescribeThreadExit = FALSE;
+	m_DescribeEvent = ::CreateEvent(NULL,FALSE,TRUE,NULL);
+	m_DescribeLock.Init();
+
 	hUxTheme = AtlLoadSystemLibraryUsingFullPath(_T("UXTHEME.DLL"));
 	if (hUxTheme)
 		pfnDrawThemeTextEx = (FNDRAWTHEMETEXTEX)::GetProcAddress(hUxTheme, "DrawThemeTextEx");
@@ -155,6 +159,12 @@ CGitLogListBase::CGitLogListBase():CHintListCtrl()
 		return;
 	}
 
+	m_DescribeThread = AfxBeginThread([](LPVOID data) -> UINT { return ((CGitLogListBase*)data)->DescribeThread(); }, this, THREAD_PRIORITY_BELOW_NORMAL);
+	if (m_DescribeThread == NULL)
+	{
+		CMessageBox::Show(NULL, IDS_ERR_THREADSTARTFAILED, IDS_APPNAME, MB_OK | MB_ICONERROR);
+		return;
+	}
 }
 
 int CGitLogListBase::AsyncDiffThread()
@@ -241,6 +251,88 @@ int CGitLogListBase::AsyncDiffThread()
 	m_AsyncThreadExited = true;
 	return 0;
 }
+
+static int DescribeCommit(CGitHash& hash, CString& result)
+{
+	CAutoRepository repo(g_Git.GetGitRepository());
+	if (!repo)
+		return -1;
+	CAutoObject commit;
+	if (git_object_lookup(commit.GetPointer(), repo, (const git_oid *)hash.m_hash, GIT_OBJ_COMMIT))
+		return -1;
+
+	CAutoDescribeResult describe;
+	git_describe_options describe_options = GIT_DESCRIBE_OPTIONS_INIT;
+	describe_options.describe_strategy = CRegDWORD(_T("Software\\TortoiseGit\\DescribeStrategy"), GIT_DESCRIBE_DEFAULT);
+	if (git_describe_commit(describe.GetPointer(), (git_object *)commit, &describe_options))
+		return -1;
+
+	CAutoBuf describe_buf;
+	git_describe_format_options format_options = GIT_DESCRIBE_FORMAT_OPTIONS_INIT;
+	format_options.abbreviated_size = CRegDWORD(_T("Software\\TortoiseGit\\DescribeAbbreviatedSize"), GIT_DESCRIBE_DEFAULT_ABBREVIATED_SIZE);
+	format_options.always_use_long_format = CRegDWORD(_T("Software\\TortoiseGit\\DescribeAlwaysLong"));
+	if (git_describe_format(describe_buf, describe, &format_options))
+		return -1;
+
+	result = CUnicodeUtils::GetUnicode(describe_buf->ptr);
+	return 0;
+}
+
+int CGitLogListBase::DescribeThread()
+{
+	m_DescribeThreadExited = false;
+	while(!m_DescribeThreadExit)
+	{
+		::WaitForSingleObject(m_DescribeEvent, INFINITE);
+
+		while (!m_DescribeThreadExit && !m_DescribeList.empty())
+		{
+			m_DescribeLock.Lock();
+			auto pRev = m_DescribeList.back();
+			m_DescribeList.pop_back();
+			m_DescribeLock.Unlock();
+
+			if (pRev->m_CommitHash.IsEmpty())
+				continue;
+			CString describe;
+			if (!DescribeCommit(pRev->m_CommitHash, describe))
+			{
+				pRev->m_Describe = describe;
+
+				int top = GetTopIndex();
+				for (int i = top; !m_DescribeThreadExit && i <= top + GetCountPerPage(); ++i)
+				{
+					if (i < m_arShownList.GetCount())
+					{
+						auto data = (GitRevLoglist*)m_arShownList.SafeGetAt(i);
+						if (data != nullptr && data->m_CommitHash == pRev->m_CommitHash)
+						{
+							::PostMessage(m_hWnd, MSG_FETCHED_DESCRIBE, (WPARAM)i, 0);
+							break;
+						}
+					}
+				}
+
+				if (!m_DescribeThreadExit && GetSelectedCount() == 1)
+				{
+					POSITION pos = GetFirstSelectedItemPosition();
+					int nItem = GetNextSelectedItem(pos);
+					if (nItem >= 0)
+					{
+						auto data = (GitRevLoglist*)m_arShownList.SafeGetAt(nItem);
+						if (data != nullptr && data->m_CommitHash == pRev->m_CommitHash)
+						{
+							this->GetParent()->PostMessage(WM_COMMAND, MSG_FETCHED_DESCRIBE2, 0);
+						}
+					}
+				}
+			}
+		}
+	}
+	m_AsyncThreadExited = true;
+	return 0;
+}
+
 void CGitLogListBase::hideFromContextMenu(unsigned __int64 hideMask, bool exclusivelyShow)
 {
 	if (exclusivelyShow)
@@ -282,9 +374,13 @@ CGitLogListBase::~CGitLogListBase()
 
 	SafeTerminateThread();
 	SafeTerminateAsyncDiffThread();
+	SafeTerminateDescribeThread();
 
 	if(m_AsyncDiffEvent)
 		CloseHandle(m_AsyncDiffEvent);
+
+	if (m_DescribeEvent)
+		CloseHandle(m_DescribeEvent);
 
 	if (hUxTheme)
 		FreeLibrary(hUxTheme);
