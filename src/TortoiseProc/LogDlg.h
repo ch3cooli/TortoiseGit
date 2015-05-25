@@ -77,6 +77,7 @@ public:
 // Dialog Data
 	enum { IDD = IDD_LOGMESSAGE };
 
+	void	FillMsgView();
 	void	FillLogMessageCtrl(bool bShow = true);
 
 	void UpdateLogInfoLabel();

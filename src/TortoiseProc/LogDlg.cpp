@@ -646,59 +646,19 @@ BOOL FindGitHash(const CString& msg, int offset, CWnd *pWnd)
 	return positions.empty() ? FALSE : TRUE;
 }
 
-void CLogDlg::FillLogMessageCtrl(bool bShow /* = true*/)
+void CLogDlg::FillMsgView()
 {
-	// we fill here the log message rich edit control,
-	// and also populate the changed files list control
-	// according to the selected revision(s).
-
 	CRichEditCtrl * pMsgView = (CRichEditCtrl*)GetDlgItem(IDC_MSGVIEW);
 	// empty the log message view
 	pMsgView->SetWindowText(_T(" "));
-	FillPatchView(true);
-	// empty the changed files list
-	m_ChangedFileListCtrl.SetRedraw(FALSE);
-//	InterlockedExchange(&m_bNoDispUpdates, TRUE);
-	m_currentChangedArray = NULL;
-	m_ChangedFileListCtrl.DeleteAllItems();
-
-	// if we're not here to really show a selected revision, just
-	// get out of here after clearing the views, which is what is intended
-	// if that flag is not set.
-	if (!bShow)
-	{
-		// force a redraw
-		m_ChangedFileListCtrl.Invalidate();
-//		InterlockedExchange(&m_bNoDispUpdates, FALSE);
-		m_ChangedFileListCtrl.SetRedraw(TRUE);
-		m_gravatar.LoadGravatar();
-		return;
-	}
-
-	// depending on how many revisions are selected, we have to do different
-	// tasks.
 	int selCount = m_LogList.GetSelectedCount();
-	if (selCount == 0)
-	{
-		// if nothing is selected, we have nothing more to do
-//		InterlockedExchange(&m_bNoDispUpdates, FALSE);
-		m_ChangedFileListCtrl.SetRedraw(TRUE);
-		m_gravatar.LoadGravatar();
-		return;
-	}
-	else if (selCount == 1)
+	if (selCount == 1)
 	{
 		// if one revision is selected, we have to fill the log message view
 		// with the corresponding log message, and also fill the changed files
 		// list fully.
 		POSITION pos = m_LogList.GetFirstSelectedItemPosition();
 		int selIndex = m_LogList.GetNextSelectedItem(pos);
-		if (selIndex >= m_LogList.m_arShownList.GetCount())
-		{
-//			InterlockedExchange(&m_bNoDispUpdates, FALSE);
-			m_ChangedFileListCtrl.SetRedraw(TRUE);
-			return;
-		}
 		Locker lock(m_LogList.m_critSec_AsyncDiff);
 		GitRevLoglist* pLogEntry = reinterpret_cast<GitRevLoglist*>(m_LogList.m_arShownList.SafeGetAt(selIndex));
 
@@ -762,7 +722,64 @@ void CLogDlg::FillLogMessageCtrl(bool bShow /* = true*/)
 			range.cpMin = 0;
 			range.cpMax = 0;
 			pMsgView->SendMessage(EM_EXSETSEL, NULL, (LPARAM)&range);
+		}
+	}
+}
 
+void CLogDlg::FillLogMessageCtrl(bool bShow /* = true*/)
+{
+	// we fill here the log message rich edit control,
+	// and also populate the changed files list control
+	// according to the selected revision(s).
+	FillMsgView();
+	FillPatchView(true);
+	// empty the changed files list
+	m_ChangedFileListCtrl.SetRedraw(FALSE);
+//	InterlockedExchange(&m_bNoDispUpdates, TRUE);
+	m_currentChangedArray = NULL;
+	m_ChangedFileListCtrl.DeleteAllItems();
+
+	// if we're not here to really show a selected revision, just
+	// get out of here after clearing the views, which is what is intended
+	// if that flag is not set.
+	if (!bShow)
+	{
+		// force a redraw
+		m_ChangedFileListCtrl.Invalidate();
+//		InterlockedExchange(&m_bNoDispUpdates, FALSE);
+		m_ChangedFileListCtrl.SetRedraw(TRUE);
+		m_gravatar.LoadGravatar();
+		return;
+	}
+
+	// depending on how many revisions are selected, we have to do different
+	// tasks.
+	int selCount = m_LogList.GetSelectedCount();
+	if (selCount == 0)
+	{
+		// if nothing is selected, we have nothing more to do
+//		InterlockedExchange(&m_bNoDispUpdates, FALSE);
+		m_ChangedFileListCtrl.SetRedraw(TRUE);
+		m_gravatar.LoadGravatar();
+		return;
+	}
+	else if (selCount == 1)
+	{
+		// if one revision is selected, we have to fill the log message view
+		// with the corresponding log message, and also fill the changed files
+		// list fully.
+		POSITION pos = m_LogList.GetFirstSelectedItemPosition();
+		int selIndex = m_LogList.GetNextSelectedItem(pos);
+		if (selIndex >= m_LogList.m_arShownList.GetCount())
+		{
+//			InterlockedExchange(&m_bNoDispUpdates, FALSE);
+			m_ChangedFileListCtrl.SetRedraw(TRUE);
+			return;
+		}
+		Locker lock(m_LogList.m_critSec_AsyncDiff);
+		GitRevLoglist* pLogEntry = reinterpret_cast<GitRevLoglist*>(m_LogList.m_arShownList.SafeGetAt(selIndex));
+
+		{
 			CString matchpath=this->m_path.GetGitPathString();
 
 			bool mightNeedReset = true;
@@ -2675,7 +2692,7 @@ void CLogDlg::OnBnClickedHidepaths()
 
 void CLogDlg::OnFetchedDescribe()
 {
-	FillLogMessageCtrl();
+	FillMsgView();
 }
 
 void CLogDlg::UpdateLogInfoLabel()
