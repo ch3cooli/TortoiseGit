@@ -299,16 +299,18 @@ int CGitLogListBase::DescribeThread()
 			{
 				pRev->m_Describe = describe;
 
-				int top = GetTopIndex();
-				for (int i = top; !m_DescribeThreadExit && i <= top + GetCountPerPage(); ++i)
+				if (!m_DescribeThreadExit)
 				{
-					if (i < m_arShownList.GetCount())
+					for (int top = GetTopIndex(), i = top; !m_DescribeThreadExit && i <= top + GetCountPerPage(); ++i)
 					{
-						auto data = (GitRevLoglist*)m_arShownList.SafeGetAt(i);
-						if (data != nullptr && data->m_CommitHash == pRev->m_CommitHash)
+						if (i < m_arShownList.GetCount())
 						{
-							::PostMessage(m_hWnd, MSG_FETCHED_DESCRIBE, (WPARAM)i, 0);
-							break;
+							auto data = (GitRevLoglist*)m_arShownList.SafeGetAt(i);
+							if (data != nullptr && data->m_CommitHash == pRev->m_CommitHash)
+							{
+								::PostMessage(m_hWnd, MSG_FETCHED_DESCRIBE, (WPARAM)i, 0);
+								break;
+							}
 						}
 					}
 				}
@@ -398,6 +400,7 @@ BEGIN_MESSAGE_MAP(CGitLogListBase, CHintListCtrl)
 	ON_WM_CREATE()
 	ON_WM_DESTROY()
 	ON_MESSAGE(MSG_LOADED,OnLoad)
+	ON_MESSAGE(MSG_FETCHED_DESCRIBE, OnFetchedDescribe)
 	ON_WM_MEASUREITEM()
 	ON_WM_MEASUREITEM_REFLECT()
 	ON_NOTIFY(HDN_BEGINTRACKA, 0, OnHdnBegintrack)
@@ -1718,7 +1721,15 @@ void CGitLogListBase::OnLvnGetdispinfoLoglist(NMHDR *pNMHDR, LRESULT *pResult)
 		break;
 	case LOGLIST_HASH:
 		if(pLogEntry)
+		{
+			DescribeAsync(pLogEntry);
+			if (pLogEntry->m_bDescribe && !pLogEntry->m_Describe.IsEmpty())
+			{
+				lstrcpyn(pItem->pszText, pLogEntry->m_Describe, pItem->cchTextMax - 1);
+				break;
+			}
 			lstrcpyn(pItem->pszText, pLogEntry->m_CommitHash.ToString(), pItem->cchTextMax - 1);
+		}
 		break;
 	case LOGLIST_ID:
 		if(this->m_IsIDReplaceAction)
@@ -3945,6 +3956,13 @@ LRESULT CGitLogListBase::OnLoad(WPARAM wParam,LPARAM /*lParam*/)
 	this->GetItemRect(i,&rect,LVIR_BOUNDS);
 	this->InvalidateRect(rect);
 
+	return 0;
+}
+
+LRESULT CGitLogListBase::OnFetchedDescribe(WPARAM wParam, LPARAM /*lParam*/)
+{
+	int i = (int)wParam;
+	this->RedrawItems(i, i);
 	return 0;
 }
 
