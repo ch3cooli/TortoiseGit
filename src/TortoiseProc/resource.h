@@ -1181,7 +1181,9 @@
 #define IDC_BUGTRAQLOGREGEX1            1569
 #define IDS_REMOVEBUTTON                1569
 #define IDC_BUGTRAQLOGREGEX2            1570
+#define IDS_LOG_FILTER_MYAUTHORNAME     1570
 #define IDC_PUTTYKEYFILE                1571
+#define IDS_LOG_FILTER_MYAUTHOREMAIL    1571
 #define IDC_GROUP_CLONE                 1572
 #define IDC_GROUPT_REMOTE               1573
 #define IDC_SENDMAIL_PATCHS             1575

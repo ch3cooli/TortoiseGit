@@ -2010,6 +2010,12 @@ LRESULT CLogDlg::OnClickedInfoIcon(WPARAM wParam, LPARAM lParam)
 		temp.LoadString(IDS_ALL);
 		popup.AppendMenu(MF_STRING | MF_ENABLED, LOGFILTER_ALL, temp);
 
+		temp.LoadString(IDS_LOG_FILTER_MYAUTHORNAME);
+		popup.AppendMenu(MF_STRING | MF_ENABLED, LOGFILTER_MYAUTHORNAME, temp);
+
+		temp.LoadString(IDS_LOG_FILTER_MYAUTHOREMAIL);
+		popup.AppendMenu(MF_STRING | MF_ENABLED, LOGFILTER_MYAUTHOREMAIL, temp);
+
 		popup.AppendMenu(MF_SEPARATOR, NULL);
 
 		temp.LoadString(IDS_LOG_FILTER_REGEX);
@@ -2048,6 +2054,32 @@ LRESULT CLogDlg::OnClickedInfoIcon(WPARAM wParam, LPARAM lParam)
 			{
 				m_LogList.m_SelectedFilters = selection;
 				SetFilterCueText();
+			}
+			else if (selection == LOGFILTER_MYAUTHORNAME)
+			{
+				CString name = g_Git.GetUserName();
+				if (name.IsEmpty())
+					return 0;				
+				m_bFilterWithRegex = false;
+				m_LogList.m_bFilterWithRegex = m_bFilterWithRegex;
+				m_LogList.m_SelectedFilters = LOGFILTER_AUTHORS;
+				SetFilterCueText();
+				m_cFilter.SetWindowText(name);
+				OnEnChangeSearchedit();
+				return 0;
+			}
+			else if (selection == LOGFILTER_MYAUTHOREMAIL)
+			{
+				CString email = g_Git.GetUserEmail();
+				if (email.IsEmpty())
+					return 0;
+				m_bFilterWithRegex = false;
+				m_LogList.m_bFilterWithRegex = m_bFilterWithRegex;
+				m_LogList.m_SelectedFilters = LOGFILTER_EMAILS;
+				SetFilterCueText();
+				m_cFilter.SetWindowText(email);
+				OnEnChangeSearchedit();
+				return 0;
 			}
 			else
 			{

@@ -4660,6 +4660,8 @@ BEGIN
     IDS_WARN_DELETE_ONE_FROM_INDEX 
                             "Do you really want to remove ""%s"" from the index?"
     IDS_REMOVEBUTTON        "&Remove"
+    IDS_LOG_FILTER_MYAUTHORNAME "My author name"
+    IDS_LOG_FILTER_MYAUTHOREMAIL "My author email"
 END
 
 #endif    // English (U.S.) resources

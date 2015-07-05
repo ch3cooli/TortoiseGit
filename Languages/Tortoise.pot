@@ -6277,6 +6277,14 @@ msgstr ""
 msgid "Moving..."
 msgstr ""
 
+#. Resource IDs: (1571)
+msgid "My author email"
+msgstr ""
+
+#. Resource IDs: (1570)
+msgid "My author name"
+msgstr ""
+
 #. Resource IDs: (65535)
 msgid "My file:"
 msgstr ""
